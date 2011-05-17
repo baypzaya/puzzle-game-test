@@ -3,7 +3,7 @@ package com.mstanford.gameframework;
 import android.content.Context;
 
 import com.mstanford.gameframework.model.GameView;
-import com.mstanford.gameframework.model.GameViewTest;
+import com.mstanford.gameframework.model.PuzzleGameTest;
 
 public class GameViewFactory {
 	private Context m_Context;
@@ -24,7 +24,7 @@ public class GameViewFactory {
 		case GameSurfaceView.GAME_ABOUT:
 			break;
 		case GameSurfaceView.GAME_RUN:
-			gv = new GameViewTest(m_Context);
+			gv = new PuzzleGameTest(m_Context);
 			break;
 		case GameSurfaceView.GAME_CONTINUE:
 			break;
