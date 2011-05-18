@@ -184,7 +184,7 @@ public class GameThread extends Thread {
 
 	public boolean doTouch(MotionEvent event) {
 		synchronized (surfaceHolder) {
-			// TODO
+			mGameView.onTouch(event);
 		}
 		return false;
 	}
@@ -202,9 +202,10 @@ public class GameThread extends Thread {
 		synchronized (surfaceHolder) {
 			mCanvasWidth = width;
 			mCanvasHeight = height;
-
+			setState(GameSurfaceView.GAME_RUN);
 			// 不要忘记每次画布的宽度和高度改变时, 在这里对图片等资源做缩放等相关适配屏幕的处理
 			// TODO
+			mGameView.onSurfaceSizeChanged(width, height);
 		}
 	}
 
@@ -246,7 +247,7 @@ public class GameThread extends Thread {
 	 * 初始化游戏开始时的参数
 	 */
 	public void doStart() {
-		setState(GameSurfaceView.GAME_RUN);
+//		setState(GameSurfaceView.GAME_RUN);
 	}
 
 	/**

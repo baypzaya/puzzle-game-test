@@ -85,6 +85,8 @@ public class GameSurfaceView extends SurfaceView implements Callback {
 	public void surfaceChanged(SurfaceHolder holder, int format, int width,
 			int height) {
 		Log.v(this.getClass().getName(), "surfaceChanged()");
+		Log.i("yujsh log","width:"+width);
+		Log.i("yujsh log","height:"+height);
 		gameThread.setSurfaceSize(width, height);
 		
 		gameThread.setRunning(true);
