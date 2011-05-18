@@ -6,6 +6,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.net.Uri;
+import android.view.MotionEvent;
 
 import com.mstanford.gameframework.utils.BitmapUtils;
 
@@ -82,8 +83,13 @@ public class GameViewTest implements GameView {
 	}
 
 	@Override
-	public boolean onTouch(int keyCode) {
+	public boolean onTouch(MotionEvent event) {
 		return false;
+	}
+	@Override
+	public void onSurfaceSizeChanged(int width, int height) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

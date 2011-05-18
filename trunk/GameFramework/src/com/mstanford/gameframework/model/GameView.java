@@ -1,48 +1,33 @@
 package com.mstanford.gameframework.model;
 
 import android.graphics.Canvas;
+import android.view.MotionEvent;
 
 public interface GameView {
 
 	/**
 	 * 绘图
-	 * 
-	 * @param N
-	 *            /A
-	 * 
-	 * @return null
+	 *
 	 */
 	public abstract void onDraw(Canvas canvas);
 
 	/**
 	 * 按键按下
-	 * 
-	 * @param N
-	 *            /A
-	 * 
-	 * @return null
+	 *
 	 */
 	public abstract boolean onKeyDown(int keyCode);
 
 	/**
 	 * 按键弹起
 	 * 
-	 * @param N
-	 *            /A
-	 * 
-	 * @return null
 	 */
 	public abstract boolean onKeyUp(int keyCode);
 	
 	/**
 	 * 触屏
 	 * 
-	 * @param N
-	 *            /A
-	 * 
-	 * @return null
 	 */
-	public abstract boolean onTouch(int keyCode);
+	public abstract boolean onTouch(MotionEvent event);
 
 	/**
 	 * 回收资源
@@ -55,4 +40,11 @@ public interface GameView {
 	 * 
 	 */
 	public abstract void refurbish();
+	
+	/**
+	 * 屏幕大小发生变化
+	 * @param width
+	 * @param height
+	 */
+	public abstract void onSurfaceSizeChanged(int width, int height);
 }
