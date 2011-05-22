@@ -57,8 +57,7 @@ public class GameThread extends Thread {
 		this.surfaceHolder = holder;
 		this.context = context;
 		this.handler = handler;
-		this.mGameViewFactory = new GameViewFactory(context);
-		doStart();
+		this.mGameViewFactory = GameViewFactory.getInstance(context,handler);
 	}
 
 	/**
@@ -202,7 +201,7 @@ public class GameThread extends Thread {
 		synchronized (surfaceHolder) {
 			mCanvasWidth = width;
 			mCanvasHeight = height;
-			setState(GameSurfaceView.GAME_RUN);
+			setState(GameGlobal.GAME_RUN);
 			// 不要忘记每次画布的宽度和高度改变时, 在这里对图片等资源做缩放等相关适配屏幕的处理
 			// TODO
 			mGameView.onSurfaceSizeChanged(width, height);
