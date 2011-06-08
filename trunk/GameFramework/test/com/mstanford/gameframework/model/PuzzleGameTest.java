@@ -31,6 +31,7 @@ public class PuzzleGameTest implements GameView {
 	private Sprite[] sprites;
 	private int mSeletedSpriteIndex = -1;
 	private Boolean mIsSuccess=false;
+	private boolean mIsStart = true;
 	private Uri mBitmapUri;
 
 	public PuzzleGameTest(Context context) {
@@ -79,7 +80,17 @@ public class PuzzleGameTest implements GameView {
 		mPaint.setAntiAlias(true);
 		mPaint.setColor(Color.BLACK);
 		canvas.drawRect(0, 0, screenWidth, screenHeight, mPaint);
-
+		
+		if(mIsStart){
+			canvas.drawBitmap(bitmap, 0, 0, null);
+			return;
+		}
+		
+		if(mIsSuccess){
+			showSuccesAnimal(canvas);
+			return;
+		}
+		
 		// draw sprites
 		int count = sprites.length;
 		// Log.i("yujsh log","count:"+count);
@@ -98,18 +109,16 @@ public class PuzzleGameTest implements GameView {
 			DrawUtils.drawRect(canvas, x, y, w, h, mPaint);
 		}
 		
-		if(mIsSuccess){
-			showSuccesAnimal(canvas);
-			return;
-		}
+		
 	}
 
 	private void showSuccesAnimal(Canvas canvas) {
-		Paint mPaint = new Paint();
-		mPaint.setAntiAlias(true);
-		mPaint.setColor(Color.BLACK);
-		mPaint.setTextSize(15);
-		canvas.drawText("成 功",screenWidth/2, screenHeight/2, mPaint);		
+		canvas.drawBitmap(bitmap, 0, 0, null);
+//		Paint mPaint = new Paint();
+//		mPaint.setAntiAlias(true);
+//		mPaint.setColor(Color.BLACK);
+//		mPaint.setTextSize(15);
+//		canvas.drawText("成 功",screenWidth/2, screenHeight/2, mPaint);		
 	}
 
 	@Override
@@ -137,6 +146,11 @@ public class PuzzleGameTest implements GameView {
 		if(mIsSuccess){
 			return false;
 		}
+		
+		if(mIsStart){
+			mIsStart = false;
+			return false;
+		}		
 			
 		int preSelectedIndex = mSeletedSpriteIndex;
 		float x = event.getX();
