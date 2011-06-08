@@ -18,8 +18,8 @@ import com.mstanford.gameframework.utils.DrawUtils;
 
 public class PuzzleGameTest implements GameView {
 
-	private int row = 2;
-	private int col = 2;
+	private int row = 3;
+	private int col = 4;
 	private Bitmap bitmap;
 	private int spriteWidth;
 	private int spriteHeight;
@@ -31,9 +31,12 @@ public class PuzzleGameTest implements GameView {
 	private Sprite[] sprites;
 	private int mSeletedSpriteIndex = -1;
 	private Boolean mIsSuccess=false;
+	private Uri mBitmapUri;
 
 	public PuzzleGameTest(Context context) {
 		mContext = context;
+		String uriStr = "file:///sdcard/aa.jpg";
+		mBitmapUri = Uri.parse(uriStr);
 	}
 
 	private void creatSprites() {
@@ -62,9 +65,7 @@ public class PuzzleGameTest implements GameView {
 		return s;
 	}
 
-	private Bitmap getBitmap() {
-		String uriStr = "file:///sdcard/aa.jpg";
-		Uri uri = Uri.parse(uriStr);
+	private Bitmap getBitmap(Uri uri) {
 		Bitmap bitmap = BitmapUtils.getBitmapFromUri(mContext, uri);
 		bitmap = Bitmap.createScaledBitmap(bitmap, screenWidth, screenHeight, true);
 		return bitmap;
@@ -166,7 +167,7 @@ public class PuzzleGameTest implements GameView {
 		Log.i("yujsh log","test height:"+height);
 		screenWidth = width;
 		screenHeight = height;
-		bitmap = getBitmap();
+		bitmap = getBitmap(mBitmapUri);
 		creatSprites();
 	}
 	

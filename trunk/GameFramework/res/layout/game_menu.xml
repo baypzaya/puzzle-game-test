@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" android:layout_height="fill_parent"
+	android:orientation="vertical" android:background="#50a2e8">
+	<ImageView android:id="@+id/frontpage" android:layout_width="fill_parent"
+		android:layout_height="fill_parent" android:layout_weight="2" />
+	<LinearLayout android:layout_width="fill_parent"
+		android:layout_height="fill_parent" android:orientation="horizontal"
+		android:layout_weight="1">
+		<ImageView android:id="@+id/frontpage" android:layout_width="fill_parent"
+		android:layout_height="fill_parent" android:layout_weight="2" />
+		<LinearLayout android:layout_width="fill_parent"
+			android:layout_height="fill_parent" android:orientation="vertical"
+			android:layout_weight="1">
+			<Button android:id="@+id/start" android:layout_width="fill_parent"
+				android:layout_height="wrap_content" android:layout_weight="1"
+				android:text="start" />
+			<Button android:id="@+id/continue_start" android:layout_width="fill_parent"
+				android:layout_height="wrap_content" android:layout_weight="1"
+				android:text="continue" />
+			<Button android:id="@+id/option" android:layout_width="fill_parent"
+				android:layout_height="wrap_content" android:layout_weight="1"
+				android:text="option" />
+			<Button android:id="@+id/help" android:layout_width="fill_parent"
+				android:layout_height="wrap_content" android:layout_weight="1"
+				android:text="help" />
+			<Button android:id="@+id/about" android:layout_width="fill_parent"
+				android:layout_height="wrap_content" android:layout_weight="1"
+				android:text="about" />
+		</LinearLayout>
+		<ImageView android:id="@+id/frontpage" android:layout_width="fill_parent"
+		android:layout_height="fill_parent" android:layout_weight="2" />
+	</LinearLayout>
+	<ImageView android:id="@+id/frontpage" android:layout_width="fill_parent"
+		android:layout_height="fill_parent" android:layout_weight="3" />
+</LinearLayout>
