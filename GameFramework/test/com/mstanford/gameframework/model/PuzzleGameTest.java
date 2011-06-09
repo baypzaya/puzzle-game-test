@@ -30,7 +30,7 @@ public class PuzzleGameTest implements GameView {
 
 	private Sprite[] sprites;
 	private int mSeletedSpriteIndex = -1;
-	private Boolean mIsSuccess=false;
+	private Boolean mIsSuccess = false;
 	private boolean mIsStart = true;
 	private Uri mBitmapUri;
 
@@ -43,12 +43,12 @@ public class PuzzleGameTest implements GameView {
 	private void creatSprites() {
 		int count = row * col;
 		sprites = new Sprite[count];
-		int[] frames=getRandomArray();
+		int[] frames = getRandomArray();
 		for (int i = 0; i < count; i++) {
 			Sprite sprite = creatSrpites(i);
 			sprite.setFrame(frames[i]);
 			sprites[i] = sprite;
-			
+
 		}
 	}
 
@@ -74,23 +74,23 @@ public class PuzzleGameTest implements GameView {
 
 	@Override
 	public void onDraw(Canvas canvas) {
-		
+
 		// clear screen
 		Paint mPaint = new Paint();
 		mPaint.setAntiAlias(true);
 		mPaint.setColor(Color.BLACK);
 		canvas.drawRect(0, 0, screenWidth, screenHeight, mPaint);
-		
-		if(mIsStart){
+
+		if (mIsStart) {
 			canvas.drawBitmap(bitmap, 0, 0, null);
 			return;
 		}
-		
-		if(mIsSuccess){
+
+		if (mIsSuccess) {
 			showSuccesAnimal(canvas);
 			return;
 		}
-		
+
 		// draw sprites
 		int count = sprites.length;
 		// Log.i("yujsh log","count:"+count);
@@ -101,24 +101,30 @@ public class PuzzleGameTest implements GameView {
 			int y = sprites[i].getY();
 			int w = sprites[i].getWidth();
 			int h = sprites[i].getHeight();
-			if (mSeletedSpriteIndex == i) {
-				mPaint.setColor(Color.RED);
-			} else {
-				mPaint.setColor(Color.BLACK);
-			}
+			mPaint.setColor(Color.BLACK);
 			DrawUtils.drawRect(canvas, x, y, w, h, mPaint);
 		}
-		
-		
+		if (mSeletedSpriteIndex >= 0) {
+			int x = sprites[mSeletedSpriteIndex].getX();
+			int y = sprites[mSeletedSpriteIndex].getY();
+			int w = sprites[mSeletedSpriteIndex].getWidth();
+			int h = sprites[mSeletedSpriteIndex].getHeight();
+			mPaint.setColor(Color.RED);
+			DrawUtils.drawRect(canvas, x, y, w, h, mPaint);
+		}
+
 	}
 
 	private void showSuccesAnimal(Canvas canvas) {
 		canvas.drawBitmap(bitmap, 0, 0, null);
-//		Paint mPaint = new Paint();
-//		mPaint.setAntiAlias(true);
-//		mPaint.setColor(Color.BLACK);
-//		mPaint.setTextSize(15);
-//		canvas.drawText("成 功",screenWidth/2, screenHeight/2, mPaint);		
+		mIsStart = true;
+		mIsSuccess = false;
+		this.creatSprites();
+		// Paint mPaint = new Paint();
+		// mPaint.setAntiAlias(true);
+		// mPaint.setColor(Color.BLACK);
+		// mPaint.setTextSize(15);
+		// canvas.drawText("成 功",screenWidth/2, screenHeight/2, mPaint);
 	}
 
 	@Override
@@ -142,16 +148,16 @@ public class PuzzleGameTest implements GameView {
 	}
 
 	@Override
-	public boolean onTouch(MotionEvent event) {	
-		if(mIsSuccess){
+	public boolean onTouch(MotionEvent event) {
+		if (mIsSuccess) {
 			return false;
 		}
-		
-		if(mIsStart){
+
+		if (mIsStart) {
 			mIsStart = false;
 			return false;
-		}		
-			
+		}
+
 		int preSelectedIndex = mSeletedSpriteIndex;
 		float x = event.getX();
 		float y = event.getY();
@@ -177,62 +183,61 @@ public class PuzzleGameTest implements GameView {
 
 	@Override
 	public void onSurfaceSizeChanged(int width, int height) {
-		Log.i("yujsh log","test width:"+width);
-		Log.i("yujsh log","test height:"+height);
+		Log.i("yujsh log", "test width:" + width);
+		Log.i("yujsh log", "test height:" + height);
 		screenWidth = width;
 		screenHeight = height;
 		bitmap = getBitmap(mBitmapUri);
 		creatSprites();
 	}
-	
-	private void isSuccess(){
-		Thread th=new Thread(new Runnable(){
+
+	private void isSuccess() {
+		Thread th = new Thread(new Runnable() {
 
 			@Override
 			public void run() {
 				synchronized (mIsSuccess) {
-					int count = sprites.length;					
+					int count = sprites.length;
 					for (int i = 0; i < count; i++) {
-						int frameIndex=sprites[i].getFrame();
-						if(i!=frameIndex){
+						int frameIndex = sprites[i].getFrame();
+						if (i != frameIndex) {
 							return;
 						}
 					}
-					mIsSuccess=true;
+					mIsSuccess = true;
 				}
-			}});
-		
+			}
+		});
+
 		th.start();
-		
+
 	}
-	
-	private int[] getRandomArray(){
-		int length=row*col;
-		int[] array=new int[length];
-		Random r=new Random(length);		
-		for(int i=0;i<length;i++){
-			array[i]=i;
+
+	private int[] getRandomArray() {
+		int length = row * col;
+		int[] array = new int[length];
+		Random r = new Random(length);
+		for (int i = 0; i < length; i++) {
+			array[i] = i;
 		}
-		StringBuffer sb=new StringBuffer();
-		for(int i=0;i<50;i++){
-			int a= r.nextInt()%length;
-			int b= r.nextInt()%length;
-			if(a<0){
-				a=-a;
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < 50; i++) {
+			int a = r.nextInt() % length;
+			int b = r.nextInt() % length;
+			if (a < 0) {
+				a = -a;
 			}
-			if(b<0){
-				b=-b;
+			if (b < 0) {
+				b = -b;
 			}
-			int temp =array[a];
-			array[a]=array[b];
-			array[b]=temp;
-			sb.append(a+" ");
-			sb.append(b+" ");
+			int temp = array[a];
+			array[a] = array[b];
+			array[b] = temp;
+			sb.append(a + " ");
+			sb.append(b + " ");
 		}
-		Log.i("yujsh log","random:"+sb.toString());
+		Log.i("yujsh log", "random:" + sb.toString());
 		return array;
 	}
-	
-	
 
 }
