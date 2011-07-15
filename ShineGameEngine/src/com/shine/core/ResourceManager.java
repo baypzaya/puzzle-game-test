@@ -1,14 +1,18 @@
 package com.shine.core;
 
+import java.io.IOException;
+
+import com.shine.core.utils.BitmapUtils;
+
 import android.content.Context;
+import android.graphics.Bitmap;
 
 public class ResourceManager {
 
 	private static ResourceManager resourceManager;	
 	private Context mContext ;
 	
-	
-	
+	Bitmap paopao;
 
 	public ResourceManager(Context context) {
 		mContext = context;
@@ -24,14 +28,16 @@ public class ResourceManager {
 
 	private void initResource() {
 		try {
-			Thread.sleep(5000);
-		} catch (InterruptedException e) {
+			paopao = BitmapUtils.getBitmapFromAsset(mContext, "paopao.png");
+			
+		} catch (IOException e) {
 			e.printStackTrace();
+			LogManager.d("init failed");
 		}
 	}
 
 	public void destroy() {
-		
+		paopao.recycle();
 		
 	}
 

@@ -1,5 +1,6 @@
 package com.shine.core;
 
+import java.io.IOException;
 import java.util.Random;
 
 import javax.microedition.lcdui.game.Sprite;
@@ -68,7 +69,12 @@ public class PuzzleGameTest implements GameView {
 	}
 
 	private Bitmap getBitmap(Uri uri) {
-		Bitmap bitmap = BitmapUtils.getBitmapFromUri(mContext, uri);
+		Bitmap bitmap = null;
+		try {
+			bitmap = BitmapUtils.getBitmapFromUri(mContext, uri);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		bitmap = Bitmap.createScaledBitmap(bitmap, screenWidth, screenHeight, true);
 		return bitmap;
 	}
