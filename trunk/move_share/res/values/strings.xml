@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">移动共享</string>
+	<string name="no_network">"WIFI未启动，请开启"</string>
+	<string name="settings_network_warning">"WIFI未启动，请开启"</string>
+	<string name="retry_set_network">"设置WIFI"</string>
+</resources>
