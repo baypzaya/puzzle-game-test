@@ -76,12 +76,7 @@ public class MoveShareActivity extends Activity implements
 		mAddDevView.setOnClickListener(this);
 	}
 
-	public boolean isWiFiActive(Context inContext) {
-		Context context = inContext.getApplicationContext();
-		WifiManager wifiManager = (WifiManager) context
-				.getSystemService(Context.WIFI_SERVICE);		
-		return wifiManager.isWifiEnabled();
-	}
+	
 
 	private void settingNetwork() {
 		mSettingNetwork = new AlertDialog.Builder(this)
@@ -134,7 +129,7 @@ public class MoveShareActivity extends Activity implements
 
 	private void addDev() {
 		// 验证设备是否已经开启wifi
-		if (!isWiFiActive(this)) {
+		if (!AppUtils.isWiFiActive(this)) {
 			settingNetwork();
 		} else {
 			// 搜索设备
