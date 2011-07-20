@@ -24,12 +24,26 @@ public class MoveShareActivity extends Activity implements
 	
 	private int mLocalIpAddress = -1;
 	private int mLocalNetMask = -1;
+	TCPServer mServer;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 		initView();
+		
+		mServer = new TCPServer();
+		new Thread(mServer).start();
+	}
+
+	@Override
+	protected void onDestroy() {		
+		super.onDestroy();
+		if(mServer!=null){
+			mServer.closeServer();
+		}
+		
+		System.exit(0);
 	}
 
 	@Override
@@ -124,8 +138,12 @@ public class MoveShareActivity extends Activity implements
 			settingNetwork();
 		} else {
 			// 搜索设备
-
+			
 			// 弹出匹配结果
+			
+			//test code
+			TCPClient client = new TCPClient("192.168.129.213",TCPServer.SERVER_PORT,null);
+			client.start();
 		}
 	}
 
