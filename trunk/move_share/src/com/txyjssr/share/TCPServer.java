@@ -15,13 +15,14 @@ import android.util.Log;
 public class TCPServer implements Runnable {
 
 	public static final int SERVER_PORT = 5211;
-	private boolean isCloseServer = false;
+	private boolean isCloseServer = true;
 	private Communication mCommunication;
 
 	@Override
 	public void run() {
 		try {
 			ServerSocket ss = new ServerSocket(SERVER_PORT);
+			isCloseServer = false;
 			while (!isCloseServer) {
 				// 等待客户端连接
 				Socket s = ss.accept();
@@ -53,6 +54,14 @@ public class TCPServer implements Runnable {
 
 	public void closeServer() {
 		isCloseServer = true;
+	}
+
+	public boolean isStarted() {		
+		return !isCloseServer;
+	}
+
+	public void setConmunication(Communication cs) {
+		mCommunication = cs;
 	}
 
 }

@@ -8,8 +8,10 @@ import android.view.WindowManager;
 
 public class AppUtils {
 	
+	public static Activity sActivity;
+
 	// 设置屏幕不能锁屏
-	private static void setUnlocked(Activity activity) {
+	public static void setUnlocked(Activity activity) {
 		Window win = activity.getWindow();
 		WindowManager.LayoutParams winParams = win.getAttributes();
 		winParams.flags |= (WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
@@ -19,7 +21,7 @@ public class AppUtils {
 	}
 
 	// 设置屏幕可以锁屏，当然默认是也是可以锁屏的
-	private static void setLocked(Activity activity) {
+	public static void setLocked(Activity activity) {
 		Window win = activity.getWindow();
 		WindowManager.LayoutParams winParams = win.getAttributes();
 		winParams.flags &= (~WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
@@ -27,11 +29,11 @@ public class AppUtils {
 				& ~WindowManager.LayoutParams.FLAG_ALLOW_LOCK_WHILE_SCREEN_ON & ~WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
 		win.setAttributes(winParams);
 	}
-	
+
 	public static boolean isWiFiActive(Context inContext) {
 		Context context = inContext.getApplicationContext();
 		WifiManager wifiManager = (WifiManager) context
-				.getSystemService(Context.WIFI_SERVICE);		
+				.getSystemService(Context.WIFI_SERVICE);
 		return wifiManager.isWifiEnabled();
 	}
 }
