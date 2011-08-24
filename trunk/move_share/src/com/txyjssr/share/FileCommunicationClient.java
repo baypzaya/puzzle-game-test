@@ -28,6 +28,11 @@ public class FileCommunicationClient implements Communication {
 
 	@Override
 	public void execute(OutputStream out, InputStream in) {
+		
+		if (mFileUri == null){
+			return;
+		}
+		
 		mOut = out;
 		mIn = in;
 		ContentResolver cr = AppUtils.sActivity.getContentResolver();
