@@ -9,28 +9,39 @@ import android.content.Intent;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
+import android.view.ViewGroup.LayoutParams;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 
 public class MoveShareActivity extends Activity implements
-		View.OnClickListener, DialogInterface.OnClickListener {
+		View.OnClickListener, OnEditorActionListener,
+		DialogInterface.OnClickListener {
 
 	private static final int LOCAL_PICTURE_MENU = 1;
 
 	private TextView mRemoteDevView;
 	private TextView mLocalDevView;
-	private TextView mAddFileView;
-	private TextView mAddDevView;
+	private ImageView mAddFileView;
+	private ImageView mAddDevView;
+	private EditText mEditText;
 	private Dialog mSettingNetwork;
 
 	private int mLocalIpAddress = -1;
 	private int mLocalNetMask = -1;
 	private TCPServer mServer;
 	private Uri fileUri;
+	private PopupWindow window;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -98,14 +109,16 @@ public class MoveShareActivity extends Activity implements
 	private void initView() {
 		mRemoteDevView = (TextView) findViewById(R.id.remote_dev);
 		mLocalDevView = (TextView) findViewById(R.id.local_dev);
-		mAddFileView = (TextView) findViewById(R.id.add_file);
-		mAddDevView = (TextView) findViewById(R.id.add_dev);
+		mAddFileView = (ImageView) findViewById(R.id.add_file);
+		mAddDevView = (ImageView) findViewById(R.id.add_dev);
+		mEditText = (EditText) findViewById(R.id.remote_dev_input);
 
 		// mRemoteDevView.setVisibility(View.INVISIBLE);
 		mRemoteDevView.setOnClickListener(this);
 		mLocalDevView.setOnClickListener(this);
 		mAddFileView.setOnClickListener(this);
 		mAddDevView.setOnClickListener(this);
+		mEditText.setOnEditorActionListener(this);
 	}
 
 	private void settingNetwork() {
@@ -139,6 +152,9 @@ public class MoveShareActivity extends Activity implements
 		case R.id.add_file:
 			addFile();
 			break;
+		case R.id.remote_dev:
+			addRemoteDev();
+			break;
 		}
 	}
 
@@ -157,6 +173,7 @@ public class MoveShareActivity extends Activity implements
 		intent1.setType("image/*");
 		Intent intent2 = Intent.createChooser(intent1, null);
 		startActivityForResult(intent2, LOCAL_PICTURE_MENU);
+		// popAwindow(findViewById(R.id.workspace_layout));
 		// 获取设备
 
 	}
@@ -174,19 +191,57 @@ public class MoveShareActivity extends Activity implements
 			FileCommunicationClient cc = new FileCommunicationClient(fileUri);
 			final TCPClient client = new TCPClient("localhost",
 					TCPServer.SERVER_PORT, cc);
-			new Thread(new Runnable(){
+			new Thread(new Runnable() {
 
 				@Override
 				public void run() {
 					client.start();
-					
-				}}).start();
-			
+
+				}
+			}).start();
+
 		}
 	}
 
-	@Override
-	public void onAttachedToWindow() {
-		getWindow().addFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
+	// @Override
+	// public void onAttachedToWindow() {
+	// getWindow().addFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
+	// }
+
+	private void popAwindow(View parent) {
+		if (window == null) {
+			LayoutInflater lay = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			View v = lay.inflate(R.layout.resource_type_select, null);
+
+			window = new PopupWindow(v, LayoutParams.WRAP_CONTENT,
+					LayoutParams.WRAP_CONTENT);
+		}
+
+		// 设置整个popupwindow的样式。
+		window.setBackgroundDrawable(getResources().getDrawable(
+				R.drawable.rounded_corners_pop));
+		// 使窗口里面的空间显示其相应的效果，比较点击button时背景颜色改变。
+		// 如果为false点击相关的空间表面上没有反应，但事件是可以监听到的。
+		// listview的话就没有了作用。
+		window.setFocusable(true);
+		window.update();
+		window.showAtLocation(parent, Gravity.BOTTOM | Gravity.LEFT, 0, 50);
 	}
+
+	private void addRemoteDev() {
+		mRemoteDevView.setVisibility(View.GONE);
+		mEditText.setVisibility(View.VISIBLE);
+	}
+	
+	@Override
+	public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+		if (actionId == EditorInfo.IME_ACTION_DONE) {			
+			String ipaddress = mEditText.getEditableText().toString();
+			mRemoteDevView.setText(ipaddress);
+			mRemoteDevView.setVisibility(View.VISIBLE);
+			mEditText.setVisibility(View.GONE);
+		}
+		return false;
+	}
+
 }

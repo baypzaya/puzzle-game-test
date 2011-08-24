@@ -28,7 +28,7 @@ public class ResourceManagerActivity extends Activity implements
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+		super.onCreate(savedInstanceState);		
 		this.setContentView(R.layout.resource_manager_layout);
 
 		detector = new GestureDetector(this);
