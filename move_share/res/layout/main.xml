@@ -16,7 +16,7 @@
 			android:textAppearance="?android:attr/textAppearanceMedium"
 			android:background="@drawable/keyboard_textfield_selected"
 			android:gravity="center" android:visibility="gone"
-			android:imeOptions="actionDone" />
+			android:imeOptions="actionDone" android:singleLine="true"/>
 	</LinearLayout>
 
 	<LinearLayout android:id="@+id/bottom_layout"
