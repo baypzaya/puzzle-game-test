@@ -18,6 +18,7 @@ import android.view.ViewGroup.LayoutParams;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
@@ -41,7 +42,9 @@ public class MoveShareActivity extends Activity implements
 	private int mLocalNetMask = -1;
 	private TCPServer mServer;
 	private Uri fileUri;
+	private String mRemoteDevIp;
 	private PopupWindow window;
+
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -102,7 +105,6 @@ public class MoveShareActivity extends Activity implements
 		} else {
 			settingNetwork();
 		}
-
 		return result;
 	}
 
@@ -153,9 +155,41 @@ public class MoveShareActivity extends Activity implements
 			addFile();
 			break;
 		case R.id.remote_dev:
-			addRemoteDev();
+			editRemoteDev();
+//			addRemoteDev();
 			break;
+		case R.id.local_dev:
+			editLocalDev();
+
 		}
+	}
+
+	private void editLocalDev() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void editRemoteDev() {
+	    AlertDialog.Builder builder = new AlertDialog.Builder(this);	
+        LayoutInflater factory = LayoutInflater.from(this);
+        final View textEntryView = factory.inflate(R.layout.input_remote_dev_ip, null);
+            builder.setIcon(R.drawable.icon);
+            builder.setTitle("自定义输入框");
+            builder.setView(textEntryView);
+            builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {                
+                EditText userName = (EditText) textEntryView.findViewById(R.id.remote_dev_ip);
+                mRemoteDevIp = userName.getEditableText().toString();
+                mRemoteDevView.setText(mRemoteDevIp);
+                }
+            });
+            builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+
+                }
+            });
+          builder.create().show();
+		
 	}
 
 	@Override
@@ -189,7 +223,7 @@ public class MoveShareActivity extends Activity implements
 
 			// test code
 			FileCommunicationClient cc = new FileCommunicationClient(fileUri);
-			final TCPClient client = new TCPClient("localhost",
+			final TCPClient client = new TCPClient(mRemoteDevIp,
 					TCPServer.SERVER_PORT, cc);
 			new Thread(new Runnable() {
 
@@ -231,6 +265,9 @@ public class MoveShareActivity extends Activity implements
 	private void addRemoteDev() {
 		mRemoteDevView.setVisibility(View.GONE);
 		mEditText.setVisibility(View.VISIBLE);
+		mEditText.requestFocus();
+		InputMethodManager im = ((InputMethodManager)         getSystemService(INPUT_METHOD_SERVICE));  
+		im.showSoftInput(mEditText, 0);  
 	}
 	
 	@Override

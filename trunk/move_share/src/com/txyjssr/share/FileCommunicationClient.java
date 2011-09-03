@@ -57,11 +57,12 @@ public class FileCommunicationClient implements Communication {
 				} catch (JSONException e) {					
 					e.printStackTrace();
 				}
-				Log.i("yujsh log" , "client writing...");
+				Log.i("yujsh log" , "client writing file name");
 				this.sendCommond(jso.toString());
 
 //				boolean isReady = false;
-//				byte[] buffer = new byte[1024];
+				Log.i("yujsh log" , "client writing file");
+				byte[] buffer = new byte[1024];
 //				int num =0;
 //				if ((num = in.read(buffer)) > -1) {
 //					String message = new String(buffer,0,num);
@@ -72,14 +73,14 @@ public class FileCommunicationClient implements Communication {
 //				}
 
 //				if (isReady) {
-//					// fileInputStream = new FileInputStream(filePath);
-//					// int num = 0;
-//					// while ((num = fileInputStream.read(buffer))> 0) {
-//					// out.write(buffer,0,num);
-//					// out.flush();
-//					// }
-//
-//					// test code
+				fileInputStream = new FileInputStream(filePath);
+				int num = 0;
+				while ((num = fileInputStream.read(buffer)) > 0) {
+					out.write(buffer, 0, num);
+					out.flush();
+				}
+
+					// test code
 //					out.write("mytest".getBytes());
 //					out.flush();
 //
@@ -99,6 +100,7 @@ public class FileCommunicationClient implements Communication {
 					e.printStackTrace();
 				}
 		}
+		Log.i("yujsh log" , "client write end");
 	}
 
 	private void sendCommond(String commond) throws IOException {
