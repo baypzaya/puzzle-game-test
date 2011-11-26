@@ -31,6 +31,7 @@ public class ImagesCacheManager {
 	}
 
 	private void refresh() {
+		medieGroupList.clear();
 		Runnable runnable = new Runnable() {
 			@Override
 			public void run() {
@@ -38,19 +39,18 @@ public class ImagesCacheManager {
 				String selection = null;
 				String[] projection = { Images.Media._ID, Images.Media.DATA,
 						Images.Media.BUCKET_ID,
-						Images.Media.BUCKET_DISPLAY_NAME , Images.Media.TITLE};
+						Images.Media.BUCKET_DISPLAY_NAME , Images.Media.TITLE,Images.Media.DATE_ADDED,Images.Media.DATE_MODIFIED};
 				String[] selectionArgs = null;
 				String sortOrder = Images.Media.BUCKET_ID;
 
 				Cursor cursor = context.getContentResolver().query(contentUri,
 						projection, selection, selectionArgs, sortOrder);
 
-				if (cursor == null || cursor.moveToFirst()) {
+				if (cursor == null || !cursor.moveToFirst()) {
 					return;
 				}
-
 				// 处理所有图片，并进行分组排序
-				while (cursor.moveToNext()) {
+				do {
 					MediaGroup mg = new MediaGroup();
 					mg.id = cursor.getLong(cursor.getColumnIndex(Images.Media.BUCKET_ID));
 					int index = medieGroupList.indexOf(mg);
@@ -67,11 +67,13 @@ public class ImagesCacheManager {
 					mi.modifyTime = cursor.getLong(cursor.getColumnIndex(Images.Media.DATE_MODIFIED));
 					mi.name = cursor.getString(cursor.getColumnIndex(Images.Media.TITLE));
 					mi.type = MediaInfo.TYPE_IMAGE;
+					mi.id = cursor.getString(cursor.getColumnIndex(Images.Media._ID));
 					
 					mg.addItem(mi);
-								
-				}
+					
+				}while (cursor.moveToNext());
 				cursor.close();
+				notifyCallBack();
 			}
 		};
 
@@ -101,10 +103,20 @@ public class ImagesCacheManager {
 
 	// 图片信息变化时回调接口
 	public interface ICacheChangeCallBack {
-		public void callBack();
+		public void runCallBack();
 	}
 
 	public MediaGroup getMediaGroupBy(int position) {
 		return medieGroupList.get(position);
+	}
+
+	public void setCallBack(ICacheChangeCallBack callBack) {
+		this.callBack = callBack;
+	}
+	
+	public void notifyCallBack(){
+		if(callBack != null){
+			callBack.runCallBack();
+		}
 	}
 }
