@@ -41,6 +41,12 @@ public class ImagesTimeActivity extends ListActivity implements
 		ImageGroupAdpater adpater = new ImageGroupAdpater(this);
 		getListView().setAdapter(adpater);
 	}
+	
+	@Override
+	protected void onDestroy() {		
+		super.onDestroy();
+		System.exit(0);
+	}
 
 	@Override
 	public void runCallBack() {

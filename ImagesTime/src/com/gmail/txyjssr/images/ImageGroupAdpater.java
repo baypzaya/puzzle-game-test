@@ -1,19 +1,13 @@
 package com.gmail.txyjssr.images;
 
-import org.apache.http.client.utils.URIUtils;
-
-import android.app.Activity;
 import android.content.Context;
-import android.net.Uri;
-import android.provider.MediaStore.Images;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.gmail.txyjssr.images.ImagesCacheManager.ICacheChangeCallBack;
 
 public class ImageGroupAdpater extends BaseAdapter {
 
@@ -58,11 +52,18 @@ public class ImageGroupAdpater extends BaseAdapter {
 		TextView tv = (TextView) view.findViewById(R.id.tv_media_group);
 
 		MediaGroup mg = mICManager.getMediaGroupBy(position);
-		MediaInfo  mi = mg.mediaInfoList.get(0);
-		Uri miUri = Uri.withAppendedPath(Images.Media.EXTERNAL_CONTENT_URI, mi.id);
+		MediaInfo  mi = mg.mediaInfoList.get(0);		
+		
+		Bitmap bitmap = mICManager.getBitmapBy(mi.thumbnailId);
+		if(  bitmap == null){
+			iv.setImageResource(R.drawable.rect_128);
+		}else{
+			iv.setImageBitmap(bitmap);
+		}
+		
 		//iv 显示 mediagroup内的第一张图片
 //		iv.setImageResource(R.drawable.rect_128);
-		iv.setImageBitmap(BitmapUtils.getBitmapBy(mi.filePath, 128, 128));
+		
 		//tx 显示信息
 		tv.setText("image info");
 		return view;
