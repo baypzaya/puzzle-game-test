@@ -125,6 +125,9 @@ public class CategoryView extends AbstractView {
 //			       cv.SetCategory(category);
 //			       cv.bringSelfToFront();
 //		         }
+				
+				BookListView bookListView = new BookListView(mContext,category);
+				((BookShopActivity) mContext).updateContent(category.categoryname, bookListView);
 			}
 		}
 	};

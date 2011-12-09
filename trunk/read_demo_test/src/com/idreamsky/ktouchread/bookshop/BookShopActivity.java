@@ -11,6 +11,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 
 import com.aliyun.aui.app.spirit.MenuTabActivity;
 import com.aliyun.aui.widget.spirit.MenuTabHost;
+import com.aliyun.aui.widget.spirit.MenuTabHost.OnTabChangeListener;
 import com.aliyun.aui.widget.spirit.MenuTabHost.TabSpec;
 import com.aliyun.aui.widget.spirit.NavigationBar;
 import com.aliyun.aui.widget.spirit.NavigationBar.Builder;
@@ -36,7 +38,7 @@ import com.idreamsky.ktouchread.util.ImgUtil;
 import com.idreamsky.ktouchread.util.LogEx;
 import com.idreamsky.ktouchread.util.NetUtil;
 
-public class BookShopActivity extends MenuTabActivity {
+public class BookShopActivity extends MenuTabActivity implements OnTabChangeListener{
 
 	public static final int TAB_RECOMMEND = 0x10, TAB_CATEGORY = 0x11,
 			TAB_LEADBOARD = 0x12, TAB_SEARCH = 0x13, TAB_BOOKDETAIL = 0x14,
@@ -132,6 +134,7 @@ public class BookShopActivity extends MenuTabActivity {
 		tabHost.addTab(tabRecommend);
 		tabHost.addTab(tabLeadBoard);
 		tabHost.addTab(tabCategory);
+		tabHost.setOnTabChangedListener(this);
 
 		this.setDefaultTab(0);
 
@@ -158,20 +161,26 @@ public class BookShopActivity extends MenuTabActivity {
 	private void back() {
 		
 		int index = tabHost.getCurrentTab();
+		AbstractView abstractView =  null;
 		switch (index) {
 		case INDEX_LEADBOARD:
 			if (isShowLeadBoardBack) {
 				isShowLeadBoardBack = false;
-				backContent("排行",mLeadBoardView);
+				abstractView = new LeadBoardView(this);
 				break;
 			}
 		case INDEX_CATEGORYVIEW:
 			if (isShowCategorBack) {
 				isShowCategorBack = false;				
-				backContent("分类", mCategoryView);
+				abstractView = new CategoryView(this);;
 				break;
 			}
 		}
+		
+		if (abstractView != null) {
+			backContent("书城", abstractView);
+		}
+		
 	}
 
 	private void backContent(String title,AbstractView abstractView) {
@@ -217,10 +226,11 @@ public class BookShopActivity extends MenuTabActivity {
 	private void backUpdateUI(AbstractView abstractView) {
 		
 		int index = tabHost.getCurrentTab();	
-
+		Log.i("yujsh log","backUpdateUI index:"+index);
 		abstractView.initializeIfNecessary();
-		activity1 = tabHost.getCurrentView();
-		activity2 = abstractView.getContentView();
+		View activity1 = tabHost.getCurrentView();
+		View activity2 = abstractView.getContentView();
+		
 
 		TabSpec tabSpec = this.getTabSpecBy(index);
 
@@ -228,14 +238,32 @@ public class BookShopActivity extends MenuTabActivity {
 			tabSpec.setContent(activity2);
 		}
 		
-		Animation anim = AnimationUtils.loadAnimation(this,
-		        android.R.anim.aui_activity_close_exit);
+//		Animation anim = AnimationUtils.loadAnimation(this,
+//		        android.R.anim.aui_activity_close_exit);
+//		
+//		anim.setAnimationListener(new AnimationListenerImpl());
+//		activity1.setAnimation(anim);
+//		activity2.setAnimation(AnimationUtils.loadAnimation(this,
+//				android.R.anim.aui_activity_close_enter));
+//		
+//		activity1.invalidate();
+//		activity2.invalidate();
 		
-		anim.setAnimationListener(new AnimationListenerImpl(false));
-		activity1.setAnimation(anim);
-		activity2.setAnimation(AnimationUtils.loadAnimation(this,
-		        android.R.anim.aui_activity_close_enter));
+		refreshTabView(index);
 		
+	}
+	
+	private void refreshTabView(int index){
+		Log.i("yujsh log","refreshTabView");
+		if(tabHost==null){
+			tabHost = getTabHost();
+		}
+		tabHost.setCurrentTab(0);
+		tabHost.clearAllTabs();
+		tabHost.addTab(tabRecommend);
+		tabHost.addTab(tabLeadBoard);
+		tabHost.addTab(tabCategory);
+		tabHost.setCurrentTab(index);
 	}
 
 	public boolean checkNetWork() { // 检测网络
@@ -709,7 +737,7 @@ public class BookShopActivity extends MenuTabActivity {
 			return;
 		}
 		
-		updateUI();
+		updateNavigationBar();
 
 		abstractView.initializeIfNecessary();
 		activity1 = tabHost.getCurrentView();
@@ -721,16 +749,18 @@ public class BookShopActivity extends MenuTabActivity {
 			tabSpec.setContent(activity2);
 		}
 
-		Animation anim = null;
-		anim = AnimationUtils.loadAnimation(this,
-				android.R.anim.aui_activity_open_exit);
-		anim.setAnimationListener(new AnimationListenerImpl(true));
-		activity1.setAnimation(anim);
-		activity2.setAnimation(AnimationUtils.loadAnimation(this,
-				android.R.anim.aui_activity_open_enter));
-
-		activity1.invalidate();
-		activity2.invalidate();
+//		Animation anim = null;
+//		anim = AnimationUtils.loadAnimation(this,
+//				android.R.anim.aui_activity_open_exit);
+//		anim.setAnimationListener(new AnimationListenerImpl());
+//		activity1.setAnimation(anim);
+//		activity2.setAnimation(AnimationUtils.loadAnimation(this,
+//				android.R.anim.aui_activity_open_enter));
+//
+//		activity1.invalidate();
+//		activity2.invalidate();
+		
+		refreshTabView(index);
 
 	}
 
@@ -753,7 +783,7 @@ public class BookShopActivity extends MenuTabActivity {
 	}
 
 	// 更新NavigationBar
-	private void updateUI() {
+	private void updateNavigationBar() {
 		Builder builder = this.getNavigationBarBuilder();
 		int index = tabHost.getCurrentTab();
 		switch (index) {
@@ -771,26 +801,18 @@ public class BookShopActivity extends MenuTabActivity {
 			}
 		default:
 			builder.showBackButton(false);
+			builder.setTitle(R.string.toBookShop);
 			break;
 		}
 	}
 
 	// 动画监听
 	private class AnimationListenerImpl implements AnimationListener {
-		boolean isEntered;
-
-		public AnimationListenerImpl(boolean isEntered) {
-			this.isEntered = isEntered;
-		}
+		
 
 		public void onAnimationEnd(Animation animation) {
-			activity1.setVisibility(isEntered ? View.GONE : View.VISIBLE);
-			activity2.setVisibility(isEntered ? View.VISIBLE : View.GONE);
-
-			tabHost.getTabContentView().removeView(activity1);
-			tabHost.getTabContentView().addView(activity2);
-			tabHost.getTabContentView().invalidate();
 			
+			refreshTabView(tabHost.getCurrentTab());
 		}
 
 		public void onAnimationRepeat(Animation animation) {
@@ -802,4 +824,10 @@ public class BookShopActivity extends MenuTabActivity {
 		}
 
 	}
+
+	@Override
+	public void onTabChanged(int arg0, String arg1) {
+		updateNavigationBar();		
+	}
+
 }
