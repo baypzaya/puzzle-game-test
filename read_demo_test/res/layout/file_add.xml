@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent"
+  android:orientation="vertical"
+  android:background="@drawable/bookstore_bg"
+>
+	<RelativeLayout 
+		style="@style/titleStyle"
+		
+	>
+		<TextView 
+			android:id="@+id/path" 
+			android:layout_alignParentLeft="true"
+			android:layout_height="wrap_content"
+			android:layout_width="@dimen/file_add_tv_width" 
+			android:text="/SdCard" 
+			android:layout_centerVertical="true"
+			style="@style/titleTextStyle"
+			android:layout_marginLeft="@dimen/file_add_tv_marginLeft" 
+			android:textSize="@dimen/file_add_tv_size"
+			android:ellipsize="start"
+			android:singleLine="true"
+		/>
+ 
+		<Button 
+			android:id="@+id/scanning"
+			android:layout_width="@dimen/file_add_rl_btn_width"
+			android:layout_height="@dimen/file_add_rl_btn_height" 
+			android:layout_alignParentRight="true"
+			android:layout_centerVertical="true"
+			android:layout_marginRight="@dimen/file_add_rl_btn_marginRight" 
+			android:text="扫描"
+			android:background="@drawable/title_button_bg"
+			android:textColor="@color/white"
+		/>
+	</RelativeLayout>
+	<RelativeLayout
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content" 
+	>
+		<LinearLayout
+			android:id="@+id/back"
+			android:layout_height="@dimen/file_add_back_height"
+			android:layout_width="fill_parent"
+			android:background="@drawable/directory_selector"
+			android:orientation="horizontal"
+			android:gravity="center_vertical"
+		>
+			<Button
+				android:layout_height="@dimen/file_add_back_btn_height"
+				android:layout_width="@dimen/file_add_back_btn_width"
+				android:background="@drawable/icon_22"
+				android:layout_marginLeft="@dimen/file_add_back_btn_marginLeft"
+			/>
+			<TextView
+				android:layout_height="wrap_content"
+				android:layout_width="wrap_content"
+				android:text="上一级"
+				android:layout_marginLeft="@dimen/file_add_back_tv_marginLeft"
+				android:textColor="@color/black"
+				android:textSize="@dimen/file_add_back_tv_size"
+			></TextView>
+		</LinearLayout>
+	
+		<Button
+			android:layout_height="@dimen/file_add_back_tv_btn_height"
+			android:layout_width="fill_parent" 
+			android:background="@drawable/shade_above"
+		/>
+	</RelativeLayout>
+	<ListView
+			android:id="@+id/lvContent"
+				android:layout_width="fill_parent"
+  	 	android:layout_height="fill_parent"
+  	 	android:listSelector="@drawable/directory_selector"
+  	 	android:background="@drawable/bar_bg_5"
+  	 	android:cacheColorHint="#00000000"
+  	 	android:divider="@drawable/line"
+		/>
+</LinearLayout>

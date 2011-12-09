@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" android:layout_height="fill_parent"
+	android:orientation="vertical">
+	<include android:id="@+id/layout_book_head" layout="@layout/book_shop_head" />
+
+	<RelativeLayout android:layout_width="fill_parent"
+		android:layout_height="wrap_content">
+
+		<ListView android:id="@+id/list" android:layout_width="fill_parent"
+			android:layout_height="fill_parent" android:listSelector="@drawable/my_book_shelf_selector"
+			android:cacheColorHint="#00000000" android:background="@drawable/bar_bg_1"
+			android:divider="@drawable/line" />
+		<ImageView android:layout_width="fill_parent"
+			android:layout_height="@dimen/book_shop_categoryList_img_height" android:background="@drawable/shade_above"
+			android:layout_alignParentTop="true"></ImageView>
+		<ImageView android:layout_width="fill_parent"
+			android:layout_height="@dimen/book_shop_categoryList_img_height" android:background="@drawable/shade_below"
+			android:layout_alignParentBottom="true"></ImageView>
+	</RelativeLayout>
+</LinearLayout>
