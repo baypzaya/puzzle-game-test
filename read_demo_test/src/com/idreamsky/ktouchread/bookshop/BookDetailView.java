@@ -343,8 +343,8 @@ public class BookDetailView extends AbstractView {
 					@Override
 					public void onFail(String msg) {
 						DismissProcess();
-						Message message = ((BookShopActivity) mContext).mHandler.obtainMessage(12, msg);
-						((BookShopActivity) mContext).mHandler.sendMessage(message);
+						Message message = ((BookDetailActivity) mContext).mHandler.obtainMessage(12, msg);
+						((BookDetailActivity) mContext).mHandler.sendMessage(message);
 					}
 
 					@Override
@@ -370,8 +370,8 @@ public class BookDetailView extends AbstractView {
 					@Override
 					public void onFail(String msg) {
 						DismissProcess();
-						Message message = ((BookShopActivity) mContext).mHandler.obtainMessage(12, msg);
-						((BookShopActivity) mContext).mHandler.sendMessage(message);
+						Message message = ((BookDetailActivity) mContext).mHandler.obtainMessage(12, msg);
+						((BookDetailActivity) mContext).mHandler.sendMessage(message);
 					}
 
 					@Override

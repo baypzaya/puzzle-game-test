@@ -5,7 +5,45 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.NotificationManager;
+import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
+import android.view.GestureDetector;
+import android.view.Gravity;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
+import android.view.ViewGroup.LayoutParams;
+import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
+
 import com.aliyun.aui.app.spirit.SpiritActivity;
+import com.aliyun.aui.widget.spirit.DropDownList;
 import com.aliyun.aui.widget.spirit.NavigationBar;
 import com.idreamsky.ktouchread.Adapter.MyBookShelfAdapter;
 import com.idreamsky.ktouchread.bookread.BookReadActivity;
@@ -35,44 +73,6 @@ import com.idreamsky.ktouchread.util.ProcessDialog;
 import com.idreamsky.ktouchread.util.SettingUtils;
 import com.idreamsky.ktouchread.util.Util;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.NotificationManager;
-import android.app.ProgressDialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.graphics.drawable.ColorDrawable;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.view.GestureDetector;
-import android.view.Gravity;
-import android.view.KeyEvent;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.WindowManager;
-import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
-import android.view.ViewGroup.LayoutParams;
-
-
-import android.widget.AdapterView;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.PopupWindow;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemLongClickListener;
-
 public class BookShelf extends SpiritActivity implements OnTouchListener,
 		OnItemClickListener {
 
@@ -86,6 +86,7 @@ public class BookShelf extends SpiritActivity implements OnTouchListener,
 	public static final String DIRECTORY = "DIRECTORY";
 	public static final String BOOKDETAIL = "BOOKDETAIL";
 	public static final int REFRESHCODE = 888;
+	public static final int REQ_SELECT_DELETE_BOOK = 889;
 	public static final int SHOWGUIDE = 898;
 	public static final int COLLECTREQUESTCOLDE = 500;
 	public static final String ACTION_BOOKSHELF_UPDATE_CHASE = "com.idreamsky.www.action.updateui";
@@ -96,6 +97,7 @@ public class BookShelf extends SpiritActivity implements OnTouchListener,
 	private static final int SYNC_SUCCESS = 12;
 	private static final int SYNC_FAIL = 13;
 	private static final int START_SYNC = 14;
+	public static final String DELETE_BOOKS = "delete_book";
 
 	private RelativeLayout bg_height;
 	private ListView lvMyBookShelf;
@@ -135,12 +137,29 @@ public class BookShelf extends SpiritActivity implements OnTouchListener,
 		NavigationBar.Builder builder = getNavigationBarBuilder();
 		builder.setTitle(R.string.myBookShelf);
 		builder.showBackButton(false);
-		builder.setCommand("选项", new OnClickListener() {
-			public void onClick(View v) {
-				Toast.makeText(BookShelf.this, "选项被点击了。",
-						Toast.LENGTH_SHORT).show();
-			}
-		});
+		
+		
+		List<String> list = new ArrayList<String>();
+		list.add(getString(R.string.deleteBook));
+		list.add(getString(R.string.phoneBook));
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.aui_drop_item, list);
+		builder.setCommand("选项", adapter,
+				new DropDownList.OnItemClickListener() {
+					public void onItemClick(DropDownList parent, View view,
+							int position, long id) {
+						switch (position) {
+						case 0:
+							deleteBooksGo();
+							break;
+						case 1:
+							importPhoneBooksGo();
+							break;
+						default:
+							break;
+						}
+
+					}					
+				});
 		
 		width = getWindow().getWindowManager().getDefaultDisplay().getWidth();
 		height = getWindow().getWindowManager().getDefaultDisplay().getHeight();
@@ -805,9 +824,11 @@ public class BookShelf extends SpiritActivity implements OnTouchListener,
 //			}
 //			menuFlag = false;
 //		}
-		MenuInflater menuInflater = getMenuInflater();
-		menuInflater.inflate(R.menu.menu_file_book_shelf, menu);
-		return true;
+		
+//		MenuInflater menuInflater = getMenuInflater();
+//		menuInflater.inflate(R.menu.menu_file_book_shelf, menu);
+//		return true;
+		return super.onCreateOptionsMenu(menu);
 	}
 
 	public static Activity context;
@@ -1022,6 +1043,15 @@ public class BookShelf extends SpiritActivity implements OnTouchListener,
 				GetLongTokenAfterGuide();
 				  
 			}
+		}else if(REQ_SELECT_DELETE_BOOK == requestCode){
+			Log.i("yujsh log","activity result delete");
+			if(data!= null && data.hasExtra(DELETE_BOOKS)){
+				String[] bookIdNets = data.getStringArrayExtra(DELETE_BOOKS);
+				Log.i("yujsh log","bookIdNets"+bookIdNets);
+				if (bookIdNets != null) {
+					deleteBooks(bookIdNets);
+				}
+			}
 		}else 
 		{
 			Message msg = new Message(); // 提示msg
@@ -1043,10 +1073,50 @@ public class BookShelf extends SpiritActivity implements OnTouchListener,
 
 			}.start();
 		}
+		
+		
 		super.onActivityResult(requestCode, resultCode, data);
 	}
 
-//	private void FinishWithNoToken()
+	private void deleteBooks(final String[] bookIdNets) {
+		Log.i("yujsh log","deleteBooks count:"+bookIdNets.length);
+		ProcessDialog.ShowProcess(this);
+		
+		Runnable runnable = new Runnable(){
+
+			@Override
+			public void run() {
+				boolean result = true;
+				for(String bookIdNet:bookIdNets){
+					Book book = Book.GetBook(bookIdNet);
+					boolean isDelete = Book.DeleteBook(book); // 删除书籍
+					result = result && isDelete;
+				}
+				
+				StartBackService();
+				if (result) {
+					Message msg = new Message(); // 提示msg
+					msg.what = 1;
+					handler.sendMessage(msg);
+				} else {
+					handler.post(new Runnable(){
+
+						@Override
+						public void run() {
+							Toast.makeText(BookShelf.this,
+									getString(R.string.deleteFail), 1).show();
+						}});
+					
+				}
+				ProcessDialog.Dismiss();
+			}};
+			
+		new Thread(runnable).start();
+		
+
+	}
+
+	//	private void FinishWithNoToken()
 //	{
 //		if(KPayAccount.getLongtermToken() == null  || KPayAccount.getLongtermToken().length() < 1)
 //		{
@@ -1292,5 +1362,25 @@ public class BookShelf extends SpiritActivity implements OnTouchListener,
 			nM.cancel(ServiceChase.NEW_MSG_NOTIF_ID);
 		}
 
+	}
+	
+	private void importPhoneBooksGo() {
+//		poster.stopPoster();
+		Intent intent = new Intent();
+//		Bundle bundle = new Bundle(); 
+//		bundle.putSerializable(BookShelf.READBOOK, book);
+//		intent.putExtras(bundle);
+		intent.setClass(BookShelf.this,  AddFile.class);
+		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); 
+		startActivityForResult(intent, BookShelf.REFRESHCODE);
+		
+	}
+
+	private void deleteBooksGo() {
+		Intent intent = new Intent();
+		intent.setClass(BookShelf.this,  BookDeleteActivity.class);
+		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); 
+		startActivityForResult(intent, BookShelf.REQ_SELECT_DELETE_BOOK);
+		
 	}
 }
