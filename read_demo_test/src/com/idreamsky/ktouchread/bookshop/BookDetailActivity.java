@@ -1,11 +1,15 @@
 package com.idreamsky.ktouchread.bookshop;
 
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.aliyun.aui.app.spirit.SpiritActivity;
 import com.aliyun.aui.widget.spirit.NavigationBar;
+import com.aliyun.aui.widget.spirit.NavigationBar.OnSearchBarDoSearchingListener;
 import com.idreamsky.ktouchread.bookshelf.R;
 import com.idreamsky.ktouchread.data.net.Advert;
 import com.idreamsky.ktouchread.data.net.NetBook;
@@ -25,10 +29,29 @@ public class BookDetailActivity extends SpiritActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		// 设置 NavigationBar
-		NavigationBar.Builder builder = getNavigationBarBuilder();
-		builder.setTitle(R.string.toBookShop);
+		final NavigationBar.Builder builder = getNavigationBarBuilder();
+		builder.setTitle(R.string.book_detail);
 		builder.showBackButton(true);
 		builder.showSearchButton(true);
+		
+builder.setOnSearchBarDoSearchingListener(new OnSearchBarDoSearchingListener() {
+			
+			@Override
+			public void doSearching(CharSequence arg0) {
+				Log.i("yujsh log","search button onclick");
+				
+				String searchContent = builder.getSearchText().toString();
+				Log.i("yujsh log","doSearching search content:"+searchContent);
+				Intent intent = new Intent(BookDetailActivity.this,BookSearchActivity.class);
+				intent.putExtra(BookSearchActivity.EXTRA_SEARCH_CONTENT, searchContent);
+				BookDetailActivity.this.startActivity(intent);
+				builder.hideSearchbar();
+			}
+		});
+		
+		Drawable drawable = new ColorDrawable(0x66000000);
+		setSearchContentBackground(drawable);
+		setSearchMaskDrawable(drawable);
 		
 		Intent intent = getIntent();
 		String cpCode = intent.getStringExtra(EXTRA_CPCODE);
