@@ -8,6 +8,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -16,7 +18,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
-import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -27,6 +28,7 @@ import com.aliyun.aui.widget.spirit.MenuTabHost.TabSpec;
 import com.aliyun.aui.widget.spirit.NavigationBar;
 import com.aliyun.aui.widget.spirit.NavigationBar.Builder;
 import com.aliyun.aui.widget.spirit.NavigationBar.OnBackListener;
+import com.aliyun.aui.widget.spirit.NavigationBar.OnSearchBarDoSearchingListener;
 import com.idreamsky.ktouchread.bookshelf.BookShelf;
 import com.idreamsky.ktouchread.bookshelf.R;
 import com.idreamsky.ktouchread.data.Book;
@@ -89,10 +91,29 @@ public class BookShopActivity extends MenuTabActivity implements OnTabChangeList
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		// 设置 NavigationBar
-		NavigationBar.Builder builder = getNavigationBarBuilder();
+		final NavigationBar.Builder builder = getNavigationBarBuilder();
 		builder.setTitle(R.string.toBookShop);
 		builder.showBackButton(false);
 		builder.showSearchButton(true);
+		
+		builder.setOnSearchBarDoSearchingListener(new OnSearchBarDoSearchingListener() {
+			
+			@Override
+			public void doSearching(CharSequence arg0) {
+				Log.i("yujsh log","search button onclick");
+				
+				String searchContent = builder.getSearchText().toString();
+				Log.i("yujsh log","doSearching search content:"+searchContent);
+				Intent intent = new Intent(BookShopActivity.this,BookSearchActivity.class);
+				intent.putExtra(BookSearchActivity.EXTRA_SEARCH_CONTENT, searchContent);
+				BookShopActivity.this.startActivity(intent);
+				builder.hideSearchbar();
+			}
+		});
+		
+		Drawable drawable = new ColorDrawable(0x66000000);
+		setSearchContentBackground(drawable);
+		setSearchMaskDrawable(drawable);
 
 		mRecommendView = new RecommendView(BookShopActivity.this);
 		mRecommendView.initializeIfNecessary();

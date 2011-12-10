@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PointF;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -64,6 +65,8 @@ public class SearchView extends AbstractView {
 	private String author;
 
 	private InputMethodManager mInputMethodManager;
+	
+	private String searchContent;
 
 	public static interface SearchKeyCallBack {
 		public void ClickKey(String Key);
@@ -79,6 +82,7 @@ public class SearchView extends AbstractView {
 		keyAuthor = Author;
 		mBookAdapter = new BookAdapterEx(context, new ArrayList<NetBook>());
 	}
+
 
 	@Override
 	public void enrichContent(ViewGroup parent) {
@@ -137,6 +141,12 @@ public class SearchView extends AbstractView {
 
 		ed = (EditText) view.findViewById(R.id.input_search);
 		ed.setOnClickListener(new SearchClcikListener());
+		
+		if(searchContent!=null){
+			ed.setText(searchContent);
+		}
+		
+		
 		bt = (Button) view.findViewById(R.id.click_search);
 		bt.setOnClickListener(new SearchClcikListener());
         
@@ -145,38 +155,34 @@ public class SearchView extends AbstractView {
 		mListView.setAdapter(mBookAdapter);
 		mListView.setOnItemClickListener(mItemClickListener);
 		mListView.setCacheColorHint(Color.TRANSPARENT);
-	
+		
 		SearchKey.GetSearchKey(new GetKeyCallback() {
 
 			@Override
-			public void onFail(String msg){
-				((BookShopActivity) mContext).makeToast(msg);
+			public void onFail(String msg) {
+				((BookSearchActivity) mContext).makeToast(msg);
 			}
 
 			@Override
 			public void onUpdate(List<String> keyList) {
-			    searchKey=keyList; 
-				if(DefaultKey != null)
-				{
-					ed.setText(DefaultKey);
-				}
-				else
-				{
-					ed.setText(R.string.reservation_keyWord);
-				}
+				searchKey = keyList;
+				//去掉更新默认关键字
+//				if (DefaultKey != null) {
+//					ed.setText(DefaultKey);
+//				} else {
+//					ed.setText(R.string.reservation_keyWord);
+//				}
 			}
 
 			@Override
 			public void onSuccess(List<String> keyList) {
 				searchKey = keyList;
-				if(DefaultKey != null)
-				{
-					ed.setText(DefaultKey);
-				}
-				else
-				{
-					ed.setText(R.string.reservation_keyWord);
-				}
+				//去掉更新默认关键字
+//				if (DefaultKey != null) {
+//					ed.setText(DefaultKey);
+//				} else {
+//					ed.setText(R.string.reservation_keyWord);
+//				}
 			}
 		});
 
@@ -240,26 +246,11 @@ public class SearchView extends AbstractView {
 		@Override
 		public void onClick(View v) {
 			if (v.getId() == R.id.click_search) {
-				if (ed.getText().toString().length() < 1) {
-					return;
-				}
+				
 //				java.net.URLEncoder.encode(ed.getText().toString()
 //						.trim())
-				ShowProcee();
-				NetBook.Search(ed.getText().toString().trim()
-						, new GetNetBookListCallback() {
-
-							@Override
-							public void onFail(String msg) {
-
-							}
-
-							@Override
-							public void onSuccess(List<NetBook> bookList) {
-								searchSuccess(bookList);
-							}
-
-						});
+				search();
+				
 			}
 			// else if(v.getId()==R.id.input_search){
 			// final InputMethodManager imm =
@@ -271,6 +262,34 @@ public class SearchView extends AbstractView {
 
 	}
 
+	private void search() {		
+		search(ed.getText().toString().trim());
+	}
+	
+	public void search(String content){
+		Log.i("yujsh log","search content:"+content);
+		
+		if (content.length() < 1) {
+			return;
+		}
+		
+		ShowProcee();
+		NetBook.Search(content
+				, new GetNetBookListCallback() {
+
+					@Override
+					public void onFail(String msg) {
+
+					}
+
+					@Override
+					public void onSuccess(List<NetBook> bookList) {
+						searchSuccess(bookList);
+					}
+
+		});
+	}
+	
 	@Override
 	protected void onFinishInit() {
 		super.onFinishInit();
@@ -389,7 +408,7 @@ public class SearchView extends AbstractView {
 	private void searchFail(String msg) {
 
 		DismissProcess();
-		((BookShopActivity) mContext).makeToast(R.string.search_fail);
+		((BookSearchActivity) mContext).makeToast(R.string.search_fail);
 		mListView.setVisibility(View.INVISIBLE);
 		absoluteLayout.setVisibility(View.VISIBLE);
 	}
@@ -437,6 +456,13 @@ public class SearchView extends AbstractView {
 //					cv.SetBook(book);
 //					cv.bringSelfToFront();
 //				}
+				Intent intent = new Intent(mContext,BookDetailActivity.class);
+				intent.putExtra(BookDetailActivity.EXTRA_SCR_TYPE, BookDetailActivity.TYPE_BOOK);
+				intent.putExtra(BookDetailActivity.EXTRA_BOOKID, book.bookid);
+				intent.putExtra(BookDetailActivity.EXTRA_CPCODE, book.cpcode);
+				intent.putExtra(BookDetailActivity.EXTRA_RPID, book.rpid);
+				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				mContext.startActivity(intent);
 			}
 		}
 	};
@@ -484,11 +510,11 @@ public class SearchView extends AbstractView {
 
 	protected void ChangeTab(boolean bIn) {
 
-		if (bIn) {
-			((BookShopActivity) mContext).mSearchview = this;
-		} else {
-			((BookShopActivity) mContext).mSearchview = null;
-		}
+//		if (bIn) {
+//			((BookShopActivity) mContext).mSearchview = this;
+//		} else {
+//			((BookShopActivity) mContext).mSearchview = null;
+//		}
 
 	}
 
@@ -625,6 +651,10 @@ public class SearchView extends AbstractView {
 	public void ReLoadData() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public void setSearchContent(String content) {
+		searchContent = content;
 	}
 
 }
