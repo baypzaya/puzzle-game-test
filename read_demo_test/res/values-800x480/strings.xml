@@ -246,8 +246,8 @@
 	<dimen name="bookmark_factory_backButton_width">90px</dimen>
 	<dimen name="bookmark_factory_backButton_height">46px</dimen>
 	<dimen name="bookmark_factory_backButton_marginRight">8px</dimen>
-	<dimen name="bookmark_factory_poster_img_height">180px</dimen>
-	<dimen name="bookmark_factory_poster_imgView_height">25px</dimen>
+	<dimen name="bookmark_factory_poster_img_height">130px</dimen>
+	<dimen name="bookmark_factory_poster_imgView_height">20px</dimen>
 	<dimen name="bookmark_factory_poster_tv_marginLeft">10px</dimen>
 	<dimen name="bookmark_factory_lin_star_width">68px</dimen>
 	<dimen name="bookmark_factory_bookmark_marginBottom">20px</dimen>
@@ -281,7 +281,7 @@
 	<dimen name="system_menu_lin_img_marginTop">5px</dimen>
 	<dimen name="system_menu_lin_tv_marginTop">5px</dimen>
 	<!-- poster -->
-	<dimen name="poster_height">100px</dimen>
+	<dimen name="poster_height">130px</dimen>
 	<dimen name="poster_recommend_height">140px</dimen>
 
 	<!-- poster_item -->

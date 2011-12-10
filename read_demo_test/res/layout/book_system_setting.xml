@@ -12,6 +12,30 @@
 			/>
 
 	</RelativeLayout>
+	
+	<RelativeLayout 
+	android:id="@+id/my_account"
+	    android:onClick="sysSettingClick"
+	    android:background="@drawable/bar_bg_5"
+		android:layout_width="fill_parent" android:layout_height="@dimen/book_system_setting_height">
+
+		<LinearLayout android:layout_centerInParent="true"
+			android:layout_alignParentLeft="true"
+			android:layout_marginLeft="@dimen/book_system_setting_marginLeft"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:orientation="vertical">
+
+			<TextView android:text="@string/my_account" style="@style/sys_setting_font_black" />
+
+		</LinearLayout>
+
+		<ImageView 
+		    android:layout_centerInParent="true"
+			android:layout_alignParentRight="true" android:src="@drawable/arrow_right"
+			android:layout_marginRight="@dimen/book_system_setting_img_marginRight" 
+			android:layout_width="@dimen/book_system_setting_img_width" android:layout_height="@dimen/book_system_setting_img_height" />
+
+	</RelativeLayout>
 
 
 	<RelativeLayout android:background="@drawable/bar_bg_5"
@@ -98,7 +122,7 @@
 	android:id="@+id/sys_setting_help"
 	    android:onClick="sysSettingClick"
 	    android:background="@drawable/bar_bg_5"
-		android:layout_width="fill_parent" android:layout_height="@dimen/book_system_setting_height">
+		android:layout_width="fill_parent" android:layout_height="@dimen/book_system_setting_height" android:visibility="gone">
 
 		<LinearLayout android:layout_centerInParent="true"
 			android:layout_alignParentLeft="true"
@@ -117,10 +141,4 @@
 			android:layout_width="@dimen/book_system_setting_img_width" android:layout_height="@dimen/book_system_setting_img_height" />
 
 	</RelativeLayout>
-
-
-
-
-
-
 </LinearLayout>
