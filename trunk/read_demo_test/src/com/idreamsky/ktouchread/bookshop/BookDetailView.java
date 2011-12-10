@@ -109,7 +109,7 @@ public class BookDetailView extends AbstractView {
 			@Override
 			public void onClick(View v) {
 
-				final BookShopActivity activity = (BookShopActivity) mContext;
+				final BookDetailActivity activity = (BookDetailActivity) mContext;
 				// TODO Auto-generated method stub
 				if (mBookInfo != null && mBookInfo.bookid != null) {
 					btnreadButton.setEnabled(false);
@@ -160,7 +160,7 @@ public class BookDetailView extends AbstractView {
 //												BookShelf.READBOOK, book);
 //										intent.putExtras(bundle);
 										intent.putExtra(Util.ENTRANCE,BookShelf.BOOKDETAIL);
-										intent.setClass((BookShopActivity) mContext,DirectoryActivity.class);
+										intent.setClass(mContext,DirectoryActivity.class);
 										mContext.startActivityForResult(intent, BookShelf.REFRESHCODE);
 										btnreadButton.setEnabled(true);
 										
@@ -215,7 +215,7 @@ public class BookDetailView extends AbstractView {
 //						}
 //					});
 
-					((BookShopActivity) mContext).SetCollectNewBook();
+					((BookDetailActivity) mContext).SetCollectNewBook();
 				//}
 			}
 		});

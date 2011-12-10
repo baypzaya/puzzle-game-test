@@ -9,6 +9,7 @@ import com.aliyun.aui.app.spirit.SpiritActivity;
 import com.aliyun.aui.widget.spirit.NavigationBar;
 import com.idreamsky.ktouchread.Adapter.MyBookShelfAdapter;
 import com.idreamsky.ktouchread.bookread.BookReadActivity;
+import com.idreamsky.ktouchread.bookshop.BookDetailActivity;
 import com.idreamsky.ktouchread.bookshop.BookShopActivity;
 import com.idreamsky.ktouchread.common.OpenBookAnimation;
 import com.idreamsky.ktouchread.data.Book;
@@ -188,31 +189,35 @@ public class BookShelf extends SpiritActivity implements OnTouchListener,
 					if(advert.bookid != null && advert.bookid.length() > 0 && advert.bookid.compareTo("-1") != 0)
 					{
 						Intent intent = new Intent();
-						Bundle bundle = new Bundle();
-						bundle.putSerializable(BookShelf.ADVERT, advert);
-						intent.putExtra(BookShelf.BUNDLE, bundle);
-						intent.putExtra(BookShelf.ENTRANCE, BookShelf.ADVERT);
-						intent.setClass(BookShelf.this, BookShopActivity.class);
+//						Bundle bundle = new Bundle();
+//						bundle.putSerializable(BookShelf.ADVERT, advert);
+//						intent.putExtra(BookShelf.BUNDLE, bundle);
+//						intent.putExtra(BookShelf.ENTRANCE, BookShelf.ADVERT);
+						intent.putExtra(BookDetailActivity.EXTRA_SCR_TYPE, BookDetailActivity.TYPE_ADVERT);
+						intent.putExtra(BookDetailActivity.EXTRA_BOOKID, advert.bookid);
+						intent.putExtra(BookDetailActivity.EXTRA_CPCODE, advert.cpcode);
+						intent.putExtra(BookDetailActivity.EXTRA_RPID, advert.rpid);
+						intent.setClass(BookShelf.this, BookDetailActivity.class);
 						intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 						BookShelf.this.startActivity(intent);
 					}
-					else
-					{
-						Intent intent = new Intent();
-						intent.putExtra(BookShelf.ENTRANCE, BookShelf.MYBOOKSHELF);
-						intent.setClass(BookShelf.this, BookShopActivity.class);
-						intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); 
-						BookShelf.this.startActivityForResult(intent,BookShelf.COLLECTREQUESTCOLDE);
-					}
+//					else
+//					{
+//						Intent intent = new Intent();
+//						intent.putExtra(BookShelf.ENTRANCE, BookShelf.MYBOOKSHELF);
+//						intent.setClass(BookShelf.this, BookShopActivity.class);
+//						intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); 
+//						BookShelf.this.startActivityForResult(intent,BookShelf.COLLECTREQUESTCOLDE);
+//					}
 				}
-				else
-				{
-					Intent intent = new Intent();
-					intent.putExtra(BookShelf.ENTRANCE, BookShelf.MYBOOKSHELF);
-					intent.setClass(BookShelf.this, BookShopActivity.class);
-					intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); 
-					BookShelf.this.startActivityForResult(intent,BookShelf.COLLECTREQUESTCOLDE);
-				}
+//				else
+//				{
+//					Intent intent = new Intent();
+//					intent.putExtra(BookShelf.ENTRANCE, BookShelf.MYBOOKSHELF);
+//					intent.setClass(BookShelf.this, BookShopActivity.class);
+//					intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); 
+//					BookShelf.this.startActivityForResult(intent,BookShelf.COLLECTREQUESTCOLDE);
+//				}
 				
 
 			}
