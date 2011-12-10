@@ -3,12 +3,9 @@ package com.idreamsky.ktouchread.bookshop;
 
 import java.util.ArrayList;
 import java.util.List;
-import com.idreamsky.ktouchread.bookshelf.R;
-import com.idreamsky.ktouchread.bookshop.adapter.BookAdapter;
-import com.idreamsky.ktouchread.data.net.Category;
-import com.idreamsky.ktouchread.data.net.NetBook;
-import com.idreamsky.ktouchread.data.net.Top;
+
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
@@ -17,11 +14,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.idreamsky.ktouchread.bookshelf.R;
+import com.idreamsky.ktouchread.bookshop.adapter.BookAdapter;
+import com.idreamsky.ktouchread.data.net.Category;
+import com.idreamsky.ktouchread.data.net.NetBook;
+import com.idreamsky.ktouchread.data.net.Top;
 
 
 public class BookListView extends AbstractView {
@@ -338,6 +340,13 @@ public class BookListView extends AbstractView {
 //			        	 cv.SetBook(book);
 //				         cv.bringSelfToFront();
 //			         }
+					Intent intent = new Intent(mContext,BookDetailActivity.class);
+					intent.putExtra(BookDetailActivity.EXTRA_SCR_TYPE, BookDetailActivity.TYPE_BOOK);
+					intent.putExtra(BookDetailActivity.EXTRA_BOOKID, book.bookid);
+					intent.putExtra(BookDetailActivity.EXTRA_CPCODE, book.cpcode);
+					intent.putExtra(BookDetailActivity.EXTRA_RPID, book.rpid);
+					intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+					mContext.startActivity(intent);
 				}
 			}
 		}

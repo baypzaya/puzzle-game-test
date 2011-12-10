@@ -49,9 +49,9 @@ public class BookShopActivity extends MenuTabActivity implements OnTabChangeList
 	private static final int INDEX_CATEGORYVIEW = 2;
 
 	private boolean isShowLeadBoardBack;
-	private String leadBoardBackTitle;
+	private String leadBoardTitle;
 
-	private boolean isShowCategorBack;
+	private boolean isShowCategoryBack;
 	private String categorTitle;
 
 	// private ViewStrategy mViewStrategy;
@@ -82,25 +82,6 @@ public class BookShopActivity extends MenuTabActivity implements OnTabChangeList
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-
-		// MenuTabHost tabHost = this.getTabHost();
-		// int index = tabHost.getCurrentTab();
-		// switch (index) {
-		// case INDEX_RECOMMEND:
-		// mRecommendView = new RecommendView(BookShopActivity.this);
-		// mRecommendView.initializeIfNecessary();
-		// break;
-		// case INDEX_LEADBOARD:
-		// mLeadBoardView = new LeadBoardView(BookShopActivity.this);
-		// mLeadBoardView.initializeIfNecessary();
-		// break;
-		// case INDEX_CATEGORYVIEW:
-		// mCategoryView = new CategoryView(BookShopActivity.this);
-		// mCategoryView.initializeIfNecessary();
-		// break;
-		// default:
-		// break;
-		// }
 
 	}
 
@@ -170,8 +151,8 @@ public class BookShopActivity extends MenuTabActivity implements OnTabChangeList
 				break;
 			}
 		case INDEX_CATEGORYVIEW:
-			if (isShowCategorBack) {
-				isShowCategorBack = false;				
+			if (isShowCategoryBack) {
+				isShowCategoryBack = false;				
 				abstractView = new CategoryView(this);;
 				break;
 			}
@@ -718,8 +699,8 @@ public class BookShopActivity extends MenuTabActivity implements OnTabChangeList
 		}
 	}
 
-	View activity1 = null;
-	View activity2 = null;
+//	View activity1 = null;
+//	View activity2 = null;
 
 	public void updateContent(String title, AbstractView abstractView) {
 		int index = tabHost.getCurrentTab();
@@ -727,10 +708,10 @@ public class BookShopActivity extends MenuTabActivity implements OnTabChangeList
 		switch (index) {
 		case INDEX_LEADBOARD:
 			isShowLeadBoardBack = true;
-			leadBoardBackTitle = title;
+			leadBoardTitle = title;
 			break;
 		case INDEX_CATEGORYVIEW:
-			isShowCategorBack = true;
+			isShowCategoryBack = true;
 			categorTitle = title;
 			break;
 		default:
@@ -740,8 +721,8 @@ public class BookShopActivity extends MenuTabActivity implements OnTabChangeList
 		updateNavigationBar();
 
 		abstractView.initializeIfNecessary();
-		activity1 = tabHost.getCurrentView();
-		activity2 = abstractView.getContentView();
+		View activity1 = tabHost.getCurrentView();
+		View activity2 = abstractView.getContentView();
 
 		TabSpec tabSpec = this.getTabSpecBy(index);
 
@@ -786,24 +767,22 @@ public class BookShopActivity extends MenuTabActivity implements OnTabChangeList
 	private void updateNavigationBar() {
 		Builder builder = this.getNavigationBarBuilder();
 		int index = tabHost.getCurrentTab();
-		switch (index) {
-		case INDEX_LEADBOARD:
-			if (isShowLeadBoardBack) {
-				builder.showBackButton(true);
-				builder.setTitle(leadBoardBackTitle);
-				break;
-			}
-		case INDEX_CATEGORYVIEW:
-			if (isShowCategorBack) {
-				builder.showBackButton(true);
-				builder.setTitle(categorTitle);
-				break;
-			}
-		default:
+		
+		if(isShowLeadBoardBack && index == INDEX_LEADBOARD ){
+			builder.showBackButton(true);
+			builder.setTitle(leadBoardTitle);
+		}else if(isShowCategoryBack && index == INDEX_CATEGORYVIEW){
+			builder.showBackButton(true);
+			builder.setTitle(categorTitle);
+		}else{
 			builder.showBackButton(false);
 			builder.setTitle(R.string.toBookShop);
-			break;
+			return;
 		}
+		
+		
+		
+		
 	}
 
 	// 动画监听
@@ -811,8 +790,16 @@ public class BookShopActivity extends MenuTabActivity implements OnTabChangeList
 		
 
 		public void onAnimationEnd(Animation animation) {
+//			activity1.setVisibility(View.GONE);
+			Runnable runnable = new Runnable(){
+
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					refreshTabView(tabHost.getCurrentTab());
+				}};
+			mHandler.postDelayed(runnable, 100);
 			
-			refreshTabView(tabHost.getCurrentTab());
 		}
 
 		public void onAnimationRepeat(Animation animation) {

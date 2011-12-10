@@ -9,6 +9,7 @@ import com.idreamsky.ktouchread.bookshop.adapter.BookAdapterEx;
 import com.idreamsky.ktouchread.data.net.Advert;
 import com.idreamsky.ktouchread.data.net.NetBook;
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Message;
 import android.view.LayoutInflater;
@@ -166,6 +167,13 @@ public class RecommendView extends AbstractView {
 //				} else {
 //					cv.bringSelfToFront();
 //				}
+				Intent intent = new Intent(mContext,BookDetailActivity.class);
+				intent.putExtra(BookDetailActivity.EXTRA_SCR_TYPE, BookDetailActivity.TYPE_BOOK);
+				intent.putExtra(BookDetailActivity.EXTRA_BOOKID, book.bookid);
+				intent.putExtra(BookDetailActivity.EXTRA_CPCODE, book.cpcode);
+				intent.putExtra(BookDetailActivity.EXTRA_RPID, book.rpid);
+				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				mContext.startActivity(intent);
 
 			}
 		}
