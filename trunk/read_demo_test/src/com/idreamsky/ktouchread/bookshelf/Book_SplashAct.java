@@ -23,13 +23,14 @@ public class Book_SplashAct extends Activity {
 
 		SettingUtils utils = new SettingUtils(this, "SaveParameter", Context.MODE_PRIVATE);
 		String key = utils.getString("guide", "false");
-		if (key.equals("true")) {
+		utils.putString("guide", "true");
+//		if (key.equals("true")) {
 			// if (false) {
 			Intent intent = new Intent(Book_SplashAct.this, Book_SplashAct1.class);
 			startActivity(intent);
 			finish();
-		} else
-			setContentView(R.layout.guide);
+//		} else
+//			setContentView(R.layout.guide);
 	}
 
 	@Override

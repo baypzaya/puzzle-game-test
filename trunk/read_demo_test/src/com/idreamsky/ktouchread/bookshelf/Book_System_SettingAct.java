@@ -26,12 +26,14 @@ import com.idreamsky.ktouchread.bookshelf.download.DownloadProgressListener;
 import com.idreamsky.ktouchread.bookshelf.download.DownloadThread;
 import com.idreamsky.ktouchread.bookshelf.download.FileDownloader;
 import com.idreamsky.ktouchread.data.BackupThread;
+import com.idreamsky.ktouchread.data.Book;
 import com.idreamsky.ktouchread.data.BackupThread.BackupCallback;
 import com.idreamsky.ktouchread.data.SyncThread;
 import com.idreamsky.ktouchread.data.SyncThread.SyncCallback;
 import com.idreamsky.ktouchread.data.net.CheckInfo;
 import com.idreamsky.ktouchread.data.net.CheckInfo.GetCheckinfoCallback;
 import com.idreamsky.ktouchread.data.net.UrlUtil;
+import com.idreamsky.ktouchread.pay.KPayAccount;
 import com.idreamsky.ktouchread.service.Book_System_SettingService;
 import com.idreamsky.ktouchread.util.LogEx;
 import com.idreamsky.ktouchread.util.NetUtil;
@@ -234,6 +236,9 @@ public class Book_System_SettingAct extends SpiritActivity {
 //
 			
 //			break;
+		case R.id.my_account:
+			SwitchtoKPayAccount();
+			break;
 		case R.id.sys_setting_update:
 
 			new Thread(new Runnable() {
@@ -388,17 +393,33 @@ public class Book_System_SettingAct extends SpiritActivity {
 		progressDialog.show();
 
 	}
-  @Override
-   public boolean onKeyDown(int keyCode, KeyEvent event) {
-	// TODO Auto-generated method stub
-	  if( keyCode==KeyEvent.KEYCODE_BACK)
-	  {
-			this.setResult(BookShelf.COLLECTREQUESTCOLDE);
-			this.finish();
-			return true;
-	  }
-	return super.onKeyDown(keyCode, event);
-   }
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+				exitApplication();
+			
+		}
+		return false;
+	}
+
+	/**
+	 * 退出应用程序
+	 */
+	public void exitApplication() {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle(R.string.bookshelf_exit);
+		builder.setMessage(R.string.bookshelf_enter);
+		builder.setPositiveButton(getString(R.string.confirm),
+				new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						finish();
+					}
+				});
+		builder.setNegativeButton(getString(R.string.cancel), null);
+		builder.create().show();
+	}
 	private void failDialogTip() {
 		AlertDialog.Builder dialog = new AlertDialog.Builder(
 				Book_System_SettingAct.this);
@@ -579,6 +600,13 @@ public class Book_System_SettingAct extends SpiritActivity {
 				"application/vnd.android.package-archive");
 		startActivity(installIntent);
 		android.os.Process.killProcess(android.os.Process.myPid());
+	}
+	
+	private void SwitchtoKPayAccount() {
+		 Book.Save();
+		 Intent intent = KPayAccount.GetUserIntent();
+		 startActivityForResult(intent,
+		 KPayAccount.REQUESTCODE_FLAG_FOR_GETTOKEN);
 	}
 
 }

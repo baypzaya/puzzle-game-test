@@ -8,6 +8,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -200,7 +202,9 @@ public class MyBookShelfAdapter extends BaseAdapter {
 				v.myBookShelfUpdateCount.setText(Integer.toString(book.unreadChapterNumber));
 		}else
 		{
-			v.myBookShelfAfterMore.setBackgroundResource(R.drawable.button_a);
+			Drawable drawable = new ColorDrawable(0x00000000);
+//			v.myBookShelfAfterMore.setBackgroundResource(R.drawable.button_a);
+			v.myBookShelfAfterMore.setBackgroundColor(0x00000000);
 			v.myBookShelfAfterMore.setText(mContext.getString(R.string.bookshelf_yes_end));
 			v.myBookShelfAfterMore.setTextColor(Color.parseColor("#999999"));
 			v.myBookShelfAfterMore.setEnabled(false);

@@ -10,7 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -38,6 +40,7 @@ import android.widget.ViewFlipper;
 
 import com.aliyun.aui.app.spirit.SpiritActivity;
 import com.aliyun.aui.widget.spirit.NavigationBar;
+import com.idreamsky.ktouchread.bookshelf.BookShelf;
 import com.idreamsky.ktouchread.bookshelf.Poster;
 import com.idreamsky.ktouchread.bookshelf.R;
 import com.idreamsky.ktouchread.data.net.BookMarkFactory;
@@ -1062,12 +1065,30 @@ public class BookMarkFactoryActivity extends SpiritActivity implements
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if(keyCode==KeyEvent.KEYCODE_BACK)
-		{
-			this.finish();
-			overridePendingTransition(R.anim.left_in,R.anim.left_out);
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+				exitApplication();
+			
 		}
-		return true;
+		return false;
+	}
+
+	/**
+	 * 退出应用程序
+	 */
+	public void exitApplication() {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle(R.string.bookshelf_exit);
+		builder.setMessage(R.string.bookshelf_enter);
+		builder.setPositiveButton(getString(R.string.confirm),
+				new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						finish();
+					}
+				});
+		builder.setNegativeButton(getString(R.string.cancel), null);
+		builder.create().show();
 	}
 	
 	

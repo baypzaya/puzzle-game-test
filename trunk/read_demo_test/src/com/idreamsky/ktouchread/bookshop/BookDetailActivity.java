@@ -1,18 +1,32 @@
 package com.idreamsky.ktouchread.bookshop;
 
+import java.lang.ref.WeakReference;
+import java.util.Iterator;
+import java.util.Map;
+
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.aliyun.aui.app.spirit.SpiritActivity;
 import com.aliyun.aui.widget.spirit.NavigationBar;
 import com.aliyun.aui.widget.spirit.NavigationBar.OnSearchBarDoSearchingListener;
+import com.idreamsky.ktouchread.bookshelf.BookShelf;
 import com.idreamsky.ktouchread.bookshelf.R;
+import com.idreamsky.ktouchread.data.Book;
 import com.idreamsky.ktouchread.data.net.Advert;
 import com.idreamsky.ktouchread.data.net.NetBook;
+import com.idreamsky.ktouchread.data.net.UrlUtil;
+import com.idreamsky.ktouchread.pay.KPayAccount;
+import com.idreamsky.ktouchread.util.ImgUtil;
 
 public class BookDetailActivity extends SpiritActivity {
 	
@@ -101,6 +115,124 @@ builder.setOnSearchBarDoSearchingListener(new OnSearchBarDoSearchingListener() {
 		
 	}
 
-	
+	public Handler mHandler = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			// TODO Auto-generated method stub
+			if (msg.what == 10) {
+				GetUserInforError();
+			} else if (msg.what == 11) {
+				new Thread() {
+					public void run() {
+						Iterator iter = ImgUtil.sBitmapPool.entrySet()
+								.iterator();
+						while (iter.hasNext()) {
+							Map.Entry entry = (Map.Entry) iter.next();
+							String key = (String) entry.getKey();
+							WeakReference<Bitmap> bitmapRef = (WeakReference<Bitmap>) entry
+									.getValue();
+							if (bitmapRef != null && key != null) {
+								Bitmap bitmap = bitmapRef.get();
+								if (null != bitmap) {
+									if (!bitmap.isRecycled()) {
+										bitmap.recycle();
+									}
 
+								}
+								ImgUtil.sBitmapPool.remove(key);
+							}
+						}
+					};
+				}.start();
+			} else if (msg.what == 12) {
+				InitTryDialog((String) msg.obj);
+
+			} else if (msg.what == 13) {
+				mHandler.postDelayed(new Runnable() {
+
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+
+						// ViewStrategy viewStrategy = getViewStrategy();
+						// AbstractView view = viewStrategy.getCurrentView();
+						// view.ReLoadData();
+					}
+				}, 500);
+
+			}
+			super.handleMessage(msg);
+		}
+	};
+	
+	private void InitTryDialog(String Msg) {
+		try {
+			AlertDialog.Builder builder = new AlertDialog.Builder(
+					this);
+			builder.setTitle(R.string.book_ol_network_error);
+			builder.setMessage(Msg);
+			builder.setPositiveButton(getString(R.string.book_ol_network_agin),
+					new DialogInterface.OnClickListener() {
+
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							// TODO Auto-generated method stub
+							mHandler.sendEmptyMessage(13);
+
+						}
+					});
+			builder.setNegativeButton(getString(R.string.cancel),
+					new DialogInterface.OnClickListener() {
+
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							// Back();
+						}
+					});
+			builder.create().show();
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+	}
+	
+	public void GetUserInforError() {
+		try {
+			AlertDialog.Builder builder = new AlertDialog.Builder(
+				this);
+			builder.setTitle(R.string.splash_notify);
+			builder.setMessage(R.string.splash_get_user_info_error);
+			builder.setPositiveButton(getString(R.string.book_ol_network_agin),
+					new DialogInterface.OnClickListener() {
+
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							// TODO Auto-generated method stub
+							SwitchtoKPayAccount();
+
+						}
+					});
+			builder.setNegativeButton(getString(R.string.cancel),
+					new DialogInterface.OnClickListener() {
+
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							UrlUtil.TokenTPL = null;
+							BookDetailActivity.this
+									.setResult(BookShelf.COLLECTREQUESTCOLDE);
+							BookDetailActivity.this.finish();
+						}
+					});
+			AlertDialog dialog = builder.create();
+			dialog.setCancelable(false);
+			dialog.show();
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+}
+	private void SwitchtoKPayAccount() {
+		Intent intent = KPayAccount.GetUserIntent();
+		startActivityForResult(intent,
+				KPayAccount.REQUESTCODE_FLAG_FOR_GETTOKEN);
+		Book.Save();
+	}
 }

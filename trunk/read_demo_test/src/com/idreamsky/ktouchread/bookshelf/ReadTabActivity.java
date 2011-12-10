@@ -1,9 +1,12 @@
 package com.idreamsky.ktouchread.bookshelf;
 
+import android.app.AlertDialog;
 import android.app.backup.RestoreObserver;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 
 import com.aliyun.aui.app.spirit.SlideTabActivity;
 import com.aliyun.aui.widget.spirit.SlideTabHost;

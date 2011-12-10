@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
@@ -836,6 +837,34 @@ public class BookShopActivity extends MenuTabActivity implements OnTabChangeList
 	@Override
 	public void onTabChanged(int arg0, String arg1) {
 		updateNavigationBar();		
+	}
+	
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+				exitApplication();
+			
+		}
+		return false;
+	}
+
+	/**
+	 * 退出应用程序
+	 */
+	public void exitApplication() {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle(R.string.bookshelf_exit);
+		builder.setMessage(R.string.bookshelf_enter);
+		builder.setPositiveButton(getString(R.string.confirm),
+				new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						finish();
+					}
+				});
+		builder.setNegativeButton(getString(R.string.cancel), null);
+		builder.create().show();
 	}
 
 }
