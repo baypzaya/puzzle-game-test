@@ -9,7 +9,7 @@
 	<LinearLayout 
 		style="@style/titleStyle"
 		android:gravity ="center_vertical"
-		>
+		android:visibility="gone" >
 		<Button  
 			android:id="@+id/btn_unRead_back" 
 			android:layout_width="@dimen/un_read_btn_back_width" 

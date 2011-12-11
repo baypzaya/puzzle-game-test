@@ -38,7 +38,7 @@
 	</RelativeLayout>
 
 
-	<RelativeLayout android:background="@drawable/bar_bg_5"
+	<RelativeLayout android:id="@+id/sys_setting_update_layout" android:background="@drawable/bar_bg_5" android:onClick="sysSettingClick"
 		android:layout_width="fill_parent" android:layout_height="@dimen/book_shop_item_height">
 
 
@@ -60,13 +60,13 @@
 
 		<Button android:onClick="sysSettingClick" style="@style/sys_setting_btn"
 			android:id="@+id/sys_setting_update" android:text="@string/soft_update_setting_update"
-			android:background="@drawable/book_shop_system_setting" />
+			android:background="@drawable/book_shop_system_setting" android:visibility="gone"/>
 
 
 	</RelativeLayout>
 
 
-	<RelativeLayout android:background="@drawable/bar_bg_5"
+	<RelativeLayout android:id="@+id/sys_setting_sync_layout" android:background="@drawable/bar_bg_5" android:onClick="sysSettingClick"
 		android:layout_width="fill_parent" android:layout_height="80px">
 
 
@@ -86,13 +86,13 @@
 		<Button android:id="@+id/sys_setting_sync"
 		    android:onClick="sysSettingClick"
 			style="@style/sys_setting_btn" android:background="@drawable/book_shop_system_setting"
-			android:text="@string/sync_data_setting" />
+			android:text="@string/sync_data_setting" android:visibility="gone"/>
 
 
 	</RelativeLayout>
 	
 	
-		<RelativeLayout android:background="@drawable/bar_bg_5"
+		<RelativeLayout android:id="@+id/sys_setting_backup_layout" android:background="@drawable/bar_bg_5" android:onClick="sysSettingClick"
 		android:layout_width="fill_parent" android:layout_height="@dimen/book_shop_item_height">
 
 
@@ -112,7 +112,7 @@
 		<Button android:id="@+id/sys_setting_backup"
 		    android:onClick="sysSettingClick"
 			style="@style/sys_setting_btn" android:background="@drawable/book_shop_system_setting"
-			android:text="@string/backup_data_setting" />
+			android:text="@string/backup_data_setting" android:visibility="gone"/>
 
 
 	</RelativeLayout>
