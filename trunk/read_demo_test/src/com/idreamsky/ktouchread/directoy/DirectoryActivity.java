@@ -3,30 +3,9 @@ package com.idreamsky.ktouchread.directoy;
 import java.util.ArrayList;
 import java.util.List;
 
-
-import com.idreamsky.ktouchread.Adapter.BookMarkAdapter;
-import com.idreamsky.ktouchread.Adapter.DirectoryAdapter;
-import com.idreamsky.ktouchread.bookread.BookReadActivity;
-import com.idreamsky.ktouchread.bookshelf.BookShelf;
-
-import com.idreamsky.ktouchread.bookshelf.R;
-
-import com.idreamsky.ktouchread.data.Book;
-import com.idreamsky.ktouchread.data.BookMark;
-import com.idreamsky.ktouchread.data.Chapter;
-
-import com.idreamsky.ktouchread.service.AddBookService;
-
-import com.idreamsky.ktouchread.util.LogEx;
-import com.idreamsky.ktouchread.util.Util;
-
-
-import android.app.Activity;
 import android.app.AlertDialog;
-
 import android.content.DialogInterface;
 import android.content.Intent;
-
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -36,16 +15,29 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemSelectedListener;
 
-public class DirectoryActivity extends Activity  {
+import com.aliyun.aui.app.spirit.SpiritActivity;
+import com.idreamsky.ktouchread.Adapter.BookMarkAdapter;
+import com.idreamsky.ktouchread.Adapter.DirectoryAdapter;
+import com.idreamsky.ktouchread.bookread.BookReadActivity;
+import com.idreamsky.ktouchread.bookshelf.BookShelf;
+import com.idreamsky.ktouchread.bookshelf.R;
+import com.idreamsky.ktouchread.data.Book;
+import com.idreamsky.ktouchread.data.BookMark;
+import com.idreamsky.ktouchread.data.Chapter;
+import com.idreamsky.ktouchread.service.AddBookService;
+import com.idreamsky.ktouchread.util.LogEx;
+import com.idreamsky.ktouchread.util.Util;
+
+public class DirectoryActivity extends SpiritActivity  {
 	private int directory = 1; //目录
 	private int bookMark = 2; //书签
 	private int curSelect = directory ;//当前选中 默认目录
