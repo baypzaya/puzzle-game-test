@@ -7,24 +7,26 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.aliyun.aui.app.spirit.SpiritActivity;
+import com.aliyun.aui.app.spirit.MenuTabActivity;
+import com.aliyun.aui.widget.spirit.MenuTabHost;
+import com.aliyun.aui.widget.spirit.MenuTabHost.OnTabChangeListener;
 import com.idreamsky.ktouchread.Adapter.BookMarkAdapter;
 import com.idreamsky.ktouchread.Adapter.DirectoryAdapter;
 import com.idreamsky.ktouchread.bookread.BookReadActivity;
@@ -37,13 +39,17 @@ import com.idreamsky.ktouchread.service.AddBookService;
 import com.idreamsky.ktouchread.util.LogEx;
 import com.idreamsky.ktouchread.util.Util;
 
-public class DirectoryActivity extends SpiritActivity  {
+public class DirectoryActivity extends MenuTabActivity  implements OnTabChangeListener{
 	private int directory = 1; //目录
 	private int bookMark = 2; //书签
 	private int curSelect = directory ;//当前选中 默认目录
-	private Button btn_directory; 
-	private Button btn_bookMark;
-	private ListView lvDirectory;
+//	private Button btn_directory; 
+//	private Button btn_bookMark;
+	private ListView currentListView;
+	
+	private ListView lvDire;
+	private ListView lvBookmark;
+	
 	private LinearLayout linDirectoryTitle; //目录工具栏
 	private TextView tvSection; //显示总章节
 	private Spinner spinnerSection;
@@ -57,21 +63,27 @@ public class DirectoryActivity extends SpiritActivity  {
 	public static int directoryCode = 333;
 	private int spinnerIndex = 0 ;
 	String entrance = null;
+	
+	private LayoutInflater mLayoutInflater;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.directory_bookmark);
-		btn_directory = (Button) this.findViewById(R.id.btn_directory); 
-		btn_bookMark = (Button) this.findViewById(R.id.btn_bookMark);
-		lvDirectory  = (ListView) this.findViewById(R.id.lvDirectory);
-		linDirectoryTitle  = (LinearLayout) this.findViewById(R.id.linDirectoryTitle);
-		tvSection = (TextView) this.findViewById(R.id.tvSection);
-		spinnerSection  =(Spinner) this.findViewById(R.id.spinnerSection);
-		Button btnBack = (Button) this.findViewById(R.id.btn_director_back); 
-		btnBack.setOnClickListener(btnClickListener);
 		
-		btn_directory.setOnClickListener(btnClickListener);
-		btn_bookMark.setOnClickListener(btnClickListener);
+		mLayoutInflater = LayoutInflater.from(this);
+		
+//		setContentView(R.layout.directory_bookmark);
+//		btn_directory = (Button) this.findViewById(R.id.btn_directory); 
+//		btn_bookMark = (Button) this.findViewById(R.id.btn_bookMark);
+//		lvDirectory  = (ListView) this.findViewById(R.id.lvDirectory);
+//		linDirectoryTitle  = (LinearLayout) this.findViewById(R.id.linDirectoryTitle);
+//		tvSection = (TextView) this.findViewById(R.id.tvSection);
+//		spinnerSection  =(Spinner) this.findViewById(R.id.spinnerSection);
+//		Button btnBack = (Button) this.findViewById(R.id.btn_director_back); 
+//		btnBack.setOnClickListener(btnClickListener);
+		
+//		btn_directory.setOnClickListener(btnClickListener);
+//		btn_bookMark.setOnClickListener(btnClickListener);
 		entrance = getIntent().getStringExtra(Util.ENTRANCE); //入口
 		if(entrance!=null)
 		{
@@ -83,36 +95,47 @@ public class DirectoryActivity extends SpiritActivity  {
 		chapters = book.GetChapterList();
 		bookMarks = book.GetBookMarkList();
 		
-		lvDirectory.setOnItemLongClickListener(onItemLongClickListener);
-		tvSection.setText(getString(R.string.directory_book)+chapters.size()+getString(R.string.unread_number));
-		new Thread(){
+//		lvDirectory.setOnItemLongClickListener(onItemLongClickListener);
+//		tvSection.setText(getString(R.string.directory_book)+chapters.size()+getString(R.string.unread_number));
+//		new Thread(){
+//
+//			@Override
+//			public void run() {
+//				chapterCuts = new ArrayList<Chapter>();
+//				if(chapters.size()>100){
+//					for(int i=0;i<showSection;i++) //默认显示100章节 
+//					{
+//						chapterCuts.add(chapters.get(i));
+//					}
+//				}else {
+//					for(int i=0;i<chapters.size();i++) //默认显示100章节
+//					{
+//						chapterCuts.add(chapters.get(i));
+//					}
+//				}
+//				handler.sendEmptyMessage(0);
+//				super.run();
+//			}
+//			
+//		}.start();
+//		
+//				
+//		directoryAdapter = new DirectoryAdapter(DirectoryActivity.this);
+//		resetSpinnerContent();
 
-			@Override
-			public void run() {
-				chapterCuts = new ArrayList<Chapter>();
-				if(chapters.size()>100){
-					for(int i=0;i<showSection;i++) //默认显示100章节 
-					{
-						chapterCuts.add(chapters.get(i));
-					}
-				}else {
-					for(int i=0;i<chapters.size();i++) //默认显示100章节
-					{
-						chapterCuts.add(chapters.get(i));
-					}
-				}
-				handler.sendEmptyMessage(0);
-				super.run();
-			}
-			
-		}.start();
 		
-				
-		directoryAdapter = new DirectoryAdapter(DirectoryActivity.this);
-		resetSpinnerContent();
+//		bookMarkAdapter = new BookMarkAdapter(this);
+		MenuTabHost tabHost = getTabHost();
+		MenuTabHost.TabSpec tabDirectory = tabHost.newTabSpec("目录").setContent(
+				createDirectoryView());
+		MenuTabHost.TabSpec tabBookMark = tabHost.newTabSpec("书签").setContent(
+				createBookMarkView());
+		
 
+		tabHost.addTab(tabDirectory);
+		tabHost.addTab(tabBookMark);
+		tabHost.setOnTabChangedListener(this);
 		
-		bookMarkAdapter = new BookMarkAdapter(this);
 	}
 	
 	public void resetSpinnerContent()
@@ -156,8 +179,8 @@ public class DirectoryActivity extends SpiritActivity  {
 			case 0:
 				
 				directoryAdapter.setChapters(chapterCuts);
-				lvDirectory.setAdapter(directoryAdapter);
-				lvDirectory.setOnItemClickListener(onItemClickListener);
+				lvDire.setAdapter(directoryAdapter);
+				lvDire.setOnItemClickListener(onItemClickListener);
 				break;
 			default:
 				break;
@@ -187,7 +210,7 @@ public class DirectoryActivity extends SpiritActivity  {
 					chapterCuts.add(chapters.get(i));
 				}
 				directoryAdapter.notifyDataSetChanged();
-				lvDirectory.setSelection(0);
+//				currentListView.setSelection(0);
 			}else {
 				chapterCuts.clear();
 				for(int i=0;i<chapters.size();i++) //默认显示100章节
@@ -195,7 +218,7 @@ public class DirectoryActivity extends SpiritActivity  {
 					chapterCuts.add(chapters.get(i));
 				}
 				directoryAdapter.notifyDataSetChanged();
-				lvDirectory.setSelection(0);
+//				currentListView.setSelection(0);
 			}
 			spinnerIndex = index;
 		}
@@ -309,7 +332,7 @@ public class DirectoryActivity extends SpiritActivity  {
 				}
 				tvSection.setText(getString(R.string.directory_book)+chapters.size()+getString(R.string.unread_number));
 				directoryAdapter.notifyDataSetChanged();
-				lvDirectory.setSelection(0);
+//				currentListView.setSelection(0);
 			}
 		}
 		super.onActivityResult(requestCode, resultCode, data);
@@ -396,7 +419,7 @@ public class DirectoryActivity extends SpiritActivity  {
 						}
 					}
 					directoryAdapter.setChapters(chapterCuts);
-					lvDirectory.setAdapter(directoryAdapter);
+					lvDire.setAdapter(directoryAdapter);
 					directoryAdapter.notifyDataSetInvalidated();
 					break;
 				case R.id.btn_bookMark:
@@ -404,7 +427,7 @@ public class DirectoryActivity extends SpiritActivity  {
 					changeCuSelect();
 					bookMarks = book.GetBookMarkList();
 					bookMarkAdapter.setBookMarks(bookMarks);
-					lvDirectory.setAdapter(bookMarkAdapter);
+					lvBookmark.setAdapter(bookMarkAdapter);
 					bookMarkAdapter.notifyDataSetChanged();
 					break;
 				case R.id.btn_director_back:
@@ -424,17 +447,19 @@ public class DirectoryActivity extends SpiritActivity  {
 	{
 		if(curSelect==directory) //如果目录
 		{
-			btn_directory.setBackgroundResource(R.drawable.bar_bg_8); //选中的背景
-			btn_directory.setTextColor(Color.WHITE);
-			btn_bookMark.setBackgroundResource(R.drawable.bar_bg_7); //书签改未选中
-			btn_bookMark.setTextColor(Color.BLACK);
-			linDirectoryTitle.setVisibility(View.VISIBLE);
+//			btn_directory.setBackgroundResource(R.drawable.bar_bg_8); //选中的背景
+//			btn_directory.setTextColor(Color.WHITE);
+//			btn_bookMark.setBackgroundResource(R.drawable.bar_bg_7); //书签改未选中
+//			btn_bookMark.setTextColor(Color.BLACK);
+//			linDirectoryTitle.setVisibility(View.VISIBLE);
+			
 		}else{
-			btn_directory.setBackgroundResource(R.drawable.bar_bg_7); //选中的背景
-			btn_directory.setTextColor(Color.BLACK);
-			btn_bookMark.setBackgroundResource(R.drawable.bar_bg_8); //书签改未选中
-			btn_bookMark.setTextColor(Color.WHITE);
-			linDirectoryTitle.setVisibility(View.GONE);
+//			btn_directory.setBackgroundResource(R.drawable.bar_bg_7); //选中的背景
+//			btn_directory.setTextColor(Color.BLACK);
+//			btn_bookMark.setBackgroundResource(R.drawable.bar_bg_8); //书签改未选中
+//			btn_bookMark.setTextColor(Color.WHITE);
+//			linDirectoryTitle.setVisibility(View.GONE);
+//			getNavigationBarBuilder().setTitle(R.string.bookMark);
 		}
 	}
 	
@@ -446,6 +471,119 @@ public class DirectoryActivity extends SpiritActivity  {
 			this.finish();
 		}
 		return super.onKeyDown(keyCode, event);
+	}
+	
+	private View createDirectoryView(){
+		View directoryView = mLayoutInflater.inflate(R.layout.directory_bookmark, null);
+		
+		
+		lvDire  = (ListView) directoryView.findViewById(R.id.lvDirectory);
+		lvDire.setOnItemClickListener(onItemClickListener);
+		linDirectoryTitle  = (LinearLayout) directoryView.findViewById(R.id.linDirectoryTitle);
+		tvSection = (TextView) directoryView.findViewById(R.id.tvSection);
+		spinnerSection  =(Spinner) directoryView.findViewById(R.id.spinnerSection);
+//		Button btnBack = (Button) directoryView.findViewById(R.id.btn_director_back); 
+//		btnBack.setOnClickListener(btnClickListener);
+		
+		
+		
+	
+		book = BookShelf.mCurrentBook;//(Book) getIntent().getExtras().getSerializable(BookShelf.BOOKINFO);
+		book.OpenBook();
+		chapters = book.GetChapterList();
+		bookMarks = book.GetBookMarkList();
+		
+		
+		tvSection.setText(getString(R.string.directory_book)+chapters.size()+getString(R.string.unread_number));
+
+		
+				
+		directoryAdapter = new DirectoryAdapter(DirectoryActivity.this);
+		resetSpinnerContent();
+		
+		new Thread(){
+
+			@Override
+			public void run() {
+				chapterCuts = new ArrayList<Chapter>();
+				if(chapters.size()>100){
+					for(int i=0;i<showSection;i++) //默认显示100章节 
+					{
+						chapterCuts.add(chapters.get(i));
+					}
+				}else {
+					for(int i=0;i<chapters.size();i++) //默认显示100章节
+					{
+						chapterCuts.add(chapters.get(i));
+					}
+				}
+				handler.sendEmptyMessage(0);
+				super.run();
+			}
+			
+		}.start();
+		
+		return directoryView;
+	}
+	
+	private View createBookMarkView(){
+		View bookMarkView = mLayoutInflater.inflate(R.layout.directory_bookmark, null);
+		bookMarkAdapter = new BookMarkAdapter(this);
+		lvBookmark  = (ListView) bookMarkView.findViewById(R.id.lvDirectory);
+		lvBookmark.setOnItemClickListener(onItemClickListener);
+		lvBookmark.setOnItemLongClickListener(onItemLongClickListener);
+		LinearLayout linDirectoryTitle  = (LinearLayout) bookMarkView.findViewById(R.id.linDirectoryTitle);
+		linDirectoryTitle.setVisibility(View.GONE);
+//		lvDirectory.addFocusables(views, direction)
+		return bookMarkView;
+	}
+
+	@Override
+	public void onTabChanged(int index, String tag) {
+		Log.i("yujsh log","index:"+index);
+		switch (index) {
+		case 0:
+			curSelect = directory;
+			if(chapterCuts!=null&&chapterCuts.size()==0)
+			{
+//				int size = chapterCuts.size();
+//				for(int i=0;i<size;i++) //默认显示的章节
+//				{
+//					chapterCuts.add(chapters.get(i)); 
+//				}
+				if(chapters.size()>100){
+					for(int i=0;i<showSection;i++) //默认显示100章节
+					{
+						chapterCuts.add(chapters.get(i));
+					}
+				}else {
+					for(int i=0;i<chapters.size();i++) 
+					{
+						chapterCuts.add(chapters.get(i));
+					}
+				}
+			}
+			Log.i("yujsh log","directoryAdapter:"+directoryAdapter);
+			directoryAdapter.setChapters(chapterCuts);
+			lvDire.setAdapter(directoryAdapter);
+			directoryAdapter.notifyDataSetInvalidated();
+			currentListView = lvDire;
+			getNavigationBarBuilder().setTitle(R.string.directory);
+			break;
+		case 1:
+			curSelect = bookMark;
+			changeCuSelect();
+			bookMarks = book.GetBookMarkList();
+			bookMarkAdapter.setBookMarks(bookMarks);
+			lvBookmark.setAdapter(bookMarkAdapter);
+			bookMarkAdapter.notifyDataSetChanged();
+			currentListView = lvBookmark;
+			getNavigationBarBuilder().setTitle(R.string.bookMark);
+			break;
+		
+		
+	}
+		Log.i("yujsh log","curSelect:"+curSelect);
 	}
 	
 	
