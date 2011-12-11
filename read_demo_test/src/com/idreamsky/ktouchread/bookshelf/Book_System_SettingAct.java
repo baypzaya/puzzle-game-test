@@ -240,6 +240,7 @@ public class Book_System_SettingAct extends SpiritActivity {
 			SwitchtoKPayAccount();
 			break;
 		case R.id.sys_setting_update:
+		case R.id.sys_setting_update_layout:
 
 			new Thread(new Runnable() {
 
@@ -250,6 +251,7 @@ public class Book_System_SettingAct extends SpiritActivity {
 			}).start();
 			break;
 		case R.id.sys_setting_sync:
+		case R.id.sys_setting_sync_layout:
 			if (NetUtil.checkNetwork(this)) {
 				new Thread(new Runnable() {
 
@@ -267,6 +269,7 @@ public class Book_System_SettingAct extends SpiritActivity {
 			}
 		break;
 		case R.id.sys_setting_backup:
+		case R.id.sys_setting_backup_layout:
 		{
 			if (NetUtil.checkNetwork(this)) {
 				new Thread(new Runnable() {

@@ -3,7 +3,6 @@ package com.idreamsky.ktouchread.bookshelf;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,13 +16,14 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.aliyun.aui.app.spirit.SpiritActivity;
 import com.idreamsky.ktouchread.Adapter.DirectoryAdapter;
 import com.idreamsky.ktouchread.bookread.BookReadActivity;
 import com.idreamsky.ktouchread.data.Book;
 import com.idreamsky.ktouchread.data.Chapter;
 import com.idreamsky.ktouchread.util.Util;
 
-public class UnReadActivity extends Activity {
+public class UnReadActivity extends SpiritActivity {
 	
 	private TextView tvSection;
 	private Spinner spinnerSection;

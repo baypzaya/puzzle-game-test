@@ -1,24 +1,9 @@
 package com.idreamsky.ktouchread.bookshelf;
 
 import java.io.File;
-
 import java.util.ArrayList;
 import java.util.List;
 
-
-
-import com.idreamsky.ktouchread.Adapter.AddFileAdapter;
-
-import com.idreamsky.ktouchread.data.Book;
-import com.idreamsky.ktouchread.data.Chapter;
-
-import com.idreamsky.ktouchread.data.SearchData;
-import com.idreamsky.ktouchread.service.AddBookService;
-
-import com.idreamsky.ktouchread.util.SDCardUtils;
-
-
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
@@ -33,14 +18,22 @@ import android.os.Message;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.AdapterView.OnItemClickListener;
 
-public class AddFile extends Activity {
+import com.aliyun.aui.app.spirit.SpiritActivity;
+import com.idreamsky.ktouchread.Adapter.AddFileAdapter;
+import com.idreamsky.ktouchread.data.Book;
+import com.idreamsky.ktouchread.data.Chapter;
+import com.idreamsky.ktouchread.data.SearchData;
+import com.idreamsky.ktouchread.service.AddBookService;
+import com.idreamsky.ktouchread.util.SDCardUtils;
+
+public class AddFile extends SpiritActivity {
 	private TextView path; 
 	private Button scanning; 
 	private LinearLayout back;
@@ -81,7 +74,42 @@ public class AddFile extends Activity {
 			}
 		});
 		
-		scanning.setOnClickListener(new View.OnClickListener() {
+//		scanning.setOnClickListener(new View.OnClickListener() {
+//			
+//			@Override
+//			public void onClick(View v) {
+//				if(!isScanning){
+//					File file = new File(path.getText().toString());
+//					currentFile = file;
+//				}
+//				if(lt!=null)
+//				{
+//					lt.flag  = false;
+//				}
+//				searchDatas.clear();
+//				adapter.setSearchDatas(searchDatas);
+//				adapter.notifyDataSetChanged();
+//				scanningCount = 0;
+//				isScanning = true;
+//				mProcessDialog = new Dialog(AddFile.this, R.style.transparentdialog);
+//				mProcessDialog.setContentView(R.layout.process);
+//				mProcessDialog.setCancelable(true);
+//				mProcessDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+//					
+//					@Override
+//					public void onCancel(DialogInterface dialog) {
+//						lt.flag  = false;
+//						Toast.makeText(AddFile.this, "扫描取消", 1).show();
+//					}
+//				});
+//				mProcessDialog.show();
+//				
+//				lt = new LoadTask(mHandler);
+//				lt.execute(null);
+//			}
+//		});
+		
+		View.OnClickListener listener = new View.OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
@@ -114,7 +142,9 @@ public class AddFile extends Activity {
 				lt = new LoadTask(mHandler);
 				lt.execute(null);
 			}
-		});
+		};
+		
+		getNavigationBarBuilder().setCommand(getString(R.string.scanning), listener);
 	}
 	/**
 	 *  得到当前路径的所有文件
