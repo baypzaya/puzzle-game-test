@@ -13,6 +13,7 @@
 	<string name="select_all">全选</string>
 	<string name="select_cancle">取消多选</string>
 	<string name="scanning">扫描</string>
+	
 	<!-- splash -->
 	<string name="splash_network_setting">进行联网设置</string>
 	<string name="splash_prompt_content">应用检测到您没有联网，是否进行联网设置？点击“确定”进行设置</string>
