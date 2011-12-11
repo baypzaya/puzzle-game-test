@@ -57,7 +57,8 @@
             android:configChanges="orientation|keyboardHidden|navigation"
             android:name="com.idreamsky.ktouchread.directoy.DirectoryActivity"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" 
+            />
         <activity
             android:configChanges="orientation|keyboardHidden|navigation"
             android:name="com.idreamsky.ktouchread.bookshelf.Book_System_SettingAct"
