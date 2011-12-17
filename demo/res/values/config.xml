@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- <string name = "URL_CHECK_UPDATE">http://kpay.k-touch.cn:8008/VersionCheck</string> -->
+    <string name="URL_CHECK_UPDATE">http://osatest01001.k-touch.cn:8006/VersionCheck</string>
+    <!-- <string name = "HOST">http://bookstore.k-touch.cn:80/</string> -->
+    <string name="HOST">http://osatest01001.k-touch.cn:8012/</string>
+    <!-- <string name = "URL_CHECK_UPDATE">bookstore.k-touch.cn:80</string> -->
+    <string name="KPAY_HOST">osatest01001.k-touch.cn:8012</string>
+    
+    <!-- true : 阿里云的系统  false ： 普通的系统  -->
+	<bool name="VERSION">true</bool>
+	
+</resources>

@@ -1,0 +1,40 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" android:layout_height="fill_parent"
+	android:orientation="vertical" android:background="@drawable/bookstore_bg"
+	android:gravity="center|bottom"
+	>
+
+
+
+	<TextView android:id="@+id/book_shop_network_text"
+		android:textColor="#333333"
+		android:textSize="@dimen/book_shop_network_setting_tv_size"
+		android:layout_marginBottom="@dimen/book_shop_network_setting_tv_marginBottom"
+		android:text="@string/book_ol_network" android:layout_width="285px"
+		android:layout_height="wrap_content" />
+
+
+	<LinearLayout 
+	    android:layout_marginBottom="@dimen/book_shop_network_setting_lin_marginBottom"
+	    android:layout_width="@dimen/book_shop_network_setting_lin_width"
+		android:layout_height="wrap_content" android:orientation="horizontal">
+
+		<Button 
+		    android:id="@+id/book_ol_network_setting"
+		    android:text="@string/book_ol_network_setting"
+			android:background="@drawable/book_shop_network_setting" 
+			android:layout_marginRight="@dimen/book_shop_network_setting_btn_marginRight"
+			android:layout_width="@dimen/book_shop_network_setting_btn_width"
+			 android:layout_height="@dimen/book_shop_network_setting_btn_height" />
+
+		<Button 
+		    android:id="@+id/book_ol_network_agin"
+		    android:text="@string/book_ol_network_agin"
+			android:background="@drawable/book_shop_network_setting" 
+			android:layout_width="@dimen/book_shop_network_setting_btn_width"
+			android:layout_height="@dimen/book_shop_network_setting_btn_height" />
+
+	</LinearLayout>
+
+
+</LinearLayout>
