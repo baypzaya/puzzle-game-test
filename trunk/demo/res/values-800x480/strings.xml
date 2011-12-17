@@ -1,0 +1,382 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+		<!-- dimen -->
+	<dimen name="title_background_height">60px</dimen>
+	<dimen name="poster_floor_height">25px</dimen>
+	<dimen name="book_system_setting_marginLeft">20dp</dimen>
+	<dimen name="book_system_setting_marginRight">20dp</dimen>
+	<dimen name="book_system_setting_height">100px</dimen>
+	<dimen name="book_system_setting_img_marginRight">10px</dimen>
+	<dimen name="book_system_setting_img_width">48px</dimen>
+	<dimen name="book_system_setting_img_height">48px</dimen>
+	<dimen name="book_shop_item_height">100px</dimen>
+	<!-- my_book_shelf_item -->
+	<dimen name="bar_bg_height">140px</dimen>
+	
+	<!-- book_onlie_category_item -->
+	<dimen name="book_onlie_category_item_marginLeft">28px</dimen>
+	<dimen name="book_onlie_category_item_img_marginRight">18px</dimen>
+	<dimen name="book_onlie_category_item_img_width">48px</dimen>
+	<dimen name="book_onlie_category_item_img_height">48px</dimen>
+	
+	<!-- book_onlie_category -->
+	<dimen name="book_onlie_category_reLayout_height">80px</dimen>
+	<dimen name="book_onlie_category_btn_marginRight">80px</dimen>
+	<dimen name="book_onlie_category_btn_height">64px</dimen>
+	<dimen name="book_onlie_category_btn_width">90px</dimen>
+	<dimen name="book_onlie_category_tv_size">20sp</dimen>
+	<dimen name="book_onlie_category_img_height">25px</dimen>
+	
+	<!-- book_onlie_recommend.xml -->
+	<dimen name="book_onlie_recommend_width">42dp</dimen>
+	<dimen name="book_onlie_recommend_height">24dp</dimen>
+	<dimen name="book_onlie_recommend_marginRight">15px</dimen>
+	
+	
+<!-- book_onlie_search_input.xml -->
+	<dimen name="search_input_marginLeft">20px</dimen>
+	<dimen name="search_input_width">360px</dimen>
+	<dimen name="search_input_height">55px</dimen>
+	<dimen name="search_input_paddingLeft">5px</dimen>
+	<dimen name="search_button_marginRight">22px</dimen>
+	<dimen name="search_button_width">58px</dimen>
+	<dimen name="search_button_height">56px</dimen>
+	<dimen name="search_TextView_size">15sp</dimen>
+	<dimen name="search_TextView_layout_x1">190px</dimen>
+	<dimen name="search_TextView_layout_y1">40px</dimen>
+	<dimen name="search_TextView_layout_x2">50px</dimen>
+	<dimen name="search_TextView_layout_y2">100px</dimen>
+	<dimen name="search_TextView_layout_x3">360px</dimen>
+	<dimen name="search_TextView_layout_y3">100px</dimen>
+	<dimen name="search_TextView_layout_x4">70px</dimen>
+	<dimen name="search_TextView_layout_y4">160px</dimen>
+	<dimen name="search_TextView_layout_x5">320px</dimen>
+	<dimen name="search_TextView_layout_y5">160px</dimen>
+	
+	<dimen name="search_TextView_layout_x6">20px</dimen>
+	<dimen name="search_TextView_layout_y6">220px</dimen>
+	<dimen name="search_TextView_layout_x7">190px</dimen>
+	<dimen name="search_TextView_layout_y7">220px</dimen>
+	<dimen name="search_TextView_layout_x8">330px</dimen>
+	<dimen name="search_TextView_layout_y8">220px</dimen>
+	<dimen name="search_TextView_layout_x9">50px</dimen>
+	<dimen name="search_TextView_layout_y9">280px</dimen>
+	<dimen name="search_TextView_layout_x10">360px</dimen>
+	<dimen name="search_TextView_layout_y10">280px</dimen>
+	<dimen name="search_TextView_layout_x11">70px</dimen>
+	<dimen name="search_TextView_layout_y11">340px</dimen>
+	<dimen name="search_TextView_layout_x12">320px</dimen>
+	<dimen name="search_TextView_layout_y12">340px</dimen>
+	<dimen name="search_TextView_layout_x13">200px</dimen>
+	<dimen name="search_TextView_layout_y13">400px</dimen>
+	
+	<!-- book_read -->
+	<dimen name="book_read_title_tool_height">70px</dimen>
+	<dimen name="book_read_title_back_btn_marginLeft">14px</dimen>
+	<dimen name="book_read_title_back_btn_width">70px</dimen>
+	<dimen name="book_read_title_back_btn_height">45px</dimen>
+	<dimen name="book_read_title_back_btn_size">14sp</dimen>
+	<dimen name="book_read_title_addBookMark_marginRight">16px</dimen>
+	<dimen name="book_read_title_addBookMark_width">47px</dimen>
+	<dimen name="book_read_title_addBookMark_height">45px</dimen>
+	<dimen name="book_read_title_deleteBookMark_width">47px</dimen>
+	<dimen name="book_read_title_deleteBookMark_height">50px</dimen>
+	<dimen name="book_read_title_deleteBookMark_marginTop">4px</dimen>
+	<dimen name="book_read_title_toDirectory_width">47px</dimen>
+	<dimen name="book_read_title_toDirectory_height">45px</dimen>
+	<dimen name="book_read_title_toDirectory_marginRight">16px</dimen>
+	<dimen name="book_read_title_collect_width">100px</dimen>
+	<dimen name="book_read_title_collect_height">45px</dimen>
+	<dimen name="book_read_title_collect_size">14sp</dimen>
+	<dimen name="book_read_title_collect_marginRight">18px</dimen>
+	<dimen name="book_read_title_bookMark_width">120px</dimen>
+	<dimen name="book_read_title_bookMark_height">510px</dimen>
+	<dimen name="book_read_title_bookMark_marginTop">70px</dimen>
+	<dimen name="book_read_title_bookMark_marginLeft">80px</dimen>
+	<dimen name="book_read_Floor_height">120px</dimen>
+	<dimen name="book_read_Floor_marginLeft">34px</dimen>
+	<dimen name="book_read_Floor_marginRight">20px</dimen>
+	<dimen name="book_read_Floor_marginBottom">20px</dimen>
+	<dimen name="book_read_Floor_seekBar_width">335px</dimen>
+	<dimen name="book_read_Floor_seekBar_height">17dip</dimen>
+	<dimen name="book_read_Floor_seekBar_minHeight">8dip</dimen>
+	<dimen name="book_read_Floor_seekBar_maxHeight">10dip</dimen>
+	<dimen name="book_read_Floor_seekBar_paddingLeft">7dip</dimen>
+	<dimen name="book_read_Floor_seekBar_paddingRight">7dip</dimen>
+	<dimen name="book_read_Floor_seekBar_marginBottom">5px</dimen>
+	<dimen name="book_read_Floor_pageNumber_marginLeft">3px</dimen>
+	<dimen name="book_read_Floor_tool_marginBottom">10px</dimen>
+	<dimen name="book_read_Floor_tool_btn_width">42px</dimen>
+	<dimen name="book_read_Floor_tool_btn_height">40px</dimen>
+	<dimen name="book_read_Floor_tool_btn_marginRight">30px</dimen>
+	
+	<!-- book_shelf_head -->
+	<dimen name="book_shelf_head_marginRight">10dp</dimen>
+	
+	<!-- book_shelf_menu -->
+	<dimen name="book_shelf_menu_width">480px</dimen>
+	<dimen name="book_shelf_menu_height">105px</dimen>
+	<dimen name="book_shelf_menu_directory_width">120px</dimen>
+	<dimen name="book_shelf_menu_directory_height">90px</dimen>
+	<dimen name="book_shelf_menu_directory_img_width">42px</dimen>
+	<dimen name="book_shelf_menu_directory_img_height">40px</dimen>
+	<dimen name="book_shelf_menu_directory_img_margintLeft">18px</dimen>
+	<dimen name="book_shelf_menu_directory_img_marginTop">10px</dimen>
+	<dimen name="book_shelf_menu_directory_tv_marginLeft">18px</dimen>
+	<dimen name="book_shelf_menu_directory_tv_marginTop">5px</dimen>
+	<dimen name="book_shelf_menu_author_width">188px</dimen>
+	<dimen name="book_shelf_menu_author_height">90px</dimen>
+	<dimen name="book_shelf_menu_author_marginLeft">12px</dimen>
+	<dimen name="book_shelf_menu_author_marginTop">4px</dimen>
+	<dimen name="book_shelf_menu_author_img_width">42px</dimen>
+	<dimen name="book_shelf_menu_author_img_height">40px</dimen>
+	<dimen name="book_shelf_menu_author_img_marginLeft">14px</dimen>
+	<dimen name="book_shelf_menu_author_img_marginTop">10px</dimen>
+	<dimen name="book_shelf_menu_author_tv_marginLeft">14px</dimen>
+	<dimen name="book_shelf_menu_author_tv_marginTop">5px</dimen>
+	<dimen name="book_shelf_menu_deleteBook_width">120px</dimen>
+	<dimen name="book_shelf_menu_deleteBook_height">90px</dimen>
+	<dimen name="book_shelf_menu_deleteBook_marginLeft">12px</dimen>
+	<dimen name="book_shelf_menu_deleteBook_marginTop">4px</dimen>
+	<dimen name="book_shelf_menu_deleteBook_img_width">42px</dimen>
+	<dimen name="book_shelf_menu_deleteBook_img_height">40px</dimen>
+	<dimen name="book_shelf_menu_deleteBook_img_marginLeft">5px</dimen>
+	<dimen name="book_shelf_menu_deleteBook_img_marginTop">10px</dimen>
+	<dimen name="book_shelf_menu_deleteBook_tv_marginLeft">5px</dimen>
+	<dimen name="book_shelf_menu_deleteBook_tv_marginTop">5px</dimen>
+	
+	<!-- splash -->
+	<dimen name="splash_img_width">88px</dimen>
+	<dimen name="splash_img_height">8px</dimen>
+	<dimen name="splash_tv_marginBottom">20px</dimen>
+	<dimen name="splash_tv_marginBottom1">25px</dimen>
+	<dimen name="splash_tv_marginBottom2">25px</dimen>
+	
+	<!-- book_shelf -->
+	<dimen name="book_shelf_btnArrow_width">80px</dimen>
+	<dimen name="book_shelf_btnArrow_height">80px</dimen>
+	<dimen name="book_shelf_btnArrow_marginRight">15px</dimen>
+	<dimen name="book_shelf_btnArrow1_width">80px</dimen>
+	<dimen name="book_shelf_btnArrow1_height">80px</dimen>
+	<!-- book_shop_categoryList -->
+	<dimen name="book_shop_categoryList_img_height">10px</dimen>
+	<!-- book_shop_detail -->
+	<dimen name="book_shop_detail_rl_height">280px</dimen>
+	<dimen name="book_shop_detail_lin_left_width">150px</dimen>
+	<dimen name="book_shop_detail_lin_left_marginTop">25px</dimen>
+	<dimen name="book_shop_detail_lin_left_bg_width">132px</dimen>
+	<dimen name="book_shop_detail_lin_left_bg_height">162px</dimen>
+	<dimen name="book_shop_detail_lin_left_bg_marginLeft">12px</dimen>
+	<dimen name="book_shop_detail_lin_left_bg_marginRinght">12px</dimen>
+	<dimen name="book_shop_detail_lin_left_bg_img_width">120px</dimen>
+	<dimen name="book_shop_detail_lin_left_bg_img_height">150px</dimen>
+	<dimen name="book_shop_detail_lin_ringht_marginTop">25px</dimen>
+	<dimen name="book_shop_detail_lin_ringht_marginLeft">10px</dimen>
+	<dimen name="book_shop_detail_lin_ringht_tv_size">14sp</dimen>
+	<dimen name="book_shop_detail_lin_right_bookname_size">30px</dimen>
+	<dimen name="book_shop_detail_lin_ringht_tv_marginBottom">5px</dimen>
+	<dimen name="book_shop_detail_lin_ringht_btn_height">60px</dimen>
+	<dimen name="book_shop_detail_lin_ringht_btn_marginTop">10px</dimen>
+	<dimen name="book_shop_detail_lin_ringht_btnRead_marginRight">20px</dimen>
+	<dimen name="book_shop_detail_lin_ringht_btnRead_width">100px</dimen>
+	<dimen name="book_shop_detail_lin_ringht_btnRead_height">60px</dimen>
+	<dimen name="book_shop_detail_lin_ringht_btnCollect_width">100px</dimen>
+	<dimen name="book_shop_detail_lin_ringht_btnCollect_height">60px</dimen>
+	<dimen name="book_shop_detail_lin_btn_text_size">30px</dimen>
+	
+	<dimen name="book_shop_detail_lin_bottom_height">40px</dimen>
+	<dimen name="book_shop_detail_lin_bottom_tv_size">15sp</dimen>
+	<dimen name="book_shop_detail_lin_bottom_tv_marginLeft">10px</dimen>
+	<dimen name="book_shop_detail_lin_bottom_marginLeft">18px</dimen>
+	
+	<!-- book_shop_error -->
+	<dimen name="book_shop_error_tv_size">20sp</dimen>
+	<dimen name="book_shop_error_tv_marginBottom">200px</dimen>
+	<dimen name="book_shop_error_tv_width">285px</dimen>
+	<dimen name="book_shop_error_lin_width">285px</dimen>
+	<dimen name="book_shop_error_lin_marginBottom">160px</dimen>
+	<dimen name="book_shop_error_lin_btn_marginBottom">22px</dimen>
+	<dimen name="book_shop_error_lin_btn_width">130px</dimen>
+	<dimen name="book_shop_error_lin_btn_height">56px</dimen>
+	
+	<!-- book_shop_head -->
+	<dimen name="book_shop_head_width">90px</dimen>
+	<dimen name="book_shop_head_height">46px</dimen>
+	<dimen name="book_shop_head_marginLeft">8px</dimen>
+	<dimen name="book_shop_head_paddingLeft">5px</dimen>
+	
+	<!-- book_shop_item -->
+	<dimen name="book_shop_item_rl_height">140px</dimen>
+	<dimen name="book_shop_item_lin_width">128px</dimen>
+	<dimen name="book_shop_item_lin_bg_width">98px</dimen>
+	<dimen name="book_shop_item_lin_bg_height">128px</dimen>
+	<dimen name="book_shop_item_lin_bg_marginLeft">10px</dimen>
+	<dimen name="book_shop_item_lin_bg_marginRight">10px</dimen>
+	<dimen name="book_shop_item_lin_bg_img_width">90px</dimen>
+	<dimen name="book_shop_item_lin_bg_img_height">118px</dimen>
+	<dimen name="book_shop_item_tvName_width">280px</dimen>
+	<dimen name="book_shop_item_tvName_marginTop">10px</dimen>
+	<dimen name="book_shop_item_tvName_size">16sp</dimen>
+	<dimen name="book_shop_item_auto_size">13sp</dimen>
+	<dimen name="book_shop_item_auto_marginTop">5px</dimen>
+	<dimen name="book_shop_item_arrowRight_width">48px</dimen>
+	<dimen name="book_shop_item_arrowRight_height">48px</dimen>
+	<dimen name="book_shop_item_arrowRight_marginRight">15px</dimen>
+	
+	<!-- book_shop_network_setting -->
+	<dimen name="book_shop_network_setting_tv_size">15sp</dimen>
+	<dimen name="book_shop_network_setting_tv_marginBottom">15px</dimen>
+	<dimen name="book_shop_network_setting_lin_marginBottom">160px</dimen>
+	<dimen name="book_shop_network_setting_lin_width">285px</dimen>
+	<dimen name="book_shop_network_setting_btn_marginRight">22px</dimen>
+	<dimen name="book_shop_network_setting_btn_width">130px</dimen>
+	<dimen name="book_shop_network_setting_btn_height">56px</dimen>
+	
+	<!-- book_shop -->
+	<dimen name="book_shop_height">70px</dimen>
+	
+	<!-- bookmark_factory_item  -->
+	<dimen name="bookmark_factory_item_width">70px</dimen>
+	<dimen name="bookmark_factory_item_marginBottom">10px</dimen>
+	<dimen name="bookmark_factory_item_img_width">70px</dimen>
+	<dimen name="bookmark_factory_item_img_height">300px</dimen>
+	<dimen name="bookmark_factory_item_img_marginBottom">10px</dimen>
+	<dimen name="bookmark_factory_item_imgButton_width">40px</dimen>
+	<dimen name="bookmark_factory_item_imgButton_height">40px</dimen>
+	
+	<!-- bookmark_factory  -->
+	<dimen name="bookmark_factory_backButton_width">90px</dimen>
+	<dimen name="bookmark_factory_backButton_height">46px</dimen>
+	<dimen name="bookmark_factory_backButton_marginRight">8px</dimen>
+	<dimen name="bookmark_factory_poster_img_height">130px</dimen>
+	<dimen name="bookmark_factory_poster_imgView_height">30px</dimen>
+	<dimen name="bookmark_factory_poster_tv_marginLeft">10px</dimen>
+	<dimen name="bookmark_factory_lin_star_width">68px</dimen>
+	<dimen name="bookmark_factory_bookmark_marginBottom">20px</dimen>
+	<dimen name="bookmark_factory_bookmark_width">60px</dimen>
+	<dimen name="bookmark_factory_bookmark_height">60px</dimen>
+	<dimen name="bookmark_factory_viewFlipper_width">360px</dimen>
+	<dimen name="bookmark_factory_viewFlipper_iv_width">60px</dimen>
+	<dimen name="bookmark_factory_viewFlipper_iv_height">60px</dimen>
+	<dimen name="bookmark_factory_button_marginBottom">10px</dimen>
+	<dimen name="bookmark_factory_button_width">385px</dimen>
+	<dimen name="bookmark_factory_button_height">45px</dimen>
+	
+		<!-- un_read -->
+	<dimen name="un_read_btn_back_width">90px</dimen>
+	<dimen name="un_read_btn_back_height">46px</dimen>
+	<dimen name="un_read_btn_back_marginLeft">8px</dimen>
+	<dimen name="un_read_btn_back_paddingLeft">5px</dimen>
+	<dimen name="un_read_lin_height">80px</dimen>
+	<dimen name="un_read_lin_tv_width">240px</dimen>
+	<dimen name="un_read_lin_tv_marginLeft">15px</dimen>
+	<dimen name="un_read_lin_tv_size">15sp</dimen>
+	<dimen name="un_read_lin_spinner_width">200px</dimen>
+	<dimen name="un_read_lin_spinner_height">44px</dimen>
+	<dimen name="un_read_lin_spinner_paddingLeft">10px</dimen>
+
+	<!-- system_menu -->
+	<dimen name="system_menu_lin_width">160px</dimen>
+	<dimen name="system_menu_lin_height">100px</dimen>
+	<dimen name="system_menu_lin_img_width">42px</dimen>
+	<dimen name="system_menu_lin_img_height">40px</dimen>
+	<dimen name="system_menu_lin_img_marginTop">5px</dimen>
+	<dimen name="system_menu_lin_tv_marginTop">5px</dimen>
+	<!-- poster -->
+	<dimen name="poster_height">130px</dimen>
+	<dimen name="poster_recommend_height">140px</dimen>
+
+	<!-- poster_item -->
+	<dimen name="poster_item_tv_width">100dp</dimen>
+	<dimen name="poster_item_tv_marginLeft">10dp</dimen>
+	<dimen name="poster_item_height">11px</dimen>
+	
+	<!-- popup_window -->
+	<dimen name="popup_window_width">310px</dimen>
+	<dimen name="popup_window_height">90px</dimen>
+	<dimen name="popup_window_tv_size">18sp</dimen>
+	<dimen name="popup_window_tv_marginBottom">3px</dimen>
+	<dimen name="popup_window_tv_marginRight">5px</dimen>
+	
+	<!-- bookShelf_item -->
+	<dimen name="bookShelf_item_rl_height">140px</dimen>
+	<dimen name="bookShelf_item_lin_width">128px</dimen>
+	<dimen name="bookShelf_item_lin_rl_marginLeft">10px</dimen>
+	<dimen name="bookShelf_item_lin_rl_marginRight">10px</dimen>
+	<dimen name="bookShelf_item_lin_rl_lin_width">98px</dimen>
+	<dimen name="bookShelf_item_lin_rl_lin_height">128px</dimen>
+	<dimen name="bookShelf_item_lin_rl_lin_img_width">86px</dimen>
+	<dimen name="bookShelf_item_lin_rl_lin_img_height">116px</dimen>
+	<dimen name="bookShelf_item_lin_rl_btn_width">45px</dimen>
+	<dimen name="bookShelf_item_lin_rl_btn_size">10sp</dimen>
+	<dimen name="bookShelf_item_lin_rl_btn_paddingLeft">5px</dimen>
+	<dimen name="bookShelf_item_lin_rl_btn_paddingBottom">2px</dimen>
+	<dimen name="bookShelf_item_lin_rl_btn_height">45px</dimen>
+	<dimen name="bookShelf_item_name_marginTop">13px</dimen>
+	<dimen name="bookShelf_item_name_size">16sp</dimen>
+	<dimen name="bookShelf_item_auto_width">220px</dimen>
+	<dimen name="bookShelf_item_size">13sp</dimen>
+	<dimen name="bookShelf_item_reader_width">220px</dimen>
+	<dimen name="bookShelf_item_reader_marginTop">5px</dimen>
+	<dimen name="bookShelf_item_afterMore_width">100px</dimen>
+	<dimen name="bookShelf_item_afterMore_height">44px</dimen>
+	<dimen name="bookShelf_item_afterMore_paddingLeft">15px</dimen>
+	<dimen name="bookShelf_item_afterMore_size">12sp</dimen>
+	<dimen name="bookShelf_item_afterMore_marginRight">18px</dimen>
+	
+	<!-- file_add -->
+	<dimen name="file_add_tv_width">350px</dimen>
+	<dimen name="file_add_tv_marginLeft">15px</dimen>
+	<dimen name="file_add_tv_size">15sp</dimen>
+	<dimen name="file_add_rl_btn_width">100px</dimen>
+	<dimen name="file_add_rl_btn_height">46px</dimen>
+	<dimen name="file_add_rl_btn_marginRight">15px</dimen>
+	<dimen name="file_add_back_height">80px</dimen>
+	<dimen name="file_add_back_btn_height">40px</dimen>
+	<dimen name="file_add_back_btn_width">40px</dimen>
+	<dimen name="file_add_back_btn_marginLeft">35px</dimen>
+	<dimen name="file_add_back_tv_marginLeft">25px</dimen>
+	<dimen name="file_add_back_tv_size">18sp</dimen>
+	<dimen name="file_add_back_tv_btn_height">10px</dimen>
+	
+	<!-- file_add_item -->
+	<dimen name="file_add_item_height">80px</dimen>
+	<dimen name="file_add_item_img_height">40px</dimen>
+	<dimen name="file_add_item_img_width">40px</dimen>
+	<dimen name="file_add_item_img_marginLeft">35px</dimen>
+	<dimen name="file_add_item_lin_marginLeft">25px</dimen>
+	<dimen name="file_add_item_lin_tv_size">15sp</dimen>
+	<dimen name="file_add_item_lin_tv_size1">12sp</dimen>
+	
+	<!-- directory_bookmark -->
+	<dimen name="directory_bookmark_btn_width">240px</dimen>
+	<dimen name="directory_bookmark_btn_height">60px</dimen>
+	<dimen name="directory_bookmark_btn_size">15sp</dimen>
+	
+	<!-- directory_bookmark_item -->
+	<dimen name="directory_bookmark_item_height">80px</dimen>
+	<dimen name="directory_bookmark_item_tv_marginLeft">15px</dimen>
+	<dimen name="directory_bookmark_item_marginRight">15px</dimen>
+	
+	<!-- bookMark_item -->
+	<dimen name="bookMark_item_height">80px</dimen>
+	<dimen name="bookMark_item_img_width">32px</dimen>
+	<dimen name="bookMark_item_img_height">55px</dimen>
+	<dimen name="bookMark_item_img_marginLeft">10px</dimen>
+	<dimen name="bookMark_item_lin_marginleft">15px</dimen>
+	<dimen name="bookMark_item_lin_tv_marginLeft">15px</dimen>
+	
+	<!-- style -->
+	<dimen name="titleTextStyle_size">20sp</dimen>
+	<dimen name="trun_width">11px</dimen>
+	<dimen name="trun_height">11px</dimen>
+	<dimen name="trun_marginLeft">5px</dimen>
+	<dimen name="trun_marginRight">5px</dimen>
+	<dimen name="sys_setting_font_black_size">30px</dimen>
+	<dimen name="sys_setting_font_grary_size">20px</dimen>
+	<dimen name="sys_setting_btn_marginRight">10px</dimen>
+	<dimen name="sys_setting_btn_width">100px</dimen>
+	<dimen name="sys_setting_btn_height">40px</dimen>
+	<dimen name="bookmark_text_size">11sp</dimen>
+	<dimen name="bookmark_text_height">70px</dimen>
+</resources>

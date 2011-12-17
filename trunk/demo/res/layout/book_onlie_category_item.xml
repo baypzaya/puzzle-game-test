@@ -1,0 +1,26 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" android:layout_height="fill_parent"
+	>
+	<RelativeLayout
+	android:layout_width="fill_parent" android:layout_height="@dimen/book_shop_item_height"
+	>
+		<TextView android:id="@+id/category_name"
+			android:layout_alignParentLeft="true" android:layout_centerInParent="true"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:layout_marginLeft="@dimen/book_onlie_category_item_marginLeft"
+			android:textColor="#333333"
+			 />
+			 
+	   		<TextView android:id="@+id/book_num"
+			android:layout_toRightOf = "@+id/category_name" android:layout_centerInParent="true"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:layout_marginLeft="@dimen/book_onlie_category_item_marginLeft"
+			android:textColor="#333333"
+			 />
+	
+		<ImageView android:id="@+id/arrow_right" android:src="@drawable/arrow_right"
+			android:layout_alignParentRight="true" android:layout_centerInParent="true"
+			android:layout_marginRight="@dimen/book_onlie_category_item_img_marginRight"
+			android:layout_width="@dimen/book_onlie_category_item_img_width" android:layout_height="@dimen/book_onlie_category_item_img_height" />
+	</RelativeLayout>
+</RelativeLayout>

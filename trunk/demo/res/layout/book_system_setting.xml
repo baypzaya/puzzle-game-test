@@ -1,0 +1,155 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical" android:layout_width="fill_parent"
+	android:layout_height="fill_parent" >
+
+
+	<RelativeLayout style="@style/titleStyle" android:visibility="gone">
+
+		<TextView android:text="@string/book_system_setting"
+			android:layout_centerInParent="true" android:layout_width="wrap_content"
+			android:layout_height="wrap_content" 
+			style="@style/titleTextStyle"
+			/>
+
+	</RelativeLayout>
+	
+	<RelativeLayout 
+	android:id="@+id/my_account"
+	    android:onClick="sysSettingClick"
+	    android:background="#F3F4F6"
+		android:layout_width="fill_parent" android:layout_height="@dimen/book_system_setting_height">
+
+		<LinearLayout android:layout_centerInParent="true"
+			android:layout_alignParentLeft="true"
+			android:layout_marginLeft="@dimen/book_system_setting_marginLeft"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:orientation="vertical">
+
+			<TextView android:text="@string/my_account" style="@style/sys_setting_font_black" />
+
+		</LinearLayout>
+
+		<ImageView 
+		    android:layout_centerInParent="true"
+			android:layout_alignParentRight="true" android:src="@drawable/arrow_right"
+			android:layout_marginRight="@dimen/book_system_setting_img_marginRight" 
+			android:layout_width="@dimen/book_system_setting_img_width" android:layout_height="@dimen/book_system_setting_img_height" />
+
+	</RelativeLayout>
+	<TextView android:layout_width="fill_parent" android:layout_height="2px" android:background="@drawable/line"/>
+	<RelativeLayout android:id="@+id/sys_setting_update_layout" android:background="#F3F4F6" android:onClick="sysSettingClick"
+		android:layout_width="fill_parent" android:layout_height="@dimen/book_shop_item_height">
+
+
+		<LinearLayout android:layout_centerInParent="true"
+			android:layout_alignParentLeft="true"
+			android:layout_marginLeft="@dimen/book_system_setting_marginLeft"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:orientation="vertical">
+
+
+			<TextView android:text="@string/soft_update_setting" style="@style/sys_setting_font_black" />
+
+			<TextView style="@style/sys_setting_font_grary"
+				android:text="@string/soft_update_setting_content" />
+
+		</LinearLayout>
+
+
+
+		<Button android:onClick="sysSettingClick" style="@style/sys_setting_btn"
+			android:id="@+id/sys_setting_update" android:text="@string/soft_update_setting_update"
+			android:background="@drawable/book_shop_system_setting" android:visibility="gone"/>
+
+<ImageView 
+		    android:layout_centerInParent="true"
+			android:layout_alignParentRight="true" android:src="@drawable/arrow_right"
+			android:layout_marginRight="@dimen/book_system_setting_img_marginRight" 
+			android:layout_width="@dimen/book_system_setting_img_width" android:layout_height="@dimen/book_system_setting_img_height" />
+	</RelativeLayout>
+
+	<TextView android:layout_width="fill_parent" android:layout_height="2px" android:background="@drawable/line"/>
+	<RelativeLayout android:id="@+id/sys_setting_sync_layout" android:background="#F3F4F6" android:onClick="sysSettingClick"
+		android:layout_width="fill_parent" android:layout_height="100px">
+
+
+		<LinearLayout android:layout_centerInParent="true"
+			android:layout_alignParentLeft="true"
+			android:layout_marginLeft="@dimen/book_system_setting_marginLeft"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:orientation="vertical">
+
+			<TextView android:text="@string/sync_data" style="@style/sys_setting_font_black" />
+
+			<TextView style="@style/sys_setting_font_grary"
+				android:text="@string/sync_data_setting_content" />
+
+		</LinearLayout>
+
+		<Button android:id="@+id/sys_setting_sync"
+		    android:onClick="sysSettingClick"
+			style="@style/sys_setting_btn" android:background="@drawable/book_shop_system_setting"
+			android:text="@string/sync_data_setting" android:visibility="gone"/>
+<ImageView 
+		    android:layout_centerInParent="true"
+			android:layout_alignParentRight="true" android:src="@drawable/arrow_right"
+			android:layout_marginRight="@dimen/book_system_setting_img_marginRight" 
+			android:layout_width="@dimen/book_system_setting_img_width" android:layout_height="@dimen/book_system_setting_img_height" />
+
+	</RelativeLayout>
+	
+		<TextView android:layout_width="fill_parent" android:layout_height="2px" android:background="@drawable/line"/>
+		<RelativeLayout android:id="@+id/sys_setting_backup_layout" android:background="#F3F4F6" android:onClick="sysSettingClick"
+		android:layout_width="fill_parent" android:layout_height="@dimen/book_shop_item_height">
+
+
+		<LinearLayout android:layout_centerInParent="true"
+			android:layout_alignParentLeft="true"
+			android:layout_marginLeft="@dimen/book_system_setting_marginLeft"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:orientation="vertical">
+
+			<TextView android:text="@string/backup_data" style="@style/sys_setting_font_black" />
+
+			<TextView style="@style/sys_setting_font_grary"
+				android:text="@string/backup_data_setting_content" />
+
+		</LinearLayout>
+
+		<Button android:id="@+id/sys_setting_backup"
+		    android:onClick="sysSettingClick"
+			style="@style/sys_setting_btn" android:background="@drawable/book_shop_system_setting"
+			android:text="@string/backup_data_setting" android:visibility="gone"/>
+
+<ImageView 
+		    android:layout_centerInParent="true"
+			android:layout_alignParentRight="true" android:src="@drawable/arrow_right"
+			android:layout_marginRight="@dimen/book_system_setting_img_marginRight" 
+			android:layout_width="@dimen/book_system_setting_img_width" android:layout_height="@dimen/book_system_setting_img_height" />
+	</RelativeLayout>
+
+	<TextView android:layout_width="fill_parent" android:layout_height="2px" android:background="@drawable/line"/>
+	<RelativeLayout 
+	android:id="@+id/sys_setting_help"
+	    android:onClick="sysSettingClick"
+	    android:background="#F3F4F6"
+		android:layout_width="fill_parent" android:layout_height="@dimen/book_system_setting_height" android:visibility="gone">
+
+		<LinearLayout android:layout_centerInParent="true"
+			android:layout_alignParentLeft="true"
+			android:layout_marginLeft="@dimen/book_system_setting_marginLeft"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:orientation="vertical">
+
+			<TextView android:text="@string/setting_help" style="@style/sys_setting_font_black" />
+
+		</LinearLayout>
+
+		<ImageView 
+		    android:layout_centerInParent="true"
+			android:layout_alignParentRight="true" android:src="@drawable/arrow_right"
+			android:layout_marginRight="@dimen/book_system_setting_img_marginRight" 
+			android:layout_width="@dimen/book_system_setting_img_width" android:layout_height="@dimen/book_system_setting_img_height" />
+
+	</RelativeLayout>
+</LinearLayout>
