@@ -80,8 +80,10 @@ public class BookShopActivity extends MenuTabActivity implements OnTabChangeList
 	private TabSpec tabCategory;
 
 	private MenuTabHost tabHost;
-//add for test
+//jiangbiao add
 	public static int mNetCheckNum = 0;
+	private AlertDialog.Builder alertDialog;
+	public static final int REQUESTCODE_FOR_NETWORK_SET = 10;
 	@Override
 	protected void onResume() {
 		// TODO Auto-generated method stub
@@ -120,6 +122,8 @@ public class BookShopActivity extends MenuTabActivity implements OnTabChangeList
 //			}
 //		});
 //		
+		//jiangbiao add 
+		alertDialog = new AlertDialog.Builder(this);
 		Drawable drawable = new ColorDrawable(0x66000000);
 		setSearchContentBackground(drawable);
 		setSearchMaskDrawable(drawable);
@@ -563,7 +567,8 @@ public class BookShopActivity extends MenuTabActivity implements OnTabChangeList
 					};
 				}.start();
 			} else if (msg.what == 12) {
-				InitTryDialog((String) msg.obj);
+				//InitTryDialog((String) msg.obj);
+				netWorkCheck();
 
 			} else if (msg.what == 13) {
 				mHandler.postDelayed(new Runnable() {
@@ -582,7 +587,32 @@ public class BookShopActivity extends MenuTabActivity implements OnTabChangeList
 			super.handleMessage(msg);
 		}
 	};
+//jiangbiao add for Network check
+	private void netWorkCheck() { // 提示设置网络
+		alertDialog.setTitle(R.string.splash_network_setting)
+				.setMessage(R.string.splash_prompt_content)
+				.setPositiveButton(R.string.splash_prompt_OK,
+						new DialogInterface.OnClickListener() { // 跳转到网络设置界面
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								alertDialog.create().dismiss();
+								Intent intent = new Intent(
+										android.provider.Settings.ACTION_WIRELESS_SETTINGS);
+								startActivity(intent);
+								startActivityForResult(intent, REQUESTCODE_FOR_NETWORK_SET);
+							}
+						})
 
+				.setNeutralButton(R.string.splash_prompt_cancel,
+						new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								dialog.dismiss();
+							}
+						}).create().show();
+	}
 	public boolean GetLongToken() {
 		final String Token = KPayAccount.getLongtermToken();
 
@@ -854,6 +884,7 @@ public class BookShopActivity extends MenuTabActivity implements OnTabChangeList
 			if(isShowLeadBoardBack||isShowCategoryBack) {
 				back();
 			}else{
+				mNetCheckNum = 0;
 				exitApplication();
 			}
 			

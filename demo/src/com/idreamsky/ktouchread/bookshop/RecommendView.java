@@ -31,8 +31,8 @@ public class RecommendView extends AbstractView {
 	private int TitleID = 0x52;
 	private ListView mListView = null;
 	private Poster mPoster;
-	  private ImageView fenge;
-	  private ImageView fenge1;
+	 // private ImageView fenge;
+	  //private ImageView fenge1;
 	public RecommendView(Activity context) {
 		super(context);
 		mBookList = new ArrayList<NetBook>();
@@ -64,12 +64,12 @@ public class RecommendView extends AbstractView {
 //				
 //			}
 //		});
-        fenge = (ImageView) layoutBook.findViewById(R.id.fenge);
-        fenge.getBackground().setAlpha(75);
-        fenge.invalidate();
-        fenge1 = (ImageView) layoutBook.findViewById(R.id.fenge1);
-        fenge1.getBackground().setAlpha(75);
-        fenge1.invalidate();
+        //fenge = (ImageView) layoutBook.findViewById(R.id.fenge);
+        //fenge.getBackground().setAlpha(75);
+       //fenge.invalidate();
+        //fenge1 = (ImageView) layoutBook.findViewById(R.id.fenge1);
+        //fenge1.getBackground().setAlpha(75);
+        //fenge1.invalidate();
 
 
 		RelativeLayout.LayoutParams iconParams = new RelativeLayout.LayoutParams(

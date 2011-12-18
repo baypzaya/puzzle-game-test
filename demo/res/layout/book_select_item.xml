@@ -9,7 +9,6 @@
 	  xmlns:android="http://schemas.android.com/apk/res/android"
 	  android:layout_width="fill_parent"
 	  android:layout_height="@dimen/bookShelf_item_rl_height"
-	  android:onClick="sysSettingClick"
 	  android:id="@+id/book_select_layout"
 	 
 	>

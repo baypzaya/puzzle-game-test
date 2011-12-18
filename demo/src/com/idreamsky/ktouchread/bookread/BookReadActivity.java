@@ -167,12 +167,12 @@ public class BookReadActivity extends SpiritActivity {
 	public Boolean isFontSizeToast = null;
 
 	//private Button back; // 返回
-	private Button toDirectory; // 去通讯录
+	//private Button toDirectory; // 去通讯录
 	//private Button addBookMark; // 书签
-	private Button collect; // 收藏
-	private Button changeMode;
-	private Button lightMode;
-	private Button font;
+	private ImageView collect; // 收藏
+	private ImageView changeMode;
+	//private Button lightMode;
+	//private Button font;
 	private boolean nightMode;
 	private DropDownList mDropList;
 	private DropDownList mDropListfont;
@@ -421,13 +421,13 @@ public class BookReadActivity extends SpiritActivity {
 	       
 	   	private int getFontCurPositon(){
 			
-			if(showSize>=32){
+			if(showSize>=34){
 				return 0;
-			}else if(showSize>=30){
+			}else if(showSize>=32){
 				return 1;
-			}else if(showSize>=28){
+			}else if(showSize>=30){
 				return 2;
-			}else if(showSize>=26){
+			}else if(showSize>=28){
 				return 3;
 			}else 	
 				return 4;
@@ -503,14 +503,14 @@ public class BookReadActivity extends SpiritActivity {
 				
 			}else if(pos == 2){
 				showSize= 28;
-				msg.what = 2;
+				msg.what = 1;
 				fontHandler.sendMessage(msg);
 			}else if(pos == 3){
-				showSize= 28;
+				showSize= 30;
 				msg.what = 2;
 				fontHandler.sendMessage(msg);
 			}else{
-				showSize= 26;
+				showSize= 28;
 		       msg.what = 2;
 		       fontHandler.sendMessage(msg);
 			}
@@ -691,9 +691,9 @@ public class BookReadActivity extends SpiritActivity {
 		img_bookmark = (ImageView) this.findViewById(R.id.img_bookmark);
 		tvPageNumber = (TextView) this.findViewById(R.id.tvPageNumber);
 		linRead = (LinearLayout) this.findViewById(R.id.linRead);
-		changeMode = (Button)findViewById(R.id.changemode);
+		changeMode = (ImageView)findViewById(R.id.changemode);
 		
-		changeMode.setOnClickListener(floorToolOnClickListener);
+		//changeMode.setOnClickListener(floorToolOnClickListener);
 		//读取当前模式 
 		SharedPreferences modelSetting = getSharedPreferences(Util.MODELSETTING,Context.MODE_PRIVATE);
 		String model = modelSetting.getString(Util.MODEL, "");
@@ -728,7 +728,6 @@ public class BookReadActivity extends SpiritActivity {
 		lightlessLayout = (RelativeLayout) this.findViewById(R.id.lightlesslayout);
 		fontLayout = (RelativeLayout) this.findViewById(R.id.fontlayout);
 		modeLayout = (RelativeLayout) this.findViewById(R.id.modelayout);
-		modeLayout.setOnClickListener(floorToolOnClickListener);
 		collectionTextView = (TextView) this.findViewById(R.id.collectiontext);
 		pageNumber = (LinearLayout) this.findViewById(R.id.pageNumber); // 页码气泡
 		progress_bar_font_size = (SeekBar) this.findViewById(R.id.progress_bar_font_size); // 进度条
@@ -743,17 +742,18 @@ public class BookReadActivity extends SpiritActivity {
 */
 		//back = (Button) this.findViewById(R.id.back);
 		//TY:liushan delete start
-		font = (Button)this.findViewById(R.id.front);
-        toDirectory = (Button) this.findViewById(R.id.list);
+		//font = (Button)this.findViewById(R.id.front);
+        //toDirectory = (Button) this.findViewById(R.id.list);
 		//addBookMark = (Button) this.findViewById(R.id.addBookMark);
-		collect = (Button) this.findViewById(R.id.collection);
-		lightMode = (Button)findViewById(R.id.lightless);
+		collect = (ImageView) this.findViewById(R.id.collection);
+		//lightMode = (Button)findViewById(R.id.lightless);
 		  
 		//deleteBookMark = (Button) this.findViewById(R.id.deleteBookMark);
 	
         //TY:liushan delete end
 		//back.setOnClickListener(titleToolOnClickListener);
 		listLayout.setOnClickListener(titleToolOnClickListener);
+		modeLayout.setOnClickListener(titleToolOnClickListener);
 		//addBookMark.setOnClickListener(titleToolOnClickListener);
 		collectionLayout.setOnClickListener(titleToolOnClickListener);
 		//deleteBookMark.setOnClickListener(titleToolOnClickListener);
@@ -972,6 +972,7 @@ public class BookReadActivity extends SpiritActivity {
 			    // NavigationBarbuilder.hideCloudView();
 				// setNavigationBarVisibility(true);
 				 //setNavigationBarVisibility(false);
+			  
 				bookRead_floor_tool.postInvalidate(); 
 				 
 			}else if(msg.what == 10)
@@ -1663,12 +1664,25 @@ public class BookReadActivity extends SpiritActivity {
 					//isAddToBookShelf = true;
 				//}
 				break;
-
+				
+			case R.id.modelayout:
+				if(model){
+					    changeMode.setBackgroundResource(R.drawable.night);
+					  
+						Toast.makeText(BookReadActivity.this,"黑夜模式", 0).show();
+						nightModel();
+				}else{
+					    changeMode.setBackgroundResource(R.drawable.day);
+					    Toast.makeText(BookReadActivity.this,"白天模式", 0).show();
+					    dayModel();
+				}
+                break;
 				//TY:liushan delete end
 			}
 		}
 	};
 
+	/*
 	public OnClickListener floorToolOnClickListener = new View.OnClickListener() {
 
 		@Override
@@ -1688,7 +1702,7 @@ public class BookReadActivity extends SpiritActivity {
 				}
 			//case R.id.modelayout:
 				//break;
-			/*
+			
 			case R.id.luminancePlus: // 增加亮度
 				WindowManager.LayoutParams luminancePlus = getWindow().getAttributes();
 				if(defaultLuminance<1.0f)
@@ -1780,12 +1794,12 @@ public class BookReadActivity extends SpiritActivity {
 				
 				dayModel();
 				break;
-				*/
+				
 			}
 
 		}
 	};
-	
+	*/
 	/**
 	 * 计算书签
 	 */
