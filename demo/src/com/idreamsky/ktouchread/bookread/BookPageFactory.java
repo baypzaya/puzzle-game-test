@@ -38,8 +38,8 @@ public class BookPageFactory {
 	public static int m_fontSize = 24;
 	//public static int m_textColor = Color.BLACK;
 	public static int m_textColor = 0xffffff;
-	//public static int m_textColor = R.id.yeshu;
 	//private int m_backColor = 0xffff9e85; // 背景颜色
+	public static int m_numPage = 0x777777;
 	public static int m_backColorDay = 0xffe5e5e5;
 	public static  int m_backColorNight = 0xff434343;
 	public static int marginWidth = 15; // 左右与边缘的距离
@@ -329,6 +329,7 @@ public class BookPageFactory {
 					+ "页"; // 显示页码
 			
 			int nPercentWidth = (int) paint.measureText(strPercent) + 1;
+			paint.setColor(0x77777777);
 			c.drawText(strPercent, (mWidth / 2) - (nPercentWidth / 2),
 					mHeight - 10, paint); // 计算中间位置
 		    

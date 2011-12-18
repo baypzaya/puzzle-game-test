@@ -833,6 +833,9 @@ public class BookReadActivity extends SpiritActivity {
 				if (Book.IsExit(book.bookidNet)&& (Book.GetBookSyncStatus(book.bookidNet) != 2)) {
 				} else {
 					CollectBook();
+					collect.setBackgroundResource(R.drawable.collectionn);
+					collectionLayout.setClickable(false);
+					collectionTextView.setText("已收藏");
 					isAddToBookShelf = true;
 					bookMarks = book.GetBookMarkList(chapter.ChapterIDNet);
 					bAddBook = true;
