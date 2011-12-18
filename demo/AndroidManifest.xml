@@ -23,7 +23,7 @@
             android:configChanges="orientation|keyboardHidden|navigation"
             android:name=".Book_SplashAct1"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
+            android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
         <activity
             android:configChanges="orientation|keyboardHidden|navigation"

@@ -46,8 +46,8 @@ public class Book_SplashAct1 extends Activity {
 	private static final String TAG="Book_SplashAct";
 	
 	private ProgressDialog progressDialog;
-	private ImageView icon_splash_progress;
-	private AnimationDrawable animationDrawable;
+//	private ImageView icon_splash_progress;
+//	private AnimationDrawable animationDrawable;
 	private File filePath;
 	private CheckInfo check;
 	private AlertDialog.Builder chooseDialog;
@@ -235,17 +235,17 @@ public class Book_SplashAct1 extends Activity {
 	
 	
 	private void initView() { // 初始化UI
-		icon_splash_progress = (ImageView) findViewById(R.id.splash_progress);
-		icon_splash_progress.setBackgroundResource(R.anim.splash_loading);
-		animationDrawable = (AnimationDrawable) icon_splash_progress
-				.getBackground();
+//		icon_splash_progress = (ImageView) findViewById(R.id.splash_progress);
+//		icon_splash_progress.setBackgroundResource(R.anim.splash_loading);
+//		animationDrawable = (AnimationDrawable) icon_splash_progress
+//				.getBackground();
 		alertDialog = new AlertDialog.Builder(this);
 	}
 
 	private void playAnim() { // 播放动画
 		handler.postDelayed(new Runnable() {
 			public void run() {
-				animationDrawable.start();
+//				animationDrawable.start();
 			}
 		}, 500);
 	}
