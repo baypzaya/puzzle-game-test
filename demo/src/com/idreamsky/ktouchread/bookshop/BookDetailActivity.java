@@ -112,6 +112,14 @@ public class BookDetailActivity extends SpiritActivity {
 		setContentView(bookDetailView.getContentView());
 		
 	}
+	
+
+	@Override
+	protected void onResume() {
+		bookDetailView.UpdataUI();
+		super.onResume();
+	}
+
 
 	public void makeToast(final String msg) {
 		Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
