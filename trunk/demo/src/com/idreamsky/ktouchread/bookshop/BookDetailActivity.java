@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.aliyun.aui.app.spirit.SpiritActivity;
@@ -46,9 +47,19 @@ public class BookDetailActivity extends SpiritActivity {
 		final NavigationBar.Builder builder = getNavigationBarBuilder();
 		builder.setTitle(R.string.book_detail);
 		builder.showBackButton(true);
-		builder.showSearchButton(true);
-		
-builder.setOnSearchBarDoSearchingListener(new OnSearchBarDoSearchingListener() {
+		//builder.showSearchButton(true);
+        builder.setCommand("搜索", new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(BookDetailActivity.this,BookSearchActivity.class);
+				intent.putExtra(BookSearchActivity.EXTRA_SEARCH_CONTENT, "");
+				BookDetailActivity.this.startActivity(intent);
+				builder.hideSearchbar();
+			}
+		});
+		/*
+         builder.setOnSearchBarDoSearchingListener(new OnSearchBarDoSearchingListener() {
 			
 			@Override
 			public void doSearching(CharSequence arg0) {
@@ -62,10 +73,10 @@ builder.setOnSearchBarDoSearchingListener(new OnSearchBarDoSearchingListener() {
 				builder.hideSearchbar();
 			}
 		});
-		
+		*/
 		Drawable drawable = new ColorDrawable(0x66000000);
-		setSearchContentBackground(drawable);
-		setSearchMaskDrawable(drawable);
+		//setSearchContentBackground(drawable);
+		//setSearchMaskDrawable(drawable);
 		
 		Intent intent = getIntent();
 		String cpCode = intent.getStringExtra(EXTRA_CPCODE);

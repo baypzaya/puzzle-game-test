@@ -230,7 +230,7 @@
 						android:id="@+id/collectionlayout"
 						android:background="@drawable/btn_front_selector"
     	     >
-			   <Button
+			   <ImageView
 						android:id="@+id/collection"
 						android:layout_width="36px"
 			  		    android:layout_height="36px"
@@ -268,7 +268,7 @@
 						android:id="@+id/listlayout"
 						android:background="@drawable/btn_front_selector"
     	     >
-			    <Button
+			    <ImageView
 						android:id="@+id/list"
 						android:layout_width="36px"
 			  		    android:layout_height="36px"
@@ -306,7 +306,7 @@
 						android:id="@+id/lightlesslayout"
 						android:background="@drawable/btn_front_selector"
     	     >
-			    <Button
+			    <ImageView
 						android:id="@+id/lightless"
 						android:layout_width="36px"
 			  		    android:layout_height="36px"
@@ -342,7 +342,7 @@
 						android:background="@drawable/btn_front_selector"
     		
     	     >
-			      <Button
+			      <ImageView
 						android:id="@+id/front"
 						android:layout_marginLeft="19px"
 						android:layout_marginRight="19px"
@@ -380,7 +380,7 @@
     		
     	     >
 			    
-			        <Button
+			        <ImageView
 						android:id="@+id/changemode"
 						android:layout_width="36px"
 			  		    android:layout_height="36px"

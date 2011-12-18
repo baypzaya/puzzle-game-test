@@ -531,8 +531,7 @@ public class BookShelf extends SpiritActivity implements OnTouchListener,
 
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
-		//return mGestureDetector.onTouchEvent(event);
-		return true;
+		return mGestureDetector.onTouchEvent(event);
 	}
 	public static OpenBookAnimation oba;
 	private Book book;
@@ -1303,7 +1302,9 @@ public class BookShelf extends SpiritActivity implements OnTouchListener,
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
-				exitApplication();
+			//jiangbiao add 
+		    mSyncNum = 0;
+			exitApplication();
 			
 		}
 		return false;

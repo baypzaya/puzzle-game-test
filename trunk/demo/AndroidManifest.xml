@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.idreamsky.ktouchread.bookshelf"
-    android:versionCode="1"
-    android:versionName="1.2" >
+    android:versionCode="13"
+    android:versionName="1.3" >
 
     <application
         android:debuggable="true"
@@ -23,7 +23,7 @@
             android:configChanges="orientation|keyboardHidden|navigation"
             android:name=".Book_SplashAct1"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar" >
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
         </activity>
         <activity
             android:configChanges="orientation|keyboardHidden|navigation"
