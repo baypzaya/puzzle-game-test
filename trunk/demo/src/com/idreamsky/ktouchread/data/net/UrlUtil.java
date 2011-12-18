@@ -127,7 +127,7 @@ public class UrlUtil {
 	public static final int  ServerTimeOut	 = 501	;//超时。
 
 
-	public static final String URL_GET_KTOUCH_TOKEN = KPayAccount.KPAY_HOST_TEMP +"/kpp/ylogon.do";
+	public static final String URL_GET_KTOUCH_TOKEN = KPayAccount.KPAY_HOST +"/kpp/ylogon.do";
 
 
 	
