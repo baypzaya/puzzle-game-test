@@ -1,15 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:orientation="vertical" android:layout_width="fill_parent"
-	android:layout_height="fill_parent" android:gravity="bottom|center"
-	android:background="@drawable/splash">
-	
-	<ProgressBar 
-         android:layout_width="wrap_content"   
-         android:layout_height="wrap_content" 
-         style="?android:attr/progressBarStyleLarge"
-         /> 
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" 
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" android:background="@drawable/splash" android:gravity="bottom">
          
+    <!--  
 	<ImageView android:background="@anim/splash_loading"
 		android:id="@+id/splash_progress" android:layout_width="@dimen/splash_img_width"
 		android:layout_height="@dimen/splash_img_height" android:layout_marginBottom="@dimen/splash_tv_marginBottom2" />
@@ -21,7 +16,18 @@
 	<TextView android:text="内容由盛大云中书城提供" android:textColor="#666666"
 		android:layout_marginBottom="@dimen/splash_tv_marginBottom1" android:layout_width="wrap_content"
 		android:layout_height="wrap_content" />
-
-		
+	-->
+	<LinearLayout android:id="@+id/progress_layout"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" android:gravity="center" android:layout_marginBottom="112px">
+    
+	    <ProgressBar android:layout_width="wrap_content"
+    android:layout_height="wrap_content" style="?android:attr/progressBarStyleLargeInverse" />
+    	<TextView android:layout_width="wrap_content"
+    android:layout_height="wrap_content" android:text="启动中..." android:textSize="18dip"/>
+    	<TextView android:layout_width="wrap_content"
+    android:layout_height="wrap_content" android:text="..." android:textSize="18dip"></TextView>
+	</LinearLayout>
 
 </LinearLayout>
