@@ -593,9 +593,9 @@ public class BookShelf extends SpiritActivity implements OnTouchListener,
 //						ViewHolder viewHolder = (ViewHolder) v.getTag();
 //						ImageView image = viewHolder.myBookShelfLogo;
 						book.UpdateReadTime();
-						oba = null;
-						oba = new OpenBookAnimation(BookShelf.this,width,height,imgBg,books);
-						oba.start();
+//						oba = null;
+//						oba = new OpenBookAnimation(BookShelf.this,width,height,imgBg,books);
+//						oba.start();
 						timer = new Timer();
 						task = new TimerTask() {
 								
@@ -616,8 +616,8 @@ public class BookShelf extends SpiritActivity implements OnTouchListener,
 
 											intent.setClass(BookShelf.this, BookReadActivity.class);
 											intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-											oba.dismiss();
-											oba.mPageWidget = null;
+//											oba.dismiss();
+//											oba.mPageWidget = null;
 											startActivityForResult(intent, BookShelf.REFRESHCODE);
 											
 											
@@ -683,23 +683,6 @@ public class BookShelf extends SpiritActivity implements OnTouchListener,
 		}
 		super.onResume();
 		
-		//在 onResume时重新刷新UI
-		if(KPayAccount.getLongtermToken() == null  || KPayAccount.getLongtermToken().length() < 1)
-		{
-			if(UrlUtil.TokenT != null && UrlUtil.TokenT.length() >0)
-			{
-				GetLongToken();
-			}
-			else
-			{
-				UrlUtil.TokenTPL = null;
-				GetUserInforError();
-			}
-			return;
-		}
-		Message msg = new Message(); // 提示msg
-		msg.what = 0;
-		handler.sendMessage(msg);
 	}
 	
 	
