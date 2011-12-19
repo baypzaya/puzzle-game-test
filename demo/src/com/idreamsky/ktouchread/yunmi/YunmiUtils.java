@@ -46,6 +46,9 @@ public class YunmiUtils{
 	//tianyu
 	//81570555
 	
+	
+	//response:oauth_token=kuh9WIkPSGER14q590422691272512uzYis&oauth_token_secret=HXHLbKwu1e&apptype=0
+
 	public static void getAppToken(final Context context,final Handler handler ) {
 		
 		Runnable runnable = new Runnable(){
