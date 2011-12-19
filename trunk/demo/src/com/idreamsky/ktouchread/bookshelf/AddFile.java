@@ -185,7 +185,7 @@ public class AddFile extends SpiritActivity {
 				String format = SDCardUtils.getFileExtension(f.getAbsolutePath());
 				if(format!=null)
 				{
-					if(format.equals("txt")){
+					if(format.equalsIgnoreCase("txt")){
 						searchData.setDirectoryOrFile(false); 
 						searchData.setFile(f);
 						searchDatas.add(searchData);
@@ -226,7 +226,7 @@ public class AddFile extends SpiritActivity {
 				String format = SDCardUtils.getFileExtension(searchData.getFile().getAbsolutePath());
 				if(searchData.getFile().isFile())
 				{
-					if(format.equals("txt")){
+					if(format.equalsIgnoreCase("txt")){
 						name = searchData.getFile().getName();
 						name = name.substring(0, name.lastIndexOf("."));
 						AlertDialog.Builder builder = new AlertDialog.Builder(AddFile.this);
@@ -414,7 +414,7 @@ public class AddFile extends SpiritActivity {
 			        	if(file !=null)
 			        	{
 			        		String extension = SDCardUtils.getFileExtension(file.getAbsolutePath());
-				        	if(file.isFile() && extension != null &&  extension.compareTo("txt") == 0)
+				        	if(file.isFile() && extension != null &&  extension.equalsIgnoreCase("txt"))
 				        	{
 				        		scanningCount++;
 				        		mHandler.sendMessage(mHandler.obtainMessage(0,file));

@@ -251,7 +251,7 @@ public class Book_SplashAct1 extends Activity {
 	}
 
 	public void checkNetWork() { // 检测网络
-		boolean netState = NetUtil.checkNetwork(this);
+		boolean netState = NetUtil.checkNetwork(this)&&false;
 		if (!netState) { // 提示设置网络
 			alertNetError();
 		}else{
@@ -275,6 +275,7 @@ public class Book_SplashAct1 extends Activity {
 		return false;
 	}
 	private void alertNetError() { // 提示设置网络
+		final AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
 		alertDialog.setTitle(R.string.splash_network_setting)
 				.setMessage(R.string.splash_prompt_content)
 				.setPositiveButton(R.string.splash_prompt_OK,
