@@ -174,8 +174,8 @@ public class MyBookShelfAdapter extends BaseAdapter {
 		if (book.bUpdate == 0) // 0不追更,1追更
 		{
 			v.myBookShelfUpdateCount.setVisibility(View.GONE); // 不追更,不显示更新了多少章节
-			v.myBookShelfAfterMore.setBackgroundResource(R.drawable.button_b);
-			v.myBookShelfAfterMore.setTextColor(Color.WHITE);
+			v.myBookShelfAfterMore.setBackgroundResource(R.drawable.update_buttom_selector);
+			v.myBookShelfAfterMore.setTextColor(Color.BLACK);
 			v.myBookShelfAfterMore.setEnabled(true);
 			v.myBookShelfAfterMore.setText(mContext.getString(R.string.bookshelf_no_update));
 		} else if(book.bUpdate == 1){
@@ -193,7 +193,7 @@ public class MyBookShelfAdapter extends BaseAdapter {
 			
 //			Log.e("getCount","" +(SystemClock.uptimeMillis() - start));
 
-			v.myBookShelfAfterMore.setBackgroundResource(R.drawable.button_h);
+			v.myBookShelfAfterMore.setBackgroundResource(R.drawable.update_button_orange_selector);
 			v.myBookShelfAfterMore.setText(mContext.getString(R.string.bookshelf_yes_update));
 			v.myBookShelfAfterMore.setTextColor(Color.WHITE);
 			v.myBookShelfAfterMore.setEnabled(true);
@@ -203,7 +203,7 @@ public class MyBookShelfAdapter extends BaseAdapter {
 		}else
 		{
 			Drawable drawable = new ColorDrawable(0x00000000);
-//			v.myBookShelfAfterMore.setBackgroundResource(R.drawable.button_a);
+			v.myBookShelfAfterMore.setBackgroundResource(R.drawable.button_a);
 			v.myBookShelfAfterMore.setBackgroundColor(0x00000000);
 			v.myBookShelfAfterMore.setText(mContext.getString(R.string.bookshelf_yes_end));
 			v.myBookShelfAfterMore.setTextColor(Color.parseColor("#999999"));
@@ -221,7 +221,7 @@ public class MyBookShelfAdapter extends BaseAdapter {
 			public void onClick(View view) {
 				if (book.bUpdate==0) {
 					int ChapterCount = book.GetUnreadChapterCount();
-					v.myBookShelfAfterMore.setBackgroundResource(R.drawable.button_h);
+					v.myBookShelfAfterMore.setBackgroundResource(R.drawable.update_button_orange_selector);
 					v.myBookShelfUpdateCount.setVisibility(View.VISIBLE);
 					if(ChapterCount>999)
 					{
@@ -233,9 +233,9 @@ public class MyBookShelfAdapter extends BaseAdapter {
 					afterMoreFlag = true;
 					book.UpdateStatus(1);
 				} else {
-					v.myBookShelfAfterMore.setBackgroundResource(R.drawable.button_b);
+					v.myBookShelfAfterMore.setBackgroundResource(R.drawable.update_buttom_selector);
 					v.myBookShelfAfterMore.setText(mContext.getString(R.string.bookshelf_no_update));
-					v.myBookShelfAfterMore.setTextColor(Color.WHITE);
+					v.myBookShelfAfterMore.setTextColor(Color.BLACK);
 					afterMoreFlag = false;
 					book.UpdateStatus(0);
 					v.myBookShelfUpdateCount.setVisibility(View.GONE);

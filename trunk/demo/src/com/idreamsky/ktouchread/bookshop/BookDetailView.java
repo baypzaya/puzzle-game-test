@@ -264,7 +264,7 @@ public class BookDetailView extends AbstractView {
 				syncDataDialog.setTitle(R.string.select_book);
 				syncDataDialog.setMessage(mContext.getString(R.string.select_book_wait));
 				syncDataDialog.setIndeterminate(false);
-				syncDataDialog.setIcon(R.drawable.icon);
+				//syncDataDialog.setIcon(R.drawable.icon);
 				syncDataDialog.setCancelable(false);
 				syncDataDialog.show();
 			}else if(msg.what == 1)

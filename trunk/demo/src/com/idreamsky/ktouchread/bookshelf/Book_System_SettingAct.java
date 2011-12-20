@@ -107,7 +107,7 @@ public class Book_System_SettingAct extends SpiritActivity {
 				syncDataDialog.setTitle(R.string.sync_data);
 				syncDataDialog.setMessage(getString(R.string.sync_data_loading));
 				syncDataDialog.setIndeterminate(false);
-				syncDataDialog.setIcon(R.drawable.icon);
+//				syncDataDialog.setIcon(R.drawable.icon);
 				syncDataDialog.setCancelable(true);
 				syncDataDialog.setButton(getString(R.string.setting_cancel),
 						new DialogInterface.OnClickListener() {
@@ -129,7 +129,7 @@ public class Book_System_SettingAct extends SpiritActivity {
 				syncDataDialog.setTitle(R.string.backup_data);
 				syncDataDialog.setMessage(getString(R.string.backup_data_loading));
 				syncDataDialog.setIndeterminate(false);
-				syncDataDialog.setIcon(R.drawable.icon);
+				//syncDataDialog.setIcon(R.drawable.icon);
 				syncDataDialog.setCancelable(true);
 				syncDataDialog.setButton(getString(R.string.setting_cancel),
 						new DialogInterface.OnClickListener() {
@@ -239,7 +239,7 @@ public class Book_System_SettingAct extends SpiritActivity {
 		case R.id.my_account:
 			SwitchtoKPayAccount();
 			break;
-		case R.id.sys_setting_update:
+		/*case R.id.sys_setting_update:
 		case R.id.sys_setting_update_layout:
 
 			new Thread(new Runnable() {
@@ -249,7 +249,7 @@ public class Book_System_SettingAct extends SpiritActivity {
 					handler.sendEmptyMessage(SYS_SETTING_UPDATE);
 				}
 			}).start();
-			break;
+			break;*/
 		case R.id.sys_setting_sync:
 		case R.id.sys_setting_sync_layout:
 			if (NetUtil.checkNetwork(this)) {
@@ -367,7 +367,7 @@ public class Book_System_SettingAct extends SpiritActivity {
 		versionProgressDialog.setTitle(R.string.setting_check_version);
 		versionProgressDialog.setMessage(getString(R.string.setting_get_version));
 		versionProgressDialog.setIndeterminate(false);
-		versionProgressDialog.setIcon(R.drawable.icon);
+		//versionProgressDialog.setIcon(R.drawable.icon);
 		versionProgressDialog.setCancelable(true);
 		versionProgressDialog.show();
 	}
@@ -399,7 +399,8 @@ public class Book_System_SettingAct extends SpiritActivity {
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
-				exitApplication();
+				//exitApplication();
+			this.finish();
 			
 		}
 		return false;

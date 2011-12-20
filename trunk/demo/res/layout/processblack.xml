@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="fill_parent" 
+  android:gravity="center"
+  android:layout_height="fill_parent">
+ 
+ <!-- @android:style/Widget.ProgressBar
+  <ProgressBar android:id="@android:id/progress"  
+    style="@android:style/Widget.ProgressBar.Inverse"
+    android:layout_width="wrap_content" android:layout_height="wrap_content" />
+  -->
+  
+  <ProgressBar android:layout_width="wrap_content"
+    android:layout_height="wrap_content" style="?android:attr/progressBarStyleLargeInverse" />
+  <TextView android:layout_width="wrap_content"
+    android:layout_height="wrap_content" android:text="加载中..." 
+    android:textColor="#ff000000"
+    android:textSize="18dip"/>
+</LinearLayout>
+
+

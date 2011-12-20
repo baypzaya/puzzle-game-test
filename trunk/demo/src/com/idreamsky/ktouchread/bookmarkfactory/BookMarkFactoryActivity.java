@@ -1066,7 +1066,8 @@ public class BookMarkFactoryActivity extends SpiritActivity implements
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
-				exitApplication();
+				//exitApplication();
+			this.finish();
 			
 		}
 		return false;

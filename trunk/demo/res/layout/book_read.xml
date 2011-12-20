@@ -31,83 +31,61 @@
 		/>
 	 -->
 	<!-- 工具栏title -->
-	<!-- TY:liushan delete
+	
 	<LinearLayout
 		android:id="@+id/bookRead_title_tool"
 		android:layout_width="fill_parent"
-  		android:layout_height="@dimen/book_read_title_tool_height"
+  		android:layout_height="84px"
 		android:orientation="horizontal"
   		android:visibility="gone"
-  		android:background="@drawable/page_b"
+  		android:background="@drawable/title_bg"
   		android:focusableInTouchMode="true"
-	>
-	<LinearLayout
-		android:layout_width="fill_parent"
-  		android:layout_height="fill_parent"
-  		android:orientation="horizontal"
-  		android:gravity="center_vertical"
-  		
-	>
+	>	
 		<LinearLayout
 			android:layout_width="fill_parent"
-  			android:layout_height="fill_parent"
+  			android:layout_height="wrap_content"
   			android:layout_weight="1"
-  			android:layout_marginLeft="@dimen/book_read_title_back_btn_marginLeft"
-  			android:gravity="center_vertical"
+  			android:orientation="horizontal"
 		>
 			<Button
 				android:id="@+id/back"
-				android:layout_width="@dimen/book_read_title_back_btn_width"
-		  		android:layout_height="@dimen/book_read_title_back_btn_height"
-				android:background="@drawable/input_a"
-				android:text="@string/back"
-				android:textColor="@color/white"
-				android:textSize="@dimen/book_read_title_back_btn_size"
+				android:layout_width="120px"
+		  		android:layout_height="79px"
+				android:background="@drawable/back_normal1"
+				
 				/>
+			<TextView
+			    android:id="@+id/bookname"
+				android:layout_width="wrap_content"
+		  		android:layout_height="wrap_content"
+		  		
+				android:textColor="@color/white"
+                
+				android:textSize="30px"
+			    />
 	  	</LinearLayout>
 			
 			<RelativeLayout
 				android:layout_width="wrap_content"
-			  	android:layout_height="fill_parent"
-			  	android:gravity="center_vertical"
-			  	android:layout_marginRight="@dimen/book_read_title_addBookMark_marginRight"
+			  	android:layout_height="wrap_content"
+			    android:layout_marginTop="8px"
+			  	android:layout_marginRight="16px"
 			>
 				<Button
 					android:id="@+id/addBookMark"
-					android:layout_width="@dimen/book_read_title_addBookMark_width"
-			  		android:layout_height="@dimen/book_read_title_addBookMark_height"
-					android:background="@drawable/btn_boo_mark_selector"
+					android:layout_width="75px"
+			  		android:layout_height="46px"
+					android:background="@drawable/right_button_normal"
 					/>
 				<Button
 					android:id="@+id/deleteBookMark"
-					android:layout_width="@dimen/book_read_title_deleteBookMark_width"
-			  		android:layout_height="@dimen/book_read_title_deleteBookMark_height"
-					android:background="@drawable/bookmark"
+					android:layout_width="75px"
+			  		android:layout_height="46px"
+					android:background="@drawable/right_button_down"
 					android:visibility="gone"
-					android:layout_marginTop="@dimen/book_read_title_deleteBookMark_marginTop"
+					
 					/>
 			</RelativeLayout>
-			
-			<Button
-					android:id="@+id/toDirectory"
-					android:layout_width="@dimen/book_read_title_toDirectory_width"
-			  		android:layout_height="@dimen/book_read_title_toDirectory_height"
-					android:background="@drawable/btn_directory_selector"
-					android:layout_marginRight="@dimen/book_read_title_toDirectory_marginRight"
-					android:layout_gravity="center_vertical"
-				/>
-			
-			<Button
-						android:id="@+id/collect"
-						android:layout_width="@dimen/book_read_title_collect_width"
-			  		    android:layout_height="@dimen/book_read_title_collect_height"
-						android:background="@drawable/input_a"
-						android:text="@string/collect"
-						android:textColor="@color/white"
-						android:textSize="@dimen/book_read_title_collect_size"
-						android:layout_marginRight="@dimen/book_read_title_collect_marginRight"
-					/>
-		</LinearLayout>
 	</LinearLayout>
 	TY:liushan delete end -->
 	<ImageView
@@ -115,9 +93,8 @@
 		android:layout_width="@dimen/book_read_title_bookMark_width"
 		android:layout_height="@dimen/book_read_title_bookMark_height"
 		android:visibility="gone"
-		android:layout_alignParentLeft="true"
-		
-		android:layout_marginLeft="300px"
+		android:layout_alignParentRight="true"
+		android:layout_marginRight="91px"
 	/>
 	
 	<RelativeLayout
@@ -160,6 +137,7 @@
 	  			
 	  			
 			>
+			<!-- android:progressDrawable="@drawable/progbutton"   -->
 			<SeekBar 
 					 android:id="@+id/progress_bar_font_size" 
 					 android:layout_width="400px"  
@@ -167,7 +145,7 @@
 			         android:progress="0"  
 			         android:max="10" 
 			         android:secondaryProgress="0"  
-		        	 android:progressDrawable="@drawable/progbutton"  
+		        	 android:progressDrawable="@layout/seekbar_style"
 		        	 android:thumb="@drawable/ddd"
 		        	 android:layout_marginTop="10px"
 		        	 android:thumbOffset="0dip"

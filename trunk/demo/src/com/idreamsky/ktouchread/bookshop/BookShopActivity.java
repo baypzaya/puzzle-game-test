@@ -15,6 +15,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
@@ -589,8 +590,11 @@ public class BookShopActivity extends MenuTabActivity implements OnTabChangeList
 	};
 //jiangbiao add for Network check
 	private void netWorkCheck() { // 提示设置网络
+		LayoutInflater factory = LayoutInflater.from(this);
+		View view = factory.inflate(R.layout.dialog_message, null);
 		alertDialog.setTitle(R.string.splash_network_setting)
-				.setMessage(R.string.splash_prompt_content)
+		        .setView(view)
+				//.setMessage(R.string.splash_prompt_content)
 				.setPositiveButton(R.string.splash_prompt_OK,
 						new DialogInterface.OnClickListener() { // 跳转到网络设置界面
 							@Override
@@ -874,6 +878,9 @@ public class BookShopActivity extends MenuTabActivity implements OnTabChangeList
 
 	@Override
 	public void onTabChanged(int arg0, String arg1) {
+		mRecommendView.ReLoadData();
+		mLeadBoardView.ReLoadData();
+		mCategoryView.ReLoadData();
 		updateNavigationBar();		
 	}
 	
@@ -885,7 +892,7 @@ public class BookShopActivity extends MenuTabActivity implements OnTabChangeList
 				back();
 			}else{
 				mNetCheckNum = 0;
-				exitApplication();
+				this.finish();
 			}
 			
 		}

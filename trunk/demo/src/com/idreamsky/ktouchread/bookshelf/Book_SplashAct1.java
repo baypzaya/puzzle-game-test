@@ -20,9 +20,12 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.aliyun.aui.app.spirit.SpiritActivity;
 import com.idreamsky.ktouchread.bookshelf.download.DownloadProgressListener;
 import com.idreamsky.ktouchread.bookshelf.download.DownloadThread;
 import com.idreamsky.ktouchread.bookshelf.download.FileDownloader;
@@ -40,7 +43,7 @@ import com.idreamsky.ktouchread.yunmi.YunmiUtils;
 /**
  * @author lewis
  */
-public class Book_SplashAct1 extends Activity {
+public class Book_SplashAct1 extends SpiritActivity {
 
 	
 	private static final String TAG="Book_SplashAct";
@@ -181,11 +184,10 @@ public class Book_SplashAct1 extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.book_shelf_splash);
-		
+		setNavigationBarVisibility(false);
 		IntentFilter intentFilter = new IntentFilter();
 		intentFilter.addAction("com.aliyun.xiaoyunmi.action.AYUN_LOGIN_BROADCAST");
 		registerReceiver(yunmiLoginReceiver, intentFilter);
-		
 		initView();
 		if(SDCardUtils.isSDCardEnable())
 		{
@@ -251,7 +253,7 @@ public class Book_SplashAct1 extends Activity {
 	}
 
 	public void checkNetWork() { // 检测网络
-		boolean netState = NetUtil.checkNetwork(this)&&false;
+		boolean netState = NetUtil.checkNetwork(this);
 		if (!netState) { // 提示设置网络
 			alertNetError();
 		}else{
@@ -275,9 +277,11 @@ public class Book_SplashAct1 extends Activity {
 		return false;
 	}
 	private void alertNetError() { // 提示设置网络
-		final AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+		LayoutInflater factory = LayoutInflater.from(this);
+		View view = factory.inflate(R.layout.dialog_message, null);
 		alertDialog.setTitle(R.string.splash_network_setting)
-				.setMessage(R.string.splash_prompt_content)
+		        .setView(view)
+				//.setMessage(R.string.splash_prompt_content)
 				.setPositiveButton(R.string.splash_prompt_OK,
 						new DialogInterface.OnClickListener() { // 跳转到网络设置界面
 							@Override
