@@ -16,6 +16,7 @@
 	<RelativeLayout 
 	android:id="@+id/my_account"
 	    android:onClick="sysSettingClick"
+	    android:visibility="gone"
 	    android:background="#F3F4F6"
 		android:layout_width="fill_parent" android:layout_height="@dimen/book_system_setting_height">
 
@@ -38,8 +39,9 @@
 	</RelativeLayout>
 	<TextView android:layout_width="fill_parent" android:layout_height="2px" android:background="@drawable/line"/>
 	<RelativeLayout android:id="@+id/sys_setting_update_layout" android:background="#F3F4F6" android:onClick="sysSettingClick"
-		android:layout_width="fill_parent" android:layout_height="@dimen/book_shop_item_height">
-
+		android:layout_width="fill_parent" android:layout_height="@dimen/book_shop_item_height"
+		android:visibility="gone">
+        
 
 		<LinearLayout android:layout_centerInParent="true"
 			android:layout_alignParentLeft="true"
@@ -69,7 +71,7 @@
 	</RelativeLayout>
 
 	<TextView android:layout_width="fill_parent" android:layout_height="2px" android:background="@drawable/line"/>
-	<RelativeLayout android:id="@+id/sys_setting_sync_layout" android:background="#F3F4F6" android:onClick="sysSettingClick"
+	<RelativeLayout android:id="@+id/sys_setting_sync_layout" android:background="@drawable/book_item_selector" android:onClick="sysSettingClick"
 		android:layout_width="fill_parent" android:layout_height="100px">
 
 
@@ -99,7 +101,7 @@
 	</RelativeLayout>
 	
 		<TextView android:layout_width="fill_parent" android:layout_height="2px" android:background="@drawable/line"/>
-		<RelativeLayout android:id="@+id/sys_setting_backup_layout" android:background="#F3F4F6" android:onClick="sysSettingClick"
+		<RelativeLayout android:id="@+id/sys_setting_backup_layout" android:background="@drawable/book_item_selector" android:onClick="sysSettingClick"
 		android:layout_width="fill_parent" android:layout_height="@dimen/book_shop_item_height">
 
 

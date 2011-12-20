@@ -3,6 +3,7 @@
   xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="fill_parent"
   android:layout_height="fill_parent"
+  android:background="@drawable/book_item_selector"
   android:orientation="vertical"
 >
 	<RelativeLayout
@@ -52,7 +53,7 @@
 						android:paddingLeft="@dimen/bookShelf_item_lin_rl_btn_paddingLeft" 
 						android:paddingBottom="@dimen/bookShelf_item_lin_rl_btn_paddingBottom" 
 						android:layout_height="@dimen/bookShelf_item_lin_rl_btn_height" 
-						android:background="@drawable/remind" 
+						android:background="@android:drawable/aui_number_indicator_small" 
 						android:focusable="false"
 						android:layout_alignParentRight="true" android:visibility="gone">
 					</Button>	
@@ -128,7 +129,8 @@
 					android:id="@+id/checkbox_select" 
 					android:layout_width="wrap_content"
 		  			android:layout_height="wrap_content"
-		  			android:layout_marginBottom="20px"				
+		  			android:layout_marginBottom="20px"
+		  			android:clickable="false"				
 				/>
 	</LinearLayout>		
 		</RelativeLayout>

@@ -36,9 +36,9 @@ import com.idreamsky.ktouchread.yunmi.AliyunResult;
 public class KPayAccount {
 
 	private static final String TAG = "Token";
-	public static final String KPAY_HOST = "http://10.32.187.91:80"; // "osatest01001.k-touch.cn:8012";
+//	public static final String KPAY_HOST = "http://10.32.187.91:80"; // "osatest01001.k-touch.cn:8012";
 																// //用于第三方需要使用天宇测试环境时
-	// private static final String KPAY_HOST = "bookstore.k-touch.cn:80";
+	public static final String KPAY_HOST = "http://kpp.k-touch.cn:80";
 	// //用于第三方需要连接天宇正式环境时
 
 	private static final String KACCOUNT_PACKAGENAME = "com.osa.ktouchpay"; // 不可修改

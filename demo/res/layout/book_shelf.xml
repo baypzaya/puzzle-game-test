@@ -33,7 +33,7 @@
 				android:id="@+id/layout_book_poster"
 				layout="@layout/poster"
 			/>
-			<Button
+			<!--  
 				android:id="@+id/btnArrow" 
 				android:layout_width="@dimen/book_shelf_btnArrow_width"
 				android:layout_height="@dimen/book_shelf_btnArrow_height"
@@ -41,6 +41,7 @@
 				android:layout_marginRight="@dimen/book_shelf_btnArrow_marginRight"
 				android:background="@drawable/btn_arrow"
 			/>
+			  -->
 			<ImageView
 				android:id="@+id/fenge1"
 				android:layout_width="fill_parent"
@@ -72,13 +73,12 @@
 				android:id="@+id/lvMyBookShelf" 
 				android:layout_width="fill_parent"
 				android:layout_height="fill_parent"
-				android:listSelector="@drawable/my_book_shelf_selector"
 				android:cacheColorHint="#00000000"
 				android:background="@drawable/bar_bg_5"
 				android:divider="@drawable/line"
 			/>
 			
-			
+			<!-- 
 			<Button
 				android:id="@+id/btnArrow1" 
 				android:layout_width="@dimen/book_shelf_btnArrow1_width"
@@ -87,7 +87,7 @@
 				android:layout_marginRight="@dimen/book_shelf_btnArrow_marginRight"
 				android:background="@drawable/btn_arrow_up"
 				android:visibility="gone"
-				
+				 -->
 			/>
 		</FrameLayout>
 	</RelativeLayout>

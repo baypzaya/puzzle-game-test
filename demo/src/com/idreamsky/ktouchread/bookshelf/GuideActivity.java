@@ -3,13 +3,15 @@ package com.idreamsky.ktouchread.bookshelf;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import com.aliyun.aui.app.spirit.SpiritActivity;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.widget.LinearLayout;
 
-public class GuideActivity extends Activity {
+public class GuideActivity extends SpiritActivity {
 
 	private Intent intent;
 	private String flag = "";

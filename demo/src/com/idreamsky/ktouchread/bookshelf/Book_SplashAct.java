@@ -6,10 +6,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MotionEvent;
 
+import com.aliyun.aui.app.spirit.SpiritActivity;
 import com.idreamsky.ktouchread.data.net.UrlUtil;
 import com.idreamsky.ktouchread.util.SettingUtils;
 
-public class Book_SplashAct extends Activity {
+public class Book_SplashAct extends SpiritActivity {
 
 	private boolean sign = true;//防止多次执行touch方法
 	private static Object object = new Object();

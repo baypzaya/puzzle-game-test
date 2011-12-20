@@ -6,7 +6,6 @@
 <include android:id="@+id/layout_book_head" layout="@layout/book_shop_head" />
 	<ListView android:id="@+id/booklist" android:layout_width="fill_parent"
 		android:layout_height="wrap_content" 
-		android:listSelector="@drawable/my_book_shelf_selector"
 		android:cacheColorHint="#00000000" android:background="@drawable/bar_bg_1" android:divider="@drawable/line" />
 </LinearLayout>
 

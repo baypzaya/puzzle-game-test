@@ -15,9 +15,9 @@
 	<string name="scanning">扫描</string>
 	
 	<!-- splash -->
-	<string name="splash_network_setting">进行联网设置</string>
-	<string name="splash_prompt_content">应用检测到您没有联网，是否进行联网设置？点击“确定”进行设置</string>
-	<string name="splash_prompt_OK">确定</string>
+	<string name="splash_network_setting">无网络连接</string>
+	<string name="splash_prompt_content">当前无网络连接，请设置移动网络或WLAN</string>
+	<string name="splash_prompt_OK">设置网络</string>
 	<string name="splash_prompt_cancel">取消</string>
     <string name="splash_close">关闭</string>
     <string name="splash_downloading">文件正在下载...</string>

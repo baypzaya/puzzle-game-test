@@ -131,6 +131,7 @@ public class BookShelf extends SpiritActivity implements OnTouchListener,
 	private boolean bExist = false;
 	//add for test
 	private static int mSyncNum = 0;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -1233,7 +1234,7 @@ public class BookShelf extends SpiritActivity implements OnTouchListener,
 					syncDataDialog.setTitle(R.string.sync_data);
 					syncDataDialog.setMessage(getString(R.string.sync_data_loading));
 					syncDataDialog.setIndeterminate(false);
-					syncDataDialog.setIcon(R.drawable.icon);
+					//syncDataDialog.setIcon(R.drawable.icon);
 					syncDataDialog.setCancelable(false);
 					syncDataDialog.setButton(getString(R.string.setting_cancel),
 							new DialogInterface.OnClickListener() {
@@ -1287,7 +1288,7 @@ public class BookShelf extends SpiritActivity implements OnTouchListener,
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			//jiangbiao add 
 		    mSyncNum = 0;
-			exitApplication();
+			this.finish();
 			
 		}
 		return false;

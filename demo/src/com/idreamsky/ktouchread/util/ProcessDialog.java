@@ -1,5 +1,6 @@
 package com.idreamsky.ktouchread.util;
 
+import com.idreamsky.ktouchread.bookread.BookReadActivity;
 import com.idreamsky.ktouchread.bookshelf.R;
 
 import android.app.Dialog;
@@ -15,7 +16,11 @@ public class ProcessDialog {
 			if(mProcessDialog == null)
 			{
 				mProcessDialog = new Dialog(context, R.style.transparentdialog);
-				mProcessDialog.setContentView(R.layout.process);
+				if(context instanceof BookReadActivity){
+					mProcessDialog.setContentView(R.layout.processblack);
+				}else{
+					mProcessDialog.setContentView(R.layout.process);
+				}
 				mProcessDialog.setCancelable(true);
 				mProcessDialog.show();
 			}

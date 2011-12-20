@@ -10,7 +10,7 @@
     android:layout_height="wrap_content" android:gravity="center" android:layout_marginBottom="112px">
     
 	    <ProgressBar android:layout_width="wrap_content"
-    android:layout_height="wrap_content" style="?android:attr/progressBarStyleLargeInverse" />
+    android:layout_height="wrap_content" style="?android:attr/progressBarStyleLarge" />
     	<TextView android:layout_width="wrap_content"
     android:layout_height="wrap_content" android:text="启动中" android:textSize="18dip"/>
     	<TextView android:layout_width="wrap_content"

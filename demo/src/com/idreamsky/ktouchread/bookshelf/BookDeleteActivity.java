@@ -98,11 +98,19 @@ public class BookDeleteActivity extends SpiritListActivity implements OnItemClic
 		for(int i=0;i<results.length;i++){
 			results[i] = bookIdNetList.get(i);
 		}
-
-		Intent intent = new Intent();
-		intent.putExtra(BookShelf.DELETE_BOOKS, results);
-		setResult(RESULT_OK,intent);
-		finish();
+//jiangbiao modify
+//		Intent intent = new Intent();
+//		intent.putExtra(BookShelf.DELETE_BOOKS, results);
+//		setResult(RESULT_OK,intent);
+//		finish();
+		if(results.length == 0){
+			return;
+		}else{
+			Intent intent = new Intent();
+			intent.putExtra(BookShelf.DELETE_BOOKS, results);
+			setResult(RESULT_OK,intent);
+			finish();
+		}
 	}
 	
 	

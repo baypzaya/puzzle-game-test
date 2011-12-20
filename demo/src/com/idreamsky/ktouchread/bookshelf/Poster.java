@@ -57,8 +57,8 @@ public class Poster implements OnGestureListener,OnTouchListener,GetAdvertListCa
 	private String pos;
 	private static View[] posterViews; //广告view
 	private ListView lvMyBookShelf;
-	private Button btnArrow;
-	private Button btnArrow1;
+	//private Button btnArrow;
+	//private Button btnArrow1;
 	public static boolean arrowFlag = true;
 	private FrameLayout posterControl;
 	private LinearLayout layout_book_poster;
@@ -103,31 +103,35 @@ public class Poster implements OnGestureListener,OnTouchListener,GetAdvertListCa
         lvMyBookShelf = (ListView) this.mContext.findViewById(R.id.lvMyBookShelf);
         posterControl = (FrameLayout) this.mContext.findViewById(R.id.frameLayoutPoster);
         posterFloor = (FrameLayout) this.mContext.findViewById(R.id.posterFloor);
-        btnArrow1 = (Button) this.mContext.findViewById(R.id.btnArrow);
-        btnArrow = (Button) this.mContext.findViewById(R.id.btnArrow);
+       // btnArrow1 = (Button) this.mContext.findViewById(R.id.btnArrow);
+       // btnArrow = (Button) this.mContext.findViewById(R.id.btnArrow);
+        /*
         btnArrow.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
 				
 				btnArrow.setBackgroundResource(R.drawable.btn_arrow_up);
-				btnArrow1.setVisibility(View.VISIBLE);
+				//btnArrow1.setVisibility(View.VISIBLE);
 				posterControl.setVisibility(View.GONE);
 				arrowFlag = false;
 				
 			}
 		});
-        btnArrow1 = (Button) this.mContext.findViewById(R.id.btnArrow1);
+		*/
+       // btnArrow1 = (Button) this.mContext.findViewById(R.id.btnArrow1);
+        /*
         btnArrow1.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
 				btnArrow.setBackgroundResource(R.drawable.btn_arrow);
-				btnArrow1.setVisibility(View.GONE);
+				//btnArrow1.setVisibility(View.GONE);
 				posterControl.setVisibility(View.VISIBLE);
 				arrowFlag = true;
 			}
 		});
+		*/
 	}
 	public Poster(Activity mActivity,LinearLayout layout,String pos)
 	{

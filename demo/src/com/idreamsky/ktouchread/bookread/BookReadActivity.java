@@ -166,20 +166,22 @@ public class BookReadActivity extends SpiritActivity {
 	*/
 	public Boolean isFontSizeToast = null;
 
-	//private Button back; // 返回
+	private Button back; // 返回
 	//private Button toDirectory; // 去通讯录
-	//private Button addBookMark; // 书签
+	private Button addBookMark; // 书签
 	private ImageView collect; // 收藏
 	private ImageView changeMode;
+	private TextView bookName;
+
 	//private Button lightMode;
 	//private Button font;
 	private boolean nightMode;
 	private DropDownList mDropList;
 	private DropDownList mDropListfont;
 	//private float[]mLuminance = {0.4f,0.6f,0.8f,1.0f};
-	//private Button deleteBookMark; //删除书签按钮
+	private Button deleteBookMark; //删除书签按钮
 	//TY:liushan delete start
-	//private LinearLayout bookRead_title_tool; // 标题工具栏 
+	private LinearLayout bookRead_title_tool; // 标题工具栏 
 	//TY:liushan delete end
 	private RelativeLayout bookRead_floor_tool;//底部工具栏
 	private RelativeLayout collectionLayout;
@@ -254,27 +256,23 @@ public class BookReadActivity extends SpiritActivity {
 		setContentView(R.layout.book_read);
 		loadingData = true;
 		ProcessDialog.ShowProcess(this);
-		
+		setNavigationBarVisibility(false);
 		System.gc();
 		System.gc();
 		//book = BookShelf.mCurrentBook;// (Book) //获取当前book
 		init(); //初始化
-
 		book = BookShelf.mCurrentBook;// (Book) //获取当前book
-		//Button collect = (Button)findViewById(R.id.collection);
 		 if (Book.IsExit(book.bookidNet)&& (Book.GetBookSyncStatus(book.bookidNet) != 2)) {
 			  collect.setBackgroundResource(R.drawable.collectionn);
 			  collectionLayout.setClickable(false);
 			  collectionTextView.setText("已收藏");
-			  
 		  }
 		
 		if(book.BookType==1)//如果是本地文件
 		{
 			IntentFilter intentFilter = new IntentFilter(BookReadActivity.FILERECEIVER);
 			registerReceiver(broadcastReceiver, intentFilter);
-		}
-		
+		}	
 		new Thread(){
 
 			@Override
@@ -283,8 +281,7 @@ public class BookReadActivity extends SpiritActivity {
 					book.OpenBook();
 					if(chapters == null)
 					    chapters = book.GetChapterList(); //7
-					initHandler.sendEmptyMessage(0);
-					
+					initHandler.sendEmptyMessage(0);	
 				}
 				super.run();
 			}
@@ -298,12 +295,9 @@ public class BookReadActivity extends SpiritActivity {
        private float Luminance ;
        private int curPosition ;
        String[] items = getResources().getStringArray(R.array.items);
-//       private ArrayList<RadioButton>Radioitems = new ArrayList<RadioButton>();    
-       
        public MyArrayAdapter(){
     	   WindowManager.LayoutParams luminancePlus = getWindow().getAttributes();
     	   Luminance = luminancePlus.screenBrightness;
-    	  
     	   curPosition = getCurPositon();
        }
        
@@ -350,18 +344,14 @@ public class BookReadActivity extends SpiritActivity {
 		}
 		
 		OnClickListener listener=new OnClickListener() {
-			
 			@Override
 			public void onClick(View v) {
-				
-				//getWindow().setAttributes(luminancePlus);
 				Log.v("liushan","convertView.onClick");
 				int pos = (Integer)v.getTag();
 				curPosition = pos;
 				MyArrayAdapter.this.notifyDataSetChanged();
 				setLight(curPosition);
 				 mDropList.dismiss();	
-				//getWindow().setAttributes(luminancePlus);
 			};
 		};
 		private int getCurPositon(){
@@ -406,8 +396,6 @@ public class BookReadActivity extends SpiritActivity {
 	       private float Luminance ;
 	       private int curPosition ;
 	       String[] items = getResources().getStringArray(R.array.fontitems);
-//	       private ArrayList<RadioButton>Radioitems = new ArrayList<RadioButton>();    
-	       
 	       public MyArrayAdapterfont(){
 	    	 //读取字体
 	   		SharedPreferences sizeSetting = getSharedPreferences(Util.SIZESETTING,
@@ -500,7 +488,6 @@ public class BookReadActivity extends SpiritActivity {
 				showSize= 30;
 				msg.what = 1;
 				fontHandler.sendMessage(msg);
-				
 			}else if(pos == 2){
 				showSize= 28;
 				msg.what = 1;
@@ -523,12 +510,17 @@ public class BookReadActivity extends SpiritActivity {
 			builder.show();
 	}
 	
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		builder = null;
+	}
+
 	public Handler initHandler = new Handler()
 	{
-
 		@Override
 		public void handleMessage(Message msg) {
-	
 			entrance = getIntent().getStringExtra(Util.ENTRANCE); //入口
 			currentIndex = 0;
 			if (entrance != null) {
@@ -664,6 +656,7 @@ public class BookReadActivity extends SpiritActivity {
 	 */
 	public void init()
 	{
+		/*
 		  setNavigationBarVisibility(false);
 		  setNavigationBarFloating(true);
 		 // collect = (Button) this.findViewById(R.id.collection);
@@ -683,8 +676,10 @@ public class BookReadActivity extends SpiritActivity {
 				finish();
 			}
 		});
+		
 		  Book Currentbook = BookShelf.mCurrentBook;
 		  NavigationBarbuilder.setTitle(Currentbook.Book_Name);
+		  */
 		 //setText(book.Book_Name)
 		isExistActivity = true;
 		boodRead_parent  = (RelativeLayout) this.findViewById(R.id.boodRead_parent);
@@ -692,8 +687,6 @@ public class BookReadActivity extends SpiritActivity {
 		tvPageNumber = (TextView) this.findViewById(R.id.tvPageNumber);
 		linRead = (LinearLayout) this.findViewById(R.id.linRead);
 		changeMode = (ImageView)findViewById(R.id.changemode);
-		
-		//changeMode.setOnClickListener(floorToolOnClickListener);
 		//读取当前模式 
 		SharedPreferences modelSetting = getSharedPreferences(Util.MODELSETTING,Context.MODE_PRIVATE);
 		String model = modelSetting.getString(Util.MODEL, "");
@@ -718,10 +711,10 @@ public class BookReadActivity extends SpiritActivity {
 				linRead.setBackgroundResource(R.drawable.page_a);
 			}
 		}
-		
-        //TY:liushan delete start
-		//bookRead_title_tool = (LinearLayout) this.findViewById(R.id.bookRead_title_tool); // 上面工具栏
-		//TY:liushan delete end
+		bookName = (TextView)this.findViewById(R.id.bookname);
+		Book Currentbook = BookShelf.mCurrentBook;
+		bookName.setText(Currentbook.Book_Name);
+		bookRead_title_tool = (LinearLayout) this.findViewById(R.id.bookRead_title_tool); // 上面工具栏
 		bookRead_floor_tool = (RelativeLayout) this.findViewById(R.id.bookRead_floor_tool); // 下面工具栏
 		collectionLayout = (RelativeLayout) this.findViewById(R.id.collectionlayout);
 		listLayout = (RelativeLayout) this.findViewById(R.id.listlayout);
@@ -740,23 +733,20 @@ public class BookReadActivity extends SpiritActivity {
 		nightModel = (Button) this.findViewById(R.id.nightModel); // 夜间模式
 		dayModel = (Button) this.findViewById(R.id.dayModel); // 白天模式
 */
-		//back = (Button) this.findViewById(R.id.back);
+		back = (Button) this.findViewById(R.id.back);
 		//TY:liushan delete start
 		//font = (Button)this.findViewById(R.id.front);
         //toDirectory = (Button) this.findViewById(R.id.list);
-		//addBookMark = (Button) this.findViewById(R.id.addBookMark);
+		addBookMark = (Button) this.findViewById(R.id.addBookMark);
 		collect = (ImageView) this.findViewById(R.id.collection);
 		//lightMode = (Button)findViewById(R.id.lightless);
-		  
-		//deleteBookMark = (Button) this.findViewById(R.id.deleteBookMark);
-	
-        //TY:liushan delete end
-		//back.setOnClickListener(titleToolOnClickListener);
+		deleteBookMark = (Button) this.findViewById(R.id.deleteBookMark);
+		back.setOnClickListener(titleToolOnClickListener);
 		listLayout.setOnClickListener(titleToolOnClickListener);
 		modeLayout.setOnClickListener(titleToolOnClickListener);
-		//addBookMark.setOnClickListener(titleToolOnClickListener);
+		addBookMark.setOnClickListener(titleToolOnClickListener);
 		collectionLayout.setOnClickListener(titleToolOnClickListener);
-		//deleteBookMark.setOnClickListener(titleToolOnClickListener);
+		deleteBookMark.setOnClickListener(titleToolOnClickListener);
 
 		/*
 		luminancePlus.setOnClickListener(floorToolOnClickListener);
@@ -775,8 +765,6 @@ public class BookReadActivity extends SpiritActivity {
 			}
 		});
 		
-		//TY:liushan delete start
-		/*
 		bookRead_title_tool.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -784,9 +772,7 @@ public class BookReadActivity extends SpiritActivity {
 
 			}
 		});
-        */
-		//TY:liushan delete end
-		
+        
 		WindowManager.LayoutParams luminancePlus = getWindow().getAttributes();
 		luminancePlus.screenBrightness = 0.6f;
 		getWindow().setAttributes(luminancePlus);
@@ -824,11 +810,10 @@ public class BookReadActivity extends SpiritActivity {
 			
 
 	}
-	
+	/*
 	private void isBookMark(boolean isBookMark){
 		if(!isBookMark){
-			 //add bookMark
-				
+			 //add bookMark				
 				bAddBook = false;
 				if (Book.IsExit(book.bookidNet)&& (Book.GetBookSyncStatus(book.bookidNet) != 2)) {
 				} else {
@@ -841,8 +826,8 @@ public class BookReadActivity extends SpiritActivity {
 					bAddBook = true;
 		
 				}
-				//addBookMark.setVisibility(View.GONE);
-				//deleteBookMark.setVisibility(View.VISIBLE);
+				addBookMark.setVisibility(View.GONE);
+				deleteBookMark.setVisibility(View.VISIBLE);
 				Animation bigAnimation = Util.loadAnimation(BookReadActivity.this,R.anim.book_mark_top_in);
 				bigBookMark(bigAnimation);
 				new Thread() {
@@ -931,6 +916,7 @@ public class BookReadActivity extends SpiritActivity {
 				closeBookMark();//关闭大书签
 	}
 	}
+	*/
 	private void SyncData()
 	{
 		if (NetUtil.checkNetwork(this)) {
@@ -971,11 +957,8 @@ public class BookReadActivity extends SpiritActivity {
 		public void handleMessage(Message msg) {
 			if(msg.what == RefreshTool)
 			{    Log.v("liushan","msg.what: "+msg.what);
-				// bookRead_title_tool.postInvalidate(); // 标题工具栏
-			    // NavigationBarbuilder.hideCloudView();
-				// setNavigationBarVisibility(true);
-				 //setNavigationBarVisibility(false);
-			  
+				 bookRead_title_tool.postInvalidate(); // 标题工具栏
+			  // setNavigationBarVisibility(true);
 				bookRead_floor_tool.postInvalidate(); 
 				 
 			}else if(msg.what == 10)
@@ -993,7 +976,7 @@ public class BookReadActivity extends SpiritActivity {
 				syncDataDialog.setTitle(R.string.sync_data);
 				syncDataDialog.setMessage(getString(R.string.sync_data_loading));
 				syncDataDialog.setIndeterminate(false);
-				syncDataDialog.setIcon(R.drawable.icon);
+				//syncDataDialog.setIcon(R.drawable.icon);
 				syncDataDialog.setCancelable(false);
 				syncDataDialog.setButton(getString(R.string.setting_cancel),
 						new DialogInterface.OnClickListener() {
@@ -1519,22 +1502,21 @@ public class BookReadActivity extends SpiritActivity {
 		public void onClick(View v) {
 
 			switch (v.getId()) {
-			/*
 			case R.id.back: //back
+				back.setBackgroundResource(R.drawable.back_down1);
+				//back.setVisibility(View.VISIBLE);
 				isCanUpdate(true);
 				if(mPageWidget != null)
 				     mPageWidget.bReturn = true;
 				BookReadActivity.this.finish();
 				break;
-				*/
-				
 			case R.id.listlayout: // directory activity 
 				BookShelf.mCurrentBook = book;
 				Intent intent = new Intent();
 				intent.setClass(BookReadActivity.this, DirectoryActivity.class);
 				startActivity(intent);
 				break;
-				/*
+				
 			case R.id.addBookMark: //add bookMark
 				
 				bAddBook = false;
@@ -1552,7 +1534,7 @@ public class BookReadActivity extends SpiritActivity {
 				Animation bigAnimation = Util.loadAnimation(BookReadActivity.this,R.anim.book_mark_top_in);
 				bigBookMark(bigAnimation);
 				
-				collect.setText(R.string.un_collect);
+				//collect.setText(R.string.un_collect);
 				new Thread() {
 
 					@Override
@@ -1610,7 +1592,7 @@ public class BookReadActivity extends SpiritActivity {
 
 				}.start();
 				break;
-
+              
 			case R.id.deleteBookMark:
 
 				deleteBookMark.setVisibility(View.GONE);
@@ -1645,7 +1627,7 @@ public class BookReadActivity extends SpiritActivity {
 				}.start();
 				closeBookMark();//关闭大书签
 				break;
-*/
+
 			case R.id.collectionlayout: //收藏
 				
 				//if (entranceBookDetail) {
@@ -1667,7 +1649,7 @@ public class BookReadActivity extends SpiritActivity {
 					//isAddToBookShelf = true;
 				//}
 				break;
-				
+				 
 			case R.id.modelayout:
 				if(model){
 					    changeMode.setBackgroundResource(R.drawable.night);
@@ -1680,10 +1662,12 @@ public class BookReadActivity extends SpiritActivity {
 					    dayModel();
 				}
                 break;
+               
 				//TY:liushan delete end
 			}
 		}
 	};
+	
 
 	/*
 	public OnClickListener floorToolOnClickListener = new View.OnClickListener() {
@@ -1950,16 +1934,16 @@ public class BookReadActivity extends SpiritActivity {
 			if (bookMarkPages.indexOf(String.valueOf(pagefactory.currentPage + 1)) != -1) // 判断是否有书签
 			{
 				bookMarkCurrentIndex = pagefactory.currentPage + 1 + "";
-				//deleteBookMark.setVisibility(View.VISIBLE);
-				//addBookMark.setVisibility(View.GONE);
+				deleteBookMark.setVisibility(View.VISIBLE);
+				addBookMark.setVisibility(View.GONE);
 			} else {
-				//deleteBookMark.setVisibility(View.GONE);
-				//addBookMark.setVisibility(View.VISIBLE);
+				deleteBookMark.setVisibility(View.GONE);
+				addBookMark.setVisibility(View.VISIBLE);
 				bookMarkCurrentIndex = "";
 			}
 		}else {
-			//deleteBookMark.setVisibility(View.GONE);
-			//addBookMark.setVisibility(View.VISIBLE);
+			deleteBookMark.setVisibility(View.GONE);
+			addBookMark.setVisibility(View.VISIBLE);
 			bookMarkCurrentIndex = "";
 		}
 	}
@@ -2196,28 +2180,23 @@ public class BookReadActivity extends SpiritActivity {
     //显示工具栏
 	public void showTool()
 	{
-		//TY:liushan delete start
-		//bookRead_title_tool.setVisibility(View.VISIBLE);
-		//TY:liushan delete end
+		bookRead_title_tool.setVisibility(View.VISIBLE);
 		Log.v("liushan","showTool");
 	
 		bookRead_floor_tool.setVisibility(View.VISIBLE);
-		setNavigationBarVisibility(!isNavigationBarVisible());
+		//setNavigationBarVisibility(!isNavigationBarVisible());
 	}
 	
 	public void hideTool()
 	{
-		//TY:liushan delete start
-		//bookRead_title_tool.setVisibility(View.GONE);
-		//TY:liushan delete end
+		bookRead_title_tool.setVisibility(View.GONE);
 		Log.v("liushan","hideTool");
-		setNavigationBarVisibility(!isNavigationBarVisible());
+		//setNavigationBarVisibility(!isNavigationBarVisible());
 		bookRead_floor_tool.setVisibility(View.GONE);
 	}
 	//页码赋值
 	public void toolPageNumber()
 	{
-		
 		tvPageNumber.setText((progress_bar_font_size.getProgress() + 1)+ "/" + BookPageFactory.totalSize);
 	}
 
@@ -2257,12 +2236,14 @@ public class BookReadActivity extends SpiritActivity {
 						} else {
 							isMiddle = true; // 已弹出工具栏
 							isOpenTool = true;
+							//mPageWidget.SetDrawAble(true);
 							mPageWidget.SetDrawAble(false);
 							toolPageNumber();
 							showTool();
 							getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN); //处理sdk屏幕缩下来的bug
 						}
 					} else { // 翻页
+						Log.v("liushan","翻页");
 						if (isMiddle) { // 如果已打开工具栏,就关闭
 							isCloseTool = true;// 第一次关闭不用做翻页效果
 							isMiddle = false; 
@@ -2279,8 +2260,6 @@ public class BookReadActivity extends SpiritActivity {
 								mPageWidget.isFirst = false;
 								mPageWidget.SetDrawAble(true);
 								mClickTime = System.currentTimeMillis();
-								
-								
 								mPageWidget.abortAnimation();
 								mPageWidget.calcCornerXY(e.getX(), e.getY());
 								pagefactory.onDraw(mCurPageCanvas);
@@ -2306,6 +2285,7 @@ public class BookReadActivity extends SpiritActivity {
 					}
 
 				} else if (e.getAction() == MotionEvent.ACTION_UP) { //没翻页
+					Log.v("liushan","没翻页");
 					onUp();
 				}
 				if (!isMiddle && !isCloseTool) {
@@ -2503,16 +2483,16 @@ public class BookReadActivity extends SpiritActivity {
         */
 		bookRead_floor_tool.setBackgroundResource(R.drawable.dt);
 		//TY:liushan delete start
-		//bookRead_title_tool.setBackgroundResource(R.drawable.page_b);
+		bookRead_title_tool.setBackgroundResource(R.drawable.title_bg);
 		//TY:liushan delete end
 		//back.setBackgroundResource(R.drawable.input_b);
 		//back.setTextColor(Color.parseColor("#AAAAAA"));
 		//toDirectory.setBackgroundResource(R.drawable.btn_directory_selector);
 		//toDirectory.setTextColor(Color.parseColor("#AAAAAA"));
-		//addBookMark.setBackgroundResource(R.drawable.btn_boo_mark_selector);
+		addBookMark.setBackgroundResource(R.drawable.right_button_normal);
 		//collect.setBackgroundResource(R.drawable.input_b);
 		//collect.setTextColor(Color.parseColor("#AAAAAA"));
-		//deleteBookMark.setBackgroundResource(R.drawable.bookmark_2);
+		deleteBookMark.setBackgroundResource(R.drawable.right_button_down);
 		BookPageFactory.m_textColor = Color.parseColor("#a0a0a0");
 		pagefactory.getPaint().setColor(BookPageFactory.m_textColor);
 		pagefactory.getTitlePaint().setColor(BookPageFactory.m_textColor);
@@ -2531,17 +2511,17 @@ public class BookReadActivity extends SpiritActivity {
 		*/
 		bookRead_floor_tool.setBackgroundResource(R.drawable.dt);
 		//TY:liushan delete start
-		//bookRead_title_tool.setBackgroundResource(R.drawable.page_b);
+		bookRead_title_tool.setBackgroundResource(R.drawable.title_bg);
 		//TY:liushan delete end
 		linRead.setBackgroundResource(R.drawable.page);
 		//back.setBackgroundResource(R.drawable.input_a);
 		//back.setTextColor(Color.WHITE);
 		//toDirectory.setBackgroundResource(R.drawable.btn_directory_selector);
 		//toDirectory.setTextColor(Color.WHITE);
-		//addBookMark.setBackgroundResource(R.drawable.btn_boo_mark_selector);
+		addBookMark.setBackgroundResource(R.drawable.right_button_normal);
 		//collect.setBackgroundResource(R.drawable.input_a);
 		//collect.setTextColor(Color.WHITE);
-		//deleteBookMark.setBackgroundResource(R.drawable.bookmark_1);
+		deleteBookMark.setBackgroundResource(R.drawable.right_button_down);
 		BookPageFactory.m_textColor = Color.parseColor("#2B2B2B");
 		pagefactory.getPaint().setColor(BookPageFactory.m_textColor);
 		pagefactory.getTitlePaint().setColor(BookPageFactory.m_textColor);
@@ -2596,8 +2576,8 @@ public class BookReadActivity extends SpiritActivity {
 		isMiddle = false;
 		isCloseTool = false; // 第一次关闭不用做翻页效果
 		//TY:liushan delete start
-		//bookRead_title_tool.setVisibility(View.GONE);
-		setNavigationBarVisibility(!isNavigationBarVisible());
+		bookRead_title_tool.setVisibility(View.GONE);
+		//setNavigationBarVisibility(!isNavigationBarVisible());
 		//TY:liushan delete end
 		bookRead_floor_tool.setVisibility(View.GONE);
 		
@@ -3025,7 +3005,7 @@ public class BookReadActivity extends SpiritActivity {
 				syncDataDialog.setTitle(R.string.select_book);
 				syncDataDialog.setMessage(BookReadActivity.this.getString(R.string.select_book_wait));
 				syncDataDialog.setIndeterminate(false);
-				syncDataDialog.setIcon(R.drawable.icon);
+				//syncDataDialog.setIcon(R.drawable.icon);
 				syncDataDialog.setCancelable(false);
 				syncDataDialog.show();
 			}else if(msg.what == 1)

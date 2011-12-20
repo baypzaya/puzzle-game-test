@@ -15,12 +15,12 @@ import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
 
 public class UrlUtil {
-//	public static final String URL_CHECK_UPDATE = "http://kpay.k-touch.cn:8008/VersionCheck";
-	public static final String URL_CHECK_UPDATE = getUrlCheckUpdateHost();//"http://osatest01001.k-touch.cn:8006/VersionCheck";
+	public static final String URL_CHECK_UPDATE = "http://kpay.k-touch.cn:8008/VersionCheck";
+	//public static final String URL_CHECK_UPDATE = getUrlCheckUpdateHost();//"http://osatest01001.k-touch.cn:8006/VersionCheck";
 	
 	
-//	private static final String HOST ="http://bookstore.k-touch.cn:80/";
-	private static final String HOST ="http://10.32.187.91:8080/";//getHost(); //"http://osatest01001.k-touch.cn:8012/";
+	private static final String HOST ="http://bookstore.k-touch.cn:80/";
+	//private static final String HOST ="http://10.32.187.91:8080/";//getHost(); //"http://osatest01001.k-touch.cn:8012/";
 	
 	private static String getUrlCheckUpdateHost(){
 		return KTouchReadApplication.sContext.getString(R.string.URL_CHECK_UPDATE);
