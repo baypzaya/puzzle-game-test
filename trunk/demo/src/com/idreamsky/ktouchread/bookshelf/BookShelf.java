@@ -43,8 +43,11 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.aliyun.aui.app.spirit.SpiritActivity;
+import com.aliyun.aui.widget.spirit.CustomButton;
 import com.aliyun.aui.widget.spirit.DropDownList;
 import com.aliyun.aui.widget.spirit.NavigationBar;
+import com.aliyun.aui.widget.spirit.SpiritMenu;
+import com.aliyun.aui.widget.spirit.SpiritMenu.OnCancelListener;
 import com.idreamsky.ktouchread.Adapter.MyBookShelfAdapter;
 import com.idreamsky.ktouchread.bookread.BookReadActivity;
 import com.idreamsky.ktouchread.bookshop.BookDetailActivity;
@@ -538,9 +541,11 @@ public class BookShelf extends SpiritActivity implements OnTouchListener,
 	private Book book;
 	private Timer timer;
 	private TimerTask task;
-	private long mClickTime = 0;
+//	private long mClickTime = 0;
 	@Override
 	public void onItemClick(AdapterView<?> arg0, final View v, int index, long arg3) {
+		
+		if(myBookShelfAdapter.getCurStatus() == BOOK_SHELF){
 		book = books.get(index);
 				if(book.GetChapterCount() < 1 && book.BookType ==0)
 				{
@@ -567,18 +572,21 @@ public class BookShelf extends SpiritActivity implements OnTouchListener,
 							});
 					return;
 				}else {
-					if (Math.abs(mClickTime- System.currentTimeMillis()) < 2000) { 
-					}else {
+//					if (Math.abs(mClickTime- System.currentTimeMillis()) < 2000) { 
+//					}else {
 						OpenBook(v);
-					}
-					mClickTime = System.currentTimeMillis();
+//					}
+//					mClickTime = System.currentTimeMillis();
 				}
 				
 //				if (Math.abs(mClickTime- System.currentTimeMillis()) < 2000) { 
 //				}else {
 //					OpenBook(v);
 //				}
-				mClickTime = System.currentTimeMillis();
+//				mClickTime = System.currentTimeMillis();
+		}else if(myBookShelfAdapter.getCurStatus() == BOOK_SHELF_DELETE){
+			this.myBookShelfAdapter.selectTag(index);
+		}
 	}
 
 	public void OpenBook(final View v)
@@ -629,7 +637,7 @@ public class BookShelf extends SpiritActivity implements OnTouchListener,
 									});
 								}
 							};
-						timer.schedule(task, 2000);
+						timer.schedule(task, 10);
 					}
 				});
 				super.run();
@@ -1286,12 +1294,16 @@ public class BookShelf extends SpiritActivity implements OnTouchListener,
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			//jiangbiao add 
-		    mSyncNum = 0;
-			this.finish();
-			
+			if(myBookShelfAdapter.getCurStatus()==BOOK_SHELF){
+				//jiangbiao add 
+			    mSyncNum = 0;
+				this.finish();
+			}else if(myBookShelfAdapter.getCurStatus()==BOOK_SHELF_DELETE){
+				changeLayoutStatus(BOOK_SHELF);
+			}
+			return true;
 		}
-		return false;
+		return super.onKeyDown(keyCode, event);
 	}
 
 	/**
@@ -1377,10 +1389,109 @@ public class BookShelf extends SpiritActivity implements OnTouchListener,
 	}
 
 	private void deleteBooksGo() {
-		Intent intent = new Intent();
-		intent.setClass(BookShelf.this,  BookDeleteActivity.class);
-		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); 
-		startActivityForResult(intent, BookShelf.REQ_SELECT_DELETE_BOOK);
+		this.changeLayoutStatus(BOOK_SHELF_DELETE);
+	}
+	
+	public static final int BOOK_SHELF = 1;
+	public static final int BOOK_SHELF_DELETE = 2;
+	public boolean isSelectAll = false;
+	private void changeLayoutStatus(int status){
+		final NavigationBar.Builder builder = getNavigationBarBuilder();
+		switch(status){
+		case BOOK_SHELF:
+			findViewById(R.id.frameLayoutPoster).setVisibility(View.VISIBLE);
+			ReadTabActivity.mTabHost.setTabsVisible(true);
+			myBookShelfAdapter.setCurStatus(BOOK_SHELF);
+			List<String> list = new ArrayList<String>();
+			list.add(getString(R.string.deleteBook));
+			list.add(getString(R.string.phoneBook));
+			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.aui_drop_item, list);
+			builder.setCommand("选项", adapter,
+					new DropDownList.OnItemClickListener() {
+						public void onItemClick(DropDownList parent, View view,
+								int position, long id) {
+							switch (position) {
+							case 0:
+								deleteBooksGo();
+								break;
+							case 1:
+								importPhoneBooksGo();
+								break;
+							default:
+								break;
+							}
+
+						}					
+					});
+			getSpiritMenuBuilder().hide();
+			lvMyBookShelf.setPadding(0, 0, 0, 0);
+			lvMyBookShelf.setSelection(0);
+			break;
+		case BOOK_SHELF_DELETE:
+			findViewById(R.id.frameLayoutPoster).setVisibility(View.GONE);
+			ReadTabActivity.mTabHost.setTabsVisible(false);
+			myBookShelfAdapter.setCurStatus(BOOK_SHELF_DELETE);
+			builder.setCommand(getString(R.string.select_all), new View.OnClickListener() {
+				public void onClick(View v) {
+					if(isSelectAll) {
+						myBookShelfAdapter.cancelSelectAll();
+						builder.setCommandName(getString(R.string.select_all));
+						isSelectAll = false;
+					} else {
+						myBookShelfAdapter.selectAll();
+						builder.setCommandName(getString(R.string.select_cancle));
+						isSelectAll = true;
+					}
+				}
+			});
+			
+			SpiritMenu.Builder menuBuilder = getSpiritMenuBuilder()
+					.addButton(0, CustomButton.WARNING,R.string.delete)
+					.addButton(1, CustomButton.NORMAL, R.string.cancel)
+					.setOnItemClickListener(new SpiritMenu.OnItemClickListener(){
+						public void onClick(int itemId) {
+							switch (itemId) {
+							case 0:
+								finishSelectBooks();
+								break;
+							case 1:
+								changeLayoutStatus(BookShelf.BOOK_SHELF);
+								break;
+							default:
+								break;
+							}
+						}
+					});
+			menuBuilder.show();
+			menuBuilder.setOnCancelListener(new OnCancelListener() {
+				
+				@Override
+				public boolean onCancel() {
+					changeLayoutStatus(BOOK_SHELF);
+					return false;
+				}
+			});
+			lvMyBookShelf.setPadding(0, 0, 0, menuBuilder.getSpiritMenuHeight());
+			break;
+		}
+	}
+	
+	private void finishSelectBooks() {
+		boolean[] selectTags = myBookShelfAdapter.getSelectedTags();
+		List<String> bookIdNetList = new ArrayList<String>();
+		for(int i=0;i<selectTags.length;i++){
+			
+			if(selectTags[i]){
+				Book book = (Book) myBookShelfAdapter.getItem(i);
+				bookIdNetList.add(book.bookidNet);
+			}
+		}
 		
+		String[] results = new String[bookIdNetList.size()];
+		for(int i=0;i<results.length;i++){
+			results[i] = bookIdNetList.get(i);
+		} 
+		deleteBooks(results);
+		changeLayoutStatus(BOOK_SHELF);
 	}
 }
