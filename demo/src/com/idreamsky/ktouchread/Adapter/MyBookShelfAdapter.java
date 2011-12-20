@@ -16,10 +16,15 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.aliyun.aui.widget.spirit.NavigationBar.Builder;
+import com.idreamsky.ktouchread.bookshelf.BookDeleteActivity;
 import com.idreamsky.ktouchread.bookshelf.BookShelf;
 import com.idreamsky.ktouchread.bookshelf.R;
 import com.idreamsky.ktouchread.bookshelf.UnReadActivity;
@@ -28,11 +33,13 @@ import com.idreamsky.ktouchread.http.bitmapasync.AsyncImageLoader;
 import com.idreamsky.ktouchread.util.ImgUtil;
 import com.idreamsky.ktouchread.util.SDCardUtils;
 
-public class MyBookShelfAdapter extends BaseAdapter {
+public class MyBookShelfAdapter extends BaseAdapter implements OnCheckedChangeListener{
 	private LayoutInflater mLayoutInflater;
 	private Activity mContext;
 	private List<Book> myBooks;
 	public static boolean afterMoreFlag = false;
+	private boolean[] selectedTags;
+	private int curStatus = 1;
 
 	private ListView listView;
 	private AsyncImageLoader asyncImageLoader;
@@ -43,6 +50,7 @@ public class MyBookShelfAdapter extends BaseAdapter {
 		mLayoutInflater = LayoutInflater.from(mContext);
 		myBooks = new ArrayList<Book>(0);
 		asyncImageLoader = new AsyncImageLoader();
+		selectedTags = new boolean[myBooks.size()];
 	}
 
 	public void SetListView(ListView listView) {
@@ -51,6 +59,14 @@ public class MyBookShelfAdapter extends BaseAdapter {
 
 	public void setMyBooks(List<Book> myBooks) {
 		this.myBooks = myBooks;
+		selectedTags = new boolean[myBooks.size()];
+		notifyDataSetChanged();
+	}
+	
+	public void setCurStatus(int status){
+		this.curStatus = status;
+		selectedTags = new boolean[myBooks.size()];
+		notifyDataSetChanged();
 	}
 
 	@Override
@@ -92,6 +108,8 @@ public class MyBookShelfAdapter extends BaseAdapter {
 					.findViewById(R.id.myBookShelfLatelyRead);
 			v.myBookShelfAfterMore = (Button) convertView
 					.findViewById(R.id.myBookShelfAfterMore);
+			v.checkboxSelect = (CheckBox)convertView.findViewById(R.id.checkbox_select);
+
 			convertView.setTag(v);
 		} else {
 			v = (ViewHolder) convertView.getTag();
@@ -258,6 +276,16 @@ public class MyBookShelfAdapter extends BaseAdapter {
 			}
 		});
 		// view[position] = convertView;
+		v.checkboxSelect.setOnCheckedChangeListener(this);
+		if(curStatus == BookShelf.BOOK_SHELF){
+			v.myBookShelfAfterMore.setVisibility(View.VISIBLE);
+			v.checkboxSelect.setVisibility(View.GONE);
+		}else if(curStatus == BookShelf.BOOK_SHELF_DELETE){
+			v.myBookShelfAfterMore.setVisibility(View.GONE);
+			v.checkboxSelect.setVisibility(View.VISIBLE);
+			v.checkboxSelect.setChecked(selectedTags[position]);
+		}
+		
 		return convertView;
 	}
 
@@ -269,7 +297,79 @@ public class MyBookShelfAdapter extends BaseAdapter {
 		public TextView myBookShelfLatelyReadTitle;
 		public TextView myBookShelfLatelyRead;
 		public Button myBookShelfAfterMore;
+		public CheckBox checkboxSelect;
 
+	}
+	
+	@Override
+	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//		int postion = (Integer)buttonView.getTag();
+//		this.selectedTags[postion] = isChecked;
+		final BookShelf activity = (BookShelf)mContext;
+		activity.runOnUiThread(new Runnable(){
+
+			@Override
+			public void run() {
+				int count = 0;
+				for(Boolean tag : selectedTags){			
+					if(tag){
+						count++;
+					}
+				}
+				
+				Builder builder = activity.getNavigationBarBuilder();
+				if(count != selectedTags.length){
+					builder.setCommandName(activity.getString(R.string.select_all));
+					activity.isSelectAll = false;
+				}else{
+					builder.setCommandName(activity.getString(R.string.select_cancle));
+					builder.showCommand(true);
+					activity.isSelectAll = true;
+				}
+				
+				String buttonName = activity.getString(R.string.delete);
+				if(count==selectedTags.length){
+					buttonName = "删除全部";
+				}else if(count>0){
+					buttonName=buttonName+"("+count+")";
+				}
+				
+				activity.getSpiritMenuBuilder().setButtonText(0, buttonName);
+				if(count == 0){
+					activity.getSpiritMenuBuilder().setButtonEnable(0, false);
+				}else{
+					activity.getSpiritMenuBuilder().setButtonEnable(0, true);
+				}
+				
+			}});
+		
+	}
+	
+	public boolean[] getSelectedTags(){
+		return selectedTags;
+	}
+	
+	public void selectAll(){
+		for(int i =0 ;i<selectedTags.length;i++){
+			selectedTags[i] = true;
+		}
+		this.notifyDataSetChanged();
+	}
+	
+	public void cancelSelectAll(){
+		for(int i =0 ;i<selectedTags.length;i++){
+			selectedTags[i] = false;
+		}
+		this.notifyDataSetChanged();
+	}
+	
+	public void selectTag(int position){
+		selectedTags[position] = !selectedTags[position];
+		notifyDataSetChanged();
+	}
+
+	public int getCurStatus() {
+		return curStatus;
 	}
 
 }

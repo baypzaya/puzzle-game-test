@@ -17,7 +17,9 @@ import com.idreamsky.ktouchread.bookshop.BookShopActivity;
 
 public class ReadTabActivity extends SlideTabActivity implements
 		OnTabChangeListener {
-
+	
+	
+   
 	public static final int INDEX_BOOK_SHELF = 0;
 	public static final int INDEX_BOOK_SHOP = 1;
 	public static final int INDEX_BOOK_MARK_FACTORY = 2;
@@ -25,7 +27,7 @@ public class ReadTabActivity extends SlideTabActivity implements
 
 	public static ReadTabActivity sReadTabActivity;
 
-	private SlideTabHost mTabHost;
+	protected static  SlideTabHost mTabHost;
 	private TabSpec tabSpecBookShelf;
 	private TabSpec tabSpecBookShop;
 	private TabSpec tabSpecBookMarkFactory;
@@ -61,19 +63,6 @@ public class ReadTabActivity extends SlideTabActivity implements
 		}
 	}
 
-	private void changeTab(int index, Intent intent) {
-		//恢复当前标签页的content
-		int curIndex = mTabHost.getCurrentTab();
-		resetTabSpecBy(curIndex);
-		
-		//修正目标标签页的content，并打开目标标签页
-		TabSpec tabSpec = getTabSpecBy(index);
-		if (tabSpec != null) {
-			tabSpec.setContent(intent);
-			mTabHost.setCurrentTabByTag(tabSpec.getTag());
-		}
-	}
-
 	/**
 	 * 获取指定index的Tabspec
 	 * @param index
@@ -103,7 +92,7 @@ public class ReadTabActivity extends SlideTabActivity implements
 
 	@Override
 	public void onTabChanged(int index, String tag) {
-//		resetTabSpecBy(index);
+		
 	}
 
 	private void resetTabSpecBy(int index) {
@@ -141,8 +130,5 @@ public class ReadTabActivity extends SlideTabActivity implements
 
 	}
 
-	public static void changeTabBy(int index, Intent intent) {
-		sReadTabActivity.changeTab(index, intent);
-	}
 
 }

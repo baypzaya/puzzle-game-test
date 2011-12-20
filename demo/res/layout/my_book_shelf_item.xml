@@ -128,6 +128,15 @@
                         android:paddingLeft="@dimen/bookShelf_item_afterMore_paddingLeft"
                         android:text="未追更"
                         android:textColor="#ff000000" />
+                        
+                    <CheckBox
+						android:id="@+id/checkbox_select" 
+						android:layout_width="wrap_content"
+			  			android:layout_height="wrap_content"
+			  			android:clickable="false"
+			  			android:focusable="false"
+			  			android:visibility="gone"				
+					/>
                 </LinearLayout>
             </RelativeLayout>
         </LinearLayout>
