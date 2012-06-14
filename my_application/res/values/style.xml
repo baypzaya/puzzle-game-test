@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="mytest" parent="@android:style/Theme.Light">
+        <item name="android:buttonStyle">@style/CKButton</item>
+    </style>
+
+    <style name="CKButton" parent="android:style/Widget.Button">
+        <item name="android:textSize">19sp</item>
+        <item name="android:layout_margin">0dip</item>
+        <item name="android:background">@drawable/custorm_button_seletor</item>
+    </style>
+
+</resources>

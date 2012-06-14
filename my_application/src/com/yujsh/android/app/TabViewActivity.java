@@ -16,6 +16,7 @@ public class TabViewActivity extends TabActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setTheme(R.style.mytest);
 		setContentView(R.layout.tab_view_layout);
 
 		// 取得TabHost对象
@@ -27,7 +28,7 @@ public class TabViewActivity extends TabActivity {
 		// 设置内容(setContent)
 		Intent testIntent1 = new Intent(this, GridViewActivity.class);
 		testIntent1.putExtra("test_message", "1");
-		Intent testIntent2 = new Intent(this, TestActivity.class);
+		Intent testIntent2 = new Intent(this, CustormButtonActivity.class);
 		testIntent2.putExtra("test_message", "2");
 		Intent testIntent3 = new Intent(this, TestActivity.class);
 		testIntent3.putExtra("test_message", "3");
