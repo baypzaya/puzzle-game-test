@@ -13,6 +13,7 @@
         </activity>
     <activity android:name="TestActivity"></activity>
     <activity android:name="GridViewActivity"></activity>
+    <activity android:name="CustormButtonActivity"></activity>
 </application>
     <uses-sdk android:minSdkVersion="3" />
 </manifest> 
