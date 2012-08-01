@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">YReader</string>
+    <string name="add_book">导入本地书</string>
+
+</resources>
