@@ -2,6 +2,7 @@
 <resources>
 
     <string name="app_name">YReader</string>
-    <string name="add_book">导入本地书</string>
+    <string name="open_local_book">打开本地书</string>
+    <string name="recent_read">最近阅读</string>
 
 </resources>
