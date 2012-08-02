@@ -34,29 +34,33 @@ public class ReadBookActivity extends BaseActivity {
 		setContentView(R.layout.layout_read_book);
 
 		mScrollView = (ScrollView) findViewById(R.id.sv_read_book);
-		
+
 		mTVBookContent = (TextView) findViewById(R.id.tv_book_content);
 		try {
 			mTVBookContent.setText(mBookLogic.getBookContent(mBook));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		Runnable runnable = new Runnable(){
 
+		scrollLastReadPosion();
+
+	}
+
+	private void scrollLastReadPosion() {
+		Runnable runnable = new Runnable() {
 			@Override
 			public void run() {
-				mScrollView.scrollTo(0, 584658);
+				int position = (int) mBook.progress;
+				mScrollView.scrollTo(0, position);
 			}
-			
+
 		};
-		mHandler.postDelayed(runnable,1000);
-		
+		mHandler.postDelayed(runnable, 1000);
+
 	}
 
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		int y = mScrollView.getScrollY();
-		Log.i("yujsh log","y:"+y);
 	}
 }
