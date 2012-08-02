@@ -1,6 +1,7 @@
 package com.gmail.txyjssr.reader;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
@@ -16,6 +17,12 @@ public class FilesAdapter extends BaseAdapter {
 	private Context mContext;
 	private List<File> mFiles;
 	private LayoutInflater mLayoutInflater;
+	
+	public FilesAdapter(Context context) {
+		mFiles = new ArrayList<File>();
+		mContext = context;
+		mLayoutInflater = LayoutInflater.from(mContext);
+	}
 
 	public FilesAdapter(Context context, List<File> books) {
 		mFiles = books;
@@ -23,8 +30,8 @@ public class FilesAdapter extends BaseAdapter {
 		mLayoutInflater = LayoutInflater.from(mContext);
 	}
 
-	public void setBooks(List<File> books) {
-		mFiles = books;
+	public void setFiles(List<File> files) {
+		mFiles = files;
 		notifyDataSetChanged();
 	}
 
