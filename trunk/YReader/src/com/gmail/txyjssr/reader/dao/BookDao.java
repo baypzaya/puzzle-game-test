@@ -39,9 +39,9 @@ public class BookDao {
 		DBManager dbm = DBManager.getInstance();
 		Cursor cursor = dbm.qury(TAB_BOOK_NAME, null, null, null, null, null);
 		if(cursor!=null&&cursor.moveToFirst()){
-			while(cursor.moveToNext()){
+			do{
 				books.add(changeToBook(cursor));
-			}
+			}while(cursor.moveToNext());
 		}
 		return books;
 	}
