@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
+import com.gmail.txyjssr.reader.data.Book;
 import com.gmail.txyjssr.reader.logic.BookLogic;
 import com.gmail.txyjssr.reader.logic.FileLogic;
 

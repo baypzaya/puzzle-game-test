@@ -2,6 +2,8 @@ package com.gmail.txyjssr.reader;
 
 import java.util.List;
 
+import com.gmail.txyjssr.reader.data.Book;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;

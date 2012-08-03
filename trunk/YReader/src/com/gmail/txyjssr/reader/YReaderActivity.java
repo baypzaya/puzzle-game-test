@@ -3,6 +3,9 @@ package com.gmail.txyjssr.reader;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.gmail.txyjssr.reader.dao.BookDao;
+import com.gmail.txyjssr.reader.data.Book;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
