@@ -28,7 +28,7 @@ public class BookLogic {
 			e.printStackTrace();
 		}
 		
-		BookDao.getInstance().addBook(book);
+		long id = BookDao.getInstance().addBook(book);
 		return book;
 	}
 
