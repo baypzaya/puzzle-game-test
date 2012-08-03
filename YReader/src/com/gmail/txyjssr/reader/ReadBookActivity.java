@@ -7,6 +7,7 @@ import android.util.Log;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.gmail.txyjssr.reader.data.Book;
 import com.gmail.txyjssr.reader.logic.BookLogic;
 
 public class ReadBookActivity extends BaseActivity {
@@ -32,9 +33,7 @@ public class ReadBookActivity extends BaseActivity {
 		}
 
 		setContentView(R.layout.layout_read_book);
-
 		mScrollView = (ScrollView) findViewById(R.id.sv_read_book);
-
 		mTVBookContent = (TextView) findViewById(R.id.tv_book_content);
 		try {
 			mTVBookContent.setText(mBookLogic.getBookContent(mBook));
@@ -56,7 +55,6 @@ public class ReadBookActivity extends BaseActivity {
 
 		};
 		mHandler.postDelayed(runnable, 1000);
-
 	}
 
 	@Override

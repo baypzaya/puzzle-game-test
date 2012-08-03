@@ -9,8 +9,8 @@ import java.io.InputStreamReader;
 import java.io.RandomAccessFile;
 import java.util.List;
 
-import com.gmail.txyjssr.reader.Book;
-import com.gmail.txyjssr.reader.BookDao;
+import com.gmail.txyjssr.reader.dao.BookDao;
+import com.gmail.txyjssr.reader.data.Book;
 
 public class BookLogic {
 
@@ -19,7 +19,6 @@ public class BookLogic {
 		book.name = file.getName();
 		book.path = file.getPath();
 		book.progress = 0;
-		book.total = file.length();
 		book.lastReadTime = System.currentTimeMillis();
 		
 		try {
@@ -46,7 +45,7 @@ public class BookLogic {
 		
 //		r.seek(2);
 		
-		byte[] bs = new byte[(int) book.total];
+		byte[] bs = new byte[(int) file.length()];
 		int size = r.read(bs);
 		while(size>0){
 			sb.append(new String(bs,0,size,code));
