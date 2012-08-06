@@ -1,14 +1,10 @@
 package com.gmail.txyjssr.reader.logic;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStreamReader;
 import java.io.RandomAccessFile;
 import java.util.List;
 
+import com.gmail.txyjssr.reader.FileUtils;
 import com.gmail.txyjssr.reader.dao.BookDao;
 import com.gmail.txyjssr.reader.data.Book;
 
@@ -20,15 +16,8 @@ public class BookLogic {
 		book.path = file.getPath();
 		book.progress = 0;
 		book.lastReadTime = System.currentTimeMillis();
-		
-		try {
-			book.encodeType = getFileEncodeType(file);
-		} catch (Exception e) {
-			
-			e.printStackTrace();
-		}
-		
-		long id = BookDao.getInstance().addBook(book);
+		book.encodeType = FileUtils.getFileEncodeType(file);
+		BookDao.getInstance().addBook(book);
 		return book;
 	}
 
@@ -38,46 +27,44 @@ public class BookLogic {
 
 	public String getBookContent(Book book) throws Exception {
 		String code = book.encodeType;
-		
+
 		File file = new File(book.path);
 		RandomAccessFile r = new RandomAccessFile(file, "r");
 		StringBuffer sb = new StringBuffer();
-		
-//		r.seek(2);
-		
+
+		// r.seek(2);
+
 		byte[] bs = new byte[(int) file.length()];
 		int size = r.read(bs);
-		while(size>0){
-			sb.append(new String(bs,0,size,code));
+		while (size > 0) {
+			sb.append(new String(bs, 0, size, code));
 			size = r.read(bs);
 		}
 		r.close();
 
-		
 		return sb.toString();
 	}
 
-	private String getFileEncodeType(File file) throws Exception {
-		String encode = "GBK";
-
-		FileInputStream fis = new FileInputStream(file);
-		BufferedInputStream in = new BufferedInputStream(fis);
-		in.mark(4);
-		byte[] first3bytes = new byte[3];
-		in.read(first3bytes);
-		in.reset();
-		in.close();
-		if (first3bytes[0] == (byte) 0xEF && first3bytes[1] == (byte) 0xBB && first3bytes[2] == (byte) 0xBF) {
-			encode = "utf-8";
-		} else if (first3bytes[0] == (byte) 0xFF && first3bytes[1] == (byte) 0xFE) {
-			encode = "unicode";
-		} else if (first3bytes[0] == (byte) 0xFE && first3bytes[1] == (byte) 0xFF) {
-			encode = "utf-16be";
-		} else if (first3bytes[0] == (byte) 0xFF && first3bytes[1] == (byte) 0xFF) {
-			encode = "utf-16le";
+	public boolean deleteBook(Book book) {
+		boolean result = revomeBookFromList(book);
+		if (result) {
+			File file = new File(book.path);
+			if (file.exists()) {
+				result = file.delete();
+			}
 		}
-		
-		return encode;
+		return result;
+	}
+
+	public boolean revomeBookFromList(Book book) {
+		BookDao dao = BookDao.getInstance();
+		boolean isExist = dao.isExist(book);
+		if (isExist) {
+			int count = dao.deleteBook(book);
+			return count > 0;
+		} else {
+			return true;
+		}
 	}
 
 }
