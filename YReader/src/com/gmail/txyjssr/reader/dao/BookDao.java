@@ -38,10 +38,10 @@ public class BookDao {
 		List<Book> books = new ArrayList<Book>();
 		DBManager dbm = DBManager.getInstance();
 		Cursor cursor = dbm.qury(TAB_BOOK_NAME, null, null, null, null, null);
-		if(cursor!=null&&cursor.moveToFirst()){
-			do{
+		if (cursor != null && cursor.moveToFirst()) {
+			do {
 				books.add(changeToBook(cursor));
-			}while(cursor.moveToNext());
+			} while (cursor.moveToNext());
 		}
 		return books;
 	}
@@ -50,6 +50,14 @@ public class BookDao {
 		DBManager dbm = DBManager.getInstance();
 		long id = dbm.insert(TAB_BOOK_NAME, changeToContentValues(book));
 		return id;
+	}
+
+	public int deleteBook(Book book) {
+		DBManager dbm = DBManager.getInstance();
+		String whereClause = COL_BOOK_ID + " = ?";
+		String[] whereArgs = { "" + book.id };
+		int count = dbm.delete(TAB_BOOK_NAME, whereClause, whereArgs);
+		return count;
 	}
 
 	private ContentValues changeToContentValues(Book book) {
@@ -61,9 +69,9 @@ public class BookDao {
 		values.put(COL_BOOK_ENCODE_TYPE, book.encodeType);
 		return values;
 	}
-	
+
 	private Book changeToBook(Cursor cursor) {
-		Book book  = new Book();
+		Book book = new Book();
 		book.id = cursor.getLong(cursor.getColumnIndex(COL_BOOK_ID));
 		book.name = cursor.getString(cursor.getColumnIndex(COL_BOOK_NAME));
 		book.path = cursor.getString(cursor.getColumnIndex(COL_BOOK_PATH));
@@ -76,5 +84,14 @@ public class BookDao {
 	public String getCreateTableSQL() {
 		String sql = "CREATE  TABLE book (_id INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL , name VARCHAR, path VARCHAR, progress INTEGER, last_read_time INTEGER, encode_type VARCHAR)";
 		return sql;
+	}
+
+	public boolean isExist(Book book) {
+		DBManager dbm = DBManager.getInstance();
+		String whereClause = COL_BOOK_ID + " = ?";
+		String[] whereArgs = { "" + book.id };
+		Cursor cursor = dbm.qury(TAB_BOOK_NAME, null, whereClause, whereArgs, null, null);
+
+		return cursor != null && cursor.getCount() > 0;
 	}
 }

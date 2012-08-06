@@ -4,5 +4,7 @@
     <string name="app_name">YReader</string>
     <string name="open_local_book">打开本地书</string>
     <string name="recent_read">最近阅读</string>
+    <string name="remove_list">移出列表</string>
+    <string name="delete_book">删除本书</string>
 
 </resources>
