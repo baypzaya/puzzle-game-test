@@ -35,12 +35,12 @@ public class ReadBookActivity extends BaseActivity {
 		setContentView(R.layout.layout_read_book);
 		mScrollView = (ScrollView) findViewById(R.id.sv_read_book);
 		mTVBookContent = (TextView) findViewById(R.id.tv_book_content);
+		
 		try {
 			mTVBookContent.setText(mBookLogic.getBookContent(mBook));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 		scrollLastReadPosion();
 
 	}
