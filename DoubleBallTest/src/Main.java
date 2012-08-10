@@ -82,12 +82,12 @@ public class Main {
 	
 	private ArrayList<NumberBall> process( Hashtable<Integer, ArrayList<Integer>> data){
 		ArrayList<NumberBall> result = new ArrayList<NumberBall>();
-		count = data.keySet().size();
-		for (int i = 1; i < count; i++) {
+		int keyCount = data.keySet().size();
+		for (int i = 1; i < keyCount; i++) {
 			NumberBall ball = new NumberBall(i);
 			ball.cycleList = data.get(i);
 			ball.cycleCount = data.get(i).size();
-			ball.cycleScale = data.get(i).size() / (float) count;
+			ball.cycleScale = data.get(i).size() / (float) this.count;
 
 			result.add(ball);
 		}
