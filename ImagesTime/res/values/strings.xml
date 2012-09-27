@@ -3,5 +3,8 @@
 
     <string name="hello">Hello World, ImagesTimeActivity!</string>
     <string name="app_name">ImagesTime</string>
+    
+    <string name="tab_title_recently">最近阅读</string>
+    <string name="tab_title_all_book">我的书籍</string>
 
 </resources>
