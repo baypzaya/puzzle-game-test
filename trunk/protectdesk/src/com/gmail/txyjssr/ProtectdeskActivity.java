@@ -10,6 +10,7 @@ import android.view.WindowManager;
 import com.gmail.txyjssr.game.GameScene;
 import com.wiyun.engine.nodes.Director;
 import com.wiyun.engine.nodes.Director.IDirectorLifecycleListener;
+import com.wiyun.engine.nodes.Scene;
 import com.wiyun.engine.opengl.WYGLSurfaceView;
 
 public class ProtectdeskActivity extends Activity implements IDirectorLifecycleListener {
@@ -102,9 +103,11 @@ public class ProtectdeskActivity extends Activity implements IDirectorLifecycleL
     	 * 比如游戏如果是横屏的, 则w必须要大于h才认为是可以的, 反之则必须要h大于w才可以.
     	 */
     	boolean landscape = getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
-    	if(!mStarted && (landscape && w >= h || !landscape && h >= w)) {
+    	if(!mStarted && (!landscape && h >= w)) {
     		mStarted = true;
-    		Director.getInstance().runWithScene(new GameScene());
+    		Scene main = new GameScene();
+    		Director.getInstance().runWithScene(main);
+    		main.autoRelease(true);
     	}
 	}
 
