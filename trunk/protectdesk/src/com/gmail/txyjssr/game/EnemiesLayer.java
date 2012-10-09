@@ -89,19 +89,8 @@ public class EnemiesLayer extends Layer implements Callback{
 
 	@Override
 	public void onUpdate(int arg0, float arg1) {
-//		shotEnemy(Action.from(arg0).getTarget());
 	}
 	
-//	private void shotEnemy(Node enemy) {
-//		Log.i("yujsh log","shot");
-//		List<Sprite> childrenDefense = GameData.getInstance().towerList;
-//		for(Node node:childrenDefense){
-//			WYRect rect = WYRect.make(node.getPositionX()-50, node.getPositionY()-50, 100, 100);
-////			Sprite enemy =  GameData.getInstance().getEnemyByScope(rect);
-//			if(rect.containsPoint(enemy.getPositionX(),enemy.getPositionY())){
-////				bulletsLayer.addBullet(node.getPositionX(),node.getPositionY(),enemy.getPositionX(),enemy.getPositionY());
-//			}
-//		}
-//	}
+
 
 }
