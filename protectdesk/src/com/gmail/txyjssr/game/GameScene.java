@@ -1,18 +1,26 @@
 package com.gmail.txyjssr.game;
 
-import android.view.MotionEvent;
+import java.util.List;
+
+import android.util.Log;
 
 import com.gmail.txyjssr.R;
 import com.wiyun.engine.nodes.Director;
+import com.wiyun.engine.nodes.Node;
 import com.wiyun.engine.nodes.Scene;
+import com.wiyun.engine.nodes.Sprite;
 import com.wiyun.engine.opengl.Texture2D;
+import com.wiyun.engine.types.WYRect;
 import com.wiyun.engine.utils.ResolutionIndependent;
+import com.wiyun.engine.utils.TargetSelector;
 import com.wiyun.engine.utils.ZwoptexManager;
 
 public class GameScene extends Scene {
 	
 	static int TILE_WIDTH = 32;
 	static int TILE_HEIGHT = 32;
+	
+	private GameData mGameData;
 	
 	float mTileWidth;
 	float mTileHeight;
@@ -22,6 +30,9 @@ public class GameScene extends Scene {
 	private GameBackGroundLayer bgLayer;
 	private EnemiesLayer enemiesLayer;
 	private DefenseLayer defenseLayer;
+	private BulletsLayer bulletsLayer;
+	
+	
 
 	public GameScene() {
 		mTileWidth = ResolutionIndependent.resolveDp(TILE_WIDTH);
@@ -44,13 +55,25 @@ public class GameScene extends Scene {
 		addChild(defenseLayer);
 		defenseLayer.autoRelease();
 		
-//		setTouchEnabled(true);
+		bulletsLayer = new BulletsLayer();
+		addChild(bulletsLayer);
+		bulletsLayer.autoRelease();
 		
+		mGameData = GameData.getInstance();
+		
+		schedule(new TargetSelector(this, "shotEnemy", new Object[]{}));
 	}
 	
-	@Override
-	public boolean wyTouchesBegan(MotionEvent event) {
-		return false;
+	public void shotEnemy() {
+		Log.i("yujsh log","shot");
+		List<Node> childrenDefense = defenseLayer.getChildren();
+		for(Node node:childrenDefense){
+			WYRect rect = WYRect.make(node.getPositionX()-50, node.getPositionY()-50, 100, 100);
+			Sprite enemy = mGameData.getEnemyByScope(rect);
+			if(enemy!=null){
+				bulletsLayer.addBullet(node.getPositionX(),node.getPositionY(),enemy.getPositionX(),enemy.getPositionY());
+			}
+		}
 	}
 
 }
