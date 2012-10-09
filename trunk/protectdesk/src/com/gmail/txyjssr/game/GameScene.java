@@ -21,6 +21,7 @@ public class GameScene extends Scene {
 
 	private GameBackGroundLayer bgLayer;
 	private EnemiesLayer enemiesLayer;
+	private DefenseLayer defenseLayer;
 
 	public GameScene() {
 		mTileWidth = ResolutionIndependent.resolveDp(TILE_WIDTH);
@@ -39,8 +40,11 @@ public class GameScene extends Scene {
 		addChild(enemiesLayer);
 		enemiesLayer.autoRelease();
 		
+		defenseLayer = new DefenseLayer();
+		addChild(defenseLayer);
+		defenseLayer.autoRelease();
 		
-		setTouchEnabled(true);
+//		setTouchEnabled(true);
 		
 	}
 	

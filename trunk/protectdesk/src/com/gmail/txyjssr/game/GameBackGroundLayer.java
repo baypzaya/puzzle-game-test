@@ -20,13 +20,7 @@ public class GameBackGroundLayer extends Layer {
 	ArrayList<SpriteEx> m_bgs;
 
 	public GameBackGroundLayer(float tileWidth, float tileHeight, int xCount, int yCount) {
-
 		
-
-		
-//		SpriteBatchNode batchNode = SpriteBatchNode.make();
-//		addChild(batchNode);
-
 		m_rect_free = WYRect.make(0, tileHeight, tileHeight, tileHeight);
 		m_rect_block = WYRect.make(tileHeight, 0, tileHeight, tileHeight);
 
