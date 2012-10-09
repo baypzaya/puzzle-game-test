@@ -1,5 +1,6 @@
 package com.gmail.txyjssr.game;
 
+import java.util.List;
 import java.util.Random;
 
 import android.util.Log;
@@ -26,10 +27,7 @@ public class EnemiesLayer extends Layer implements Callback{
 
 	float ITEM_WIDTH;
 	float ITEM_HEIGHT;
-
-	Sprite m_moveSprite;
-	float m_findStartx;
-	float m_findStarty;
+	
 	Animation mAnimDown;
 	IntervalAction anim;
 	
@@ -69,6 +67,8 @@ public class EnemiesLayer extends Layer implements Callback{
 		enemy.runAction(moveTo);
 		moveTo.setCallback(this);
 		
+		GameData.getInstance().addEnemy(enemy);
+		
 	}
 
 	private WYRect frameAt(int x, int y) {
@@ -88,7 +88,20 @@ public class EnemiesLayer extends Layer implements Callback{
 	}
 
 	@Override
-	public void onUpdate(int arg0, float arg1) {		
+	public void onUpdate(int arg0, float arg1) {
+//		shotEnemy(Action.from(arg0).getTarget());
 	}
+	
+//	private void shotEnemy(Node enemy) {
+//		Log.i("yujsh log","shot");
+//		List<Sprite> childrenDefense = GameData.getInstance().towerList;
+//		for(Node node:childrenDefense){
+//			WYRect rect = WYRect.make(node.getPositionX()-50, node.getPositionY()-50, 100, 100);
+////			Sprite enemy =  GameData.getInstance().getEnemyByScope(rect);
+//			if(rect.containsPoint(enemy.getPositionX(),enemy.getPositionY())){
+////				bulletsLayer.addBullet(node.getPositionX(),node.getPositionY(),enemy.getPositionX(),enemy.getPositionY());
+//			}
+//		}
+//	}
 
 }
