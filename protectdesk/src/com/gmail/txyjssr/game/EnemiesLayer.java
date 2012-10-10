@@ -109,9 +109,7 @@ public class EnemiesLayer extends Layer implements Callback {
 			label.setScale(0.2f);
 			addChild(label);
 			label.setPosition(enemy.getPositionX(), enemy.getPositionY());
-//			schedule(new TargetSelector(this, "dimissLable(Label)", new
-//			 Object[]{label}),5);
-			ScaleBy scaleBy = ScaleBy.make(1, 2);
+			ScaleBy scaleBy = ScaleBy.make(0.5f, 2);
 			label.runAction(scaleBy);
 			scaleBy.setCallback(this);
 		}
