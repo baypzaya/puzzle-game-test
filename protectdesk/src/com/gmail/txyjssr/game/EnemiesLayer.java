@@ -6,19 +6,18 @@ import com.gmail.txyjssr.R;
 import com.gmail.txyjssr.game.data.Enemy;
 import com.gmail.txyjssr.game.data.GameData;
 import com.gmail.txyjssr.game.data.OnLifeChangedListener;
-import com.gmail.txyjssr.game.data.OnShotListener;
 import com.wiyun.engine.actions.Action;
 import com.wiyun.engine.actions.Action.Callback;
 import com.wiyun.engine.actions.Animate;
 import com.wiyun.engine.actions.IntervalAction;
 import com.wiyun.engine.actions.MoveTo;
 import com.wiyun.engine.actions.RepeatForever;
+import com.wiyun.engine.actions.ScaleBy;
 import com.wiyun.engine.nodes.Animation;
 import com.wiyun.engine.nodes.Director;
 import com.wiyun.engine.nodes.Label;
 import com.wiyun.engine.nodes.Layer;
 import com.wiyun.engine.nodes.Node;
-import com.wiyun.engine.nodes.Sprite;
 import com.wiyun.engine.opengl.Texture2D;
 import com.wiyun.engine.types.WYRect;
 import com.wiyun.engine.types.WYSize;
@@ -73,7 +72,7 @@ public class EnemiesLayer extends Layer implements Callback {
 		enemy.runAction(moveTo);
 		moveTo.setCallback(this);
 		enemy.setLifeChangedListener(listener);
-		GameData.getInstance().addEnemy(enemy);
+		GameData.getInstance().addEnemy(enemy.getPointer(),enemy);
 
 	}
 
@@ -92,6 +91,7 @@ public class EnemiesLayer extends Layer implements Callback {
 		node.stopAllActions();
 		node.setVisible(false);
 		removeChild(node, true);
+		node = null;
 	}
 
 	@Override
@@ -102,14 +102,18 @@ public class EnemiesLayer extends Layer implements Callback {
 		if (life <= 0) {
 			enemy.stopAllActions();
 			removeChild(enemy, true);
+			GameData.getInstance().removeEnemy(enemy.getPointer());
 			enemy = null;
-			GameData.getInstance().removeEnemy(enemy);
 		} else {
 			Label label = Label.make("" + life);
+			label.setScale(0.2f);
 			addChild(label);
 			label.setPosition(enemy.getPositionX(), enemy.getPositionY());
-			// schedule(new TargetSelector(this, "dimissLable(Label)", new
-			// Object[]{label}),1);
+//			schedule(new TargetSelector(this, "dimissLable(Label)", new
+//			 Object[]{label}),5);
+			ScaleBy scaleBy = ScaleBy.make(1, 2);
+			label.runAction(scaleBy);
+			scaleBy.setCallback(this);
 		}
 	}
 

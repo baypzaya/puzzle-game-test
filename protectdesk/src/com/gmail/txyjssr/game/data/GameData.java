@@ -1,6 +1,8 @@
 package com.gmail.txyjssr.game.data;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Hashtable;
 import java.util.List;
 
 import com.wiyun.engine.nodes.Sprite;
@@ -8,9 +10,9 @@ import com.wiyun.engine.types.WYRect;
 
 public class GameData {
 	public static GameData sGameData;
-
-	public List<Enemy> enemyList = new ArrayList<Enemy>();
-	public List<Tower> towerList = new ArrayList<Tower>();
+	
+	public Hashtable<Integer,Enemy> enemyMap = new Hashtable<Integer,Enemy>();
+	public  Hashtable<Integer,Tower> towerMap = new Hashtable<Integer,Tower>();
 
 	public static GameData getInstance() {
 		if (sGameData == null) {
@@ -19,17 +21,18 @@ public class GameData {
 		return sGameData;
 	}
 	
-	public void addEnemy(Enemy enemy){
-		enemyList.add(enemy);
+	public void addEnemy(int pointer,Enemy enemy){
+		enemyMap.put(pointer,enemy);
 	}
 	
-	public void addTower(Tower tower){
-		towerList.add(tower);
+	public void addTower(int pointer,Tower tower){
+		towerMap.put(pointer,tower);
 	}
 	
 	public Enemy getEnemyByScope(WYRect rect){
 		Enemy enemy = null;
-		for(Enemy temEnemy:enemyList){
+		Collection<Enemy> enemis= enemyMap.values();
+		for(Enemy temEnemy:enemis){
 			if(rect.containsPoint(temEnemy.getPositionX(),temEnemy.getPositionY())){
 				enemy = temEnemy;
 			}
@@ -37,9 +40,7 @@ public class GameData {
 		return enemy;
 	}
 
-	public void removeEnemy(Enemy enemy) {
-		if(enemy!=null){
-			enemyList.remove(enemy);
-		}
+	public void removeEnemy(int pointer) {
+		enemyMap.remove(pointer);
 	}
 }

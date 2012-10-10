@@ -1,5 +1,6 @@
 package com.gmail.txyjssr.game;
 
+import java.util.Collection;
 import java.util.List;
 
 import android.util.Log;
@@ -75,8 +76,8 @@ public class GameScene extends Scene implements OnLifeChangedListener, OnShotLis
 
 	public void shotEnemy() {
 		Log.i("yujsh log", "shot");
-		List<Tower> towerList = mGameData.towerList;
-		for (Tower tower : towerList) {
+		Collection<Tower> towers = mGameData.towerMap.values();
+		for (Tower tower : towers) {
 			WYRect rect = WYRect.make(tower.getPositionX() - tower.scope / 2, tower.getPositionY() - tower.scope / 2,
 					tower.scope, tower.scope);
 			Enemy enemy = mGameData.getEnemyByScope(rect);
@@ -96,7 +97,7 @@ public class GameScene extends Scene implements OnLifeChangedListener, OnShotLis
 	@Override
 	public boolean wyTouchesEnded(MotionEvent event) {
 		Tower tower = defenseLayer.showTower(currentPoint);
-		GameData.getInstance().addTower(tower);
+		GameData.getInstance().addTower(tower.getPointer(),tower);
 		return true;
 	}
 
