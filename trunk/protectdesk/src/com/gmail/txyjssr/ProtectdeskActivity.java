@@ -104,7 +104,7 @@ public class ProtectdeskActivity extends Activity implements IDirectorLifecycleL
     	 * 比如游戏如果是横屏的, 则w必须要大于h才认为是可以的, 反之则必须要h大于w才可以.
     	 */
     	boolean landscape = getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
-    	if(!mStarted && (!landscape && h >= w)) {
+    	if(!mStarted && (landscape && h <= w)) {
     		mStarted = true;
     		Scene main = new GameScene();
     		Director.getInstance().runWithScene(main);
