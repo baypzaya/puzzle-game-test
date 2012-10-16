@@ -45,24 +45,24 @@ public class EnemiesLayer extends Layer implements Callback {
 		ITEM_HEIGHT = ResolutionIndependent.resolveDp(32);
 		mTileWidth = tileWidth;
 		mTileHeight = tileHeight;
-		
+
 		// add player
 		s = Director.getInstance().getWindowSize();
 		texEnemy = Texture2D.makePNG(R.drawable.player);
 		this.listener = listener;
-		
+
 		int[] pathArray = GameData.getInstance().getCurrentPath();
-		path = new Path(tileWidth,tileHeight,pathArray);
+		path = new Path(tileWidth, tileHeight, pathArray);
 
 		mAnimDown = new Animation(1);
 		mAnimDown.addFrame(0.3f, frameAt(0, 2), frameAt(2, 2));
-		schedule(new TargetSelector(this, "addEnemies", new Object[] {}),3);
-		
+		schedule(new TargetSelector(this, "addEnemies", new Object[] {}), 1);
+
 	}
 
 	public Enemy createEnemy() {
-//		Random random = new Random();
-//		Integer x = random.nextInt(480);
+		// Random random = new Random();
+		// Integer x = random.nextInt(480);
 		Enemy enemy = new Enemy(texEnemy, WYRect.make(0, ITEM_HEIGHT * 2, ITEM_WIDTH, ITEM_HEIGHT));
 		enemy.setPosition(path.getFirstLocal());
 		return enemy;
@@ -75,11 +75,12 @@ public class EnemiesLayer extends Layer implements Callback {
 		anim = (IntervalAction) Animate.make(mAnimDown, true).autoRelease();
 		enemy.runAction((Action) RepeatForever.make(anim).autoRelease());
 		enemy.setPathIndex(1);
-		IntervalAction moveTo = (IntervalAction) MoveTo.make(1, enemy.getPositionX(), enemy.getPositionY(), path.getNextLocal(0).x , path.getNextLocal(0).y).autoRelease();
+		IntervalAction moveTo = (IntervalAction) MoveTo.make(1, enemy.getPositionX(), enemy.getPositionY(),
+				path.getNextLocal(0).x, path.getNextLocal(0).y).autoRelease();
 		enemy.runAction(moveTo);
 		moveTo.setCallback(this);
 		enemy.setLifeChangedListener(listener);
-		GameData.getInstance().addEnemy(enemy.getPointer(),enemy);
+		GameData.getInstance().addEnemy(enemy.getPointer(), enemy);
 
 	}
 
@@ -95,19 +96,25 @@ public class EnemiesLayer extends Layer implements Callback {
 	public void onStop(int arg0) {
 		Action action = Action.from(arg0);
 		Node node = action.getTarget();
-//		node.stopAllActions();
+		// node.stopAllActions();
 		Enemy enemy = GameData.getInstance().enemyMap.get(node.getPointer());
-		int index = enemy.getPathIndex();
-		if(path.hasNext(index)){
-			enemy.setPathIndex(index+1);
-			IntervalAction moveTo = (IntervalAction) MoveTo.make(1, enemy.getPositionX(), enemy.getPositionY(), path.getNextLocal(index).x , path.getNextLocal(index).y).autoRelease();
-			node.runAction(moveTo);
-			moveTo.setCallback(this);
+		if (enemy != null) {
+			int index = enemy.getPathIndex();
+			if (path.hasNext(index)) {
+				enemy.setPathIndex(index + 1);
+				IntervalAction moveTo = (IntervalAction) MoveTo.make(1, enemy.getPositionX(), enemy.getPositionY(),
+						path.getNextLocal(index).x, path.getNextLocal(index).y).autoRelease();
+				node.runAction(moveTo);
+				moveTo.setCallback(this);
+			} else {
+				node.stopAllActions();
+				removeChild(node, true);
+			}
 		}else{
 			node.stopAllActions();
-			removeChild(node,true);
+			removeChild(node, true);
 		}
-		
+
 	}
 
 	@Override
