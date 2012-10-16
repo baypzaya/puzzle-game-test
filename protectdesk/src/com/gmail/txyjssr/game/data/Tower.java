@@ -16,7 +16,7 @@ public class Tower extends Sprite{
 		
 		type = 0;
 		speed = 500;
-		scope = 100;
+		scope = 200;
 	}
 	
 	public boolean canShot(){

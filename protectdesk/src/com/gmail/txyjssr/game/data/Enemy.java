@@ -8,6 +8,7 @@ public class Enemy extends Sprite {
 	private long life; // 1k - 100k
 	private float speed;// px/s
 	private OnLifeChangedListener lifeChangedListener;
+	private int pathIndex = 0;
 
 	protected Enemy(Texture2D tex) {
 		super(tex);
@@ -50,6 +51,12 @@ public class Enemy extends Sprite {
 		this.lifeChangedListener = lifeChangedListener;
 	}
 	
+	public void setPathIndex(int index){
+		this.pathIndex = index;
+	}
 	
+	public int getPathIndex(){
+		return this.pathIndex;
+	}
 	
 }
