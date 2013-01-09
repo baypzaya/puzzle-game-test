@@ -12,6 +12,7 @@ public class Node {
 
 	private final int padding = 16;
 	private final int roundStrokeWidth = 2;
+	private final int titleSize = 40;
 
 	public String title;
 	public int type;
@@ -27,10 +28,9 @@ public class Node {
 
 		tilePaint = new Paint();
 		tilePaint.setAntiAlias(true);
-		// tilePaint.setStrokeWidth(5);
 		tilePaint.setStrokeCap(Paint.Cap.ROUND);
-		tilePaint.setTextSize(40);
-//		tilePaint.setTypeface(Typeface.create(Typeface.SERIF, Typeface.ITALIC));
+		tilePaint.setTextSize(titleSize);
+		tilePaint.setTypeface(Typeface.create(Typeface.MONOSPACE, Typeface.ITALIC));
 
 	}
 
