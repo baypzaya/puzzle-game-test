@@ -33,7 +33,7 @@ public class MindMapView extends View {
 
 		Paint paint = new Paint();
 		paint.setAntiAlias(true);
-		Bitmap bitmap = getBitmap("test");
+		Bitmap bitmap = getBitmap("中文测试京东分开就撒的");
 		canvas.drawBitmap(bitmap, 100, 100, paint);
 	}
 
@@ -43,39 +43,7 @@ public class MindMapView extends View {
 	}
 
 	private Bitmap getBitmap(String text) {
-		Paint mFramePaint = new Paint();
-		mFramePaint.setColor(Color.RED);
-		mFramePaint.setAntiAlias(true);
-		mFramePaint.setStyle(Paint.Style.STROKE);
-		mFramePaint.setStrokeWidth(2);
-
-		Paint mPaint = new Paint();
-		mPaint.setAntiAlias(true);
-		mPaint.setStrokeWidth(5);
-		mPaint.setStrokeCap(Paint.Cap.ROUND);
-		mPaint.setTextSize(64);
-		mPaint.setTypeface(Typeface.create(Typeface.SERIF, Typeface.ITALIC));
-
-		Rect rect = new Rect();
-		mPaint.getTextBounds(text, 0, text.length(), rect);
-
-		Bitmap bitmap = Bitmap.createBitmap(rect.width() + 6, rect.height() + 6, Bitmap.Config.ARGB_8888);
-		Canvas c = new Canvas(bitmap);
-
-		c.drawColor(Color.GRAY);
-
-		c.translate(0, rect.height()+3);
-		
-		Log.i("yujsh log","text center:"+rect.centerX()+" "+rect.centerY());
-
-		// mPaint.setColor(0xFF88FF88);
-		// c.drawRect(rect, mFramePaint);
-		// mPaint.setColor(Color.BLACK);
-		// c.drawText(text, 0, 0, mPaint);
-
-		RectF rectf = new RectF(rect);
-		c.drawRoundRect(rectf, 5, 5, mFramePaint);
-		c.drawText(text, 0, 0, mPaint);
+		Bitmap bitmap = new Node().getNodeBitmap(text);
 		return bitmap;
 	}
 }
