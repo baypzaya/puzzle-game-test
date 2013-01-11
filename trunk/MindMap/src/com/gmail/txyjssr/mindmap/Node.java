@@ -1,5 +1,6 @@
 package com.gmail.txyjssr.mindmap;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -7,8 +8,10 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
+import android.util.Log;
+import android.view.View;
 
-public class Node {
+public class Node extends View{
 
 	private final int padding = 16;
 	private final int roundStrokeWidth = 2;
@@ -19,7 +22,9 @@ public class Node {
 	private Paint tilePaint;
 	private Paint roundPaint;
 
-	public Node() {
+	public Node(Context context) {
+		super(context);
+		
 		roundPaint = new Paint();
 		roundPaint.setColor(Color.RED);
 		roundPaint.setAntiAlias(true);
@@ -34,7 +39,7 @@ public class Node {
 
 	}
 
-	public Bitmap getNodeBitmap(String title) {
+	private Bitmap getNodeBitmap(String title) {
 
 		Rect roundRect = new Rect();
 		tilePaint.getTextBounds(title, 0, title.length(), roundRect);
@@ -60,6 +65,17 @@ public class Node {
 		canvas.translate(centerX - roundRect.centerX(), centerY-roundRect.centerY());
 		canvas.drawText(title, 0, 0, tilePaint);
 		return bitmap;
+	}
+	
+	@Override
+	protected void onDraw(Canvas canvas) {
+		Log.i("yujsh log", "onDraw:");
+		canvas.drawColor(Color.WHITE);
+
+		Paint paint = new Paint();
+		paint.setAntiAlias(true);
+		Bitmap bitmap = getNodeBitmap("中文测试京东分开就撒的");
+		canvas.drawBitmap(bitmap, 100, 100, paint);
 	}
 
 }

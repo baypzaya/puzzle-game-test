@@ -1,19 +1,13 @@
 package com.gmail.txyjssr.mindmap;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Rect;
-import android.graphics.RectF;
-import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 
-public class MindMapView extends View {
+public class MindMapView extends ViewGroup {
 
 	public MindMapView(Context context) {
 		super(context);
@@ -27,23 +21,39 @@ public class MindMapView extends View {
 		super(context, attrs);
 	}
 
+	// @Override
+	// protected void onDraw(Canvas canvas) {
+	// canvas.drawColor(Color.WHITE);
+	// int childCount = getChildCount();
+	// for(int i=0;i<childCount;i++){
+	// getChildAt(i).onDraw(canvas);
+	// }
+	// }
+
+//	@Override
+//	public boolean onTouchEvent(MotionEvent event) {
+//		float x = event.getX();
+//		float y = event.getY();
+//		Log.i("yujsh log", "event type:" + event.getAction());
+//		Log.i("yujsh log", "event x:" + x + " y:" + y);
+//		switch (event.getAction()) {
+//		case MotionEvent.ACTION_DOWN:
+//			break;
+//		case MotionEvent.ACTION_MOVE:
+//			break;
+//		case MotionEvent.ACTION_UP:
+//			break;
+//		}
+//		return true;
+//	}
+
 	@Override
-	protected void onDraw(Canvas canvas) {
-		canvas.drawColor(Color.WHITE);
+	protected void onLayout(boolean changed, int l, int t, int r, int b) {
+		int childCount = getChildCount();
+		for (int i = 0; i < childCount; i++) {
+			final View child = getChildAt(i);
+			child.layout(l, t, r, b);
+		}
 
-		Paint paint = new Paint();
-		paint.setAntiAlias(true);
-		Bitmap bitmap = getBitmap("中文测试京东分开就撒的");
-		canvas.drawBitmap(bitmap, 100, 100, paint);
-	}
-
-	@Override
-	public boolean onTouchEvent(MotionEvent event) {
-		return false;
-	}
-
-	private Bitmap getBitmap(String text) {
-		Bitmap bitmap = new Node().getNodeBitmap(text);
-		return bitmap;
 	}
 }
