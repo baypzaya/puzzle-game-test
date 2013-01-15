@@ -9,9 +9,9 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.util.Log;
-import android.view.View;
+import android.widget.TextView;
 
-public class NodeView extends View {
+public class NodeView extends TextView {
 
 	private final int padding = 16;
 	private final int roundStrokeWidth = 2;
@@ -85,6 +85,9 @@ public class NodeView extends View {
 		paint.setAntiAlias(true);
 		canvas.translate(canvas.getWidth() / 2f, canvas.getHeight() / 2f);
 		canvas.save();
+		if(bitmap==null){
+			bitmap = getNodeBitmap(title);
+		}
 		canvas.drawBitmap(bitmap, (x - bitmap.getWidth()) / 2f, (y - bitmap.getHeight()) / 2f, paint);
 		canvas.restore();
 	}
