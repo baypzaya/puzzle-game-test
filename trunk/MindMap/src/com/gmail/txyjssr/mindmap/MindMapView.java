@@ -34,7 +34,13 @@ public class MindMapView extends FrameLayout {
 		int childCount = getChildCount();
 		for (int i = 0; i < childCount; i++) {
 			final View child = getChildAt(i);
-			child.layout(l, t, r, b);
+			
+			int centerX=(r-l)/2;
+			int centerY=(b-t)/2;
+			int width = child.getMeasuredWidth()/2;
+			int height = child.getMeasuredHeight()/2;
+			child.layout(centerX-width, centerY-height, centerX+width, centerY+height);
+			
 		}
 
 	}
