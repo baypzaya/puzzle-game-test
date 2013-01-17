@@ -73,6 +73,8 @@ public class NodeView extends View {
 	}
 
 	private Bitmap getNodeBitmap(String title) {
+		Rect roundRect = new Rect();
+		tilePaint.getTextBounds(title, 0, title.length(), roundRect);
 
 		Bitmap bitmap = Bitmap.createBitmap(getMeasuredWidth(), getMeasuredHeight(),Bitmap.Config.ARGB_8888);
 		int centerX = bitmap.getWidth() / 2;
@@ -83,7 +85,7 @@ public class NodeView extends View {
 		RectF rectF = new RectF(roundStrokeWidth, roundStrokeWidth, getMeasuredWidth()-roundStrokeWidth, getMeasuredHeight()-roundStrokeWidth);
 		canvas.drawRoundRect(rectF, 4, 4, roundPaint);
 
-		canvas.translate(centerX - rectF.centerX(), centerY - rectF.centerY());
+		canvas.translate(centerX - roundRect.centerX(), centerY - roundRect.centerY());
 		canvas.drawText(title, 0, 0, tilePaint);
 		return bitmap;
 	}
