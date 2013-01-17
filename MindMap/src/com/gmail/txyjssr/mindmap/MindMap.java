@@ -17,8 +17,8 @@ public class MindMap {
 		nodeList.add(node);
 
 		if (node.parentNode != null) {
-			node.x = node.parentNode.x-200;
-			node.y = node.parentNode.y-200;
+			node.x = node.parentNode.x-50;
+			node.y = node.parentNode.y-50;
 		}
 	}
 
