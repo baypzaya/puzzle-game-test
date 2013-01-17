@@ -63,6 +63,10 @@ public class MindMapActivity extends Activity implements OnClickListener, OnTouc
 			
 			nv.setTag(childNode);
 			nv.setOnClickListener(this);
+			
+			LinkView lv = new LinkView(this);
+			lv.setLink(node.x,node.y,childNode.x,childNode.y);
+			mindMapPad.addView(lv,0);
 		}
 	}
 
