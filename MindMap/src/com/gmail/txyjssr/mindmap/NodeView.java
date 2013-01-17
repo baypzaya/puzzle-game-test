@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
+import android.graphics.Paint.Style;
 import android.util.Log;
 import android.view.View;
 
@@ -101,6 +102,13 @@ public class NodeView extends View {
 		}
 		canvas.drawBitmap(bitmap, 0, 0, paint);
 		canvas.restore();
+		
+		Paint paintL = new Paint();
+		paintL.setAntiAlias(true);
+		paintL.setColor(Color.BLACK);
+		paintL.setStyle(Style.FILL);
+		paintL.setStrokeWidth(20);
+		canvas.drawLine(0, 0, getMeasuredWidth(), getMeasuredHeight(), paintL);
 	}
 
 	public void setTitle(String title) {
