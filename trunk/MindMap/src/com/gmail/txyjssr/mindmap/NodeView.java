@@ -63,8 +63,8 @@ public class NodeView extends View {
 		Rect roundRect = new Rect();
 		tilePaint.getTextBounds(title, 0, title.length(), roundRect);
 
-		int titleWidth = roundRect.width() < 50 ? 50 : roundRect.width();
-		int titleHeight = roundRect.height() < 100 ? 100 : roundRect.height();
+		int titleWidth = roundRect.width() < 100 ? 100 : roundRect.width();
+		int titleHeight = roundRect.height() < 50 ? 50 : roundRect.height();
 
 		int roundWidth = titleWidth + 2 * padding;
 		int roundHeight = titleHeight + 2 * padding;
@@ -115,4 +115,11 @@ public class NodeView extends View {
 		invalidate();
 	}
 
+	public float getX() {
+		return x;
+	}
+
+	public float getY() {
+		return y;
+	}
 }

@@ -24,9 +24,9 @@ public class MindMapView extends FrameLayout {
 
 	@Override
 	protected void onDraw(Canvas canvas) {
-		//canvas.save();
+		// canvas.save();
 		super.onDraw(canvas);
-		//canvas.restore();
+		// canvas.restore();
 	}
 
 	@Override
@@ -34,13 +34,15 @@ public class MindMapView extends FrameLayout {
 		int childCount = getChildCount();
 		for (int i = 0; i < childCount; i++) {
 			final View child = getChildAt(i);
-			
-			int centerX=(r-l)/2;
-			int centerY=(b-t)/2;
-			int width = child.getMeasuredWidth()/2;
-			int height = child.getMeasuredHeight()/2;
-			child.layout(centerX-width, centerY-height, centerX+width, centerY+height);
-			
+
+			if (child instanceof NodeView) {
+				NodeView nodeView = (NodeView)child;
+				int centerX = (r - l) / 2+(int)nodeView.getX();
+				int centerY = (b - t) / 2+(int)nodeView.getY();
+				int width = child.getMeasuredWidth() / 2;
+				int height = child.getMeasuredHeight() / 2;
+				child.layout(centerX +- width, centerY - height, centerX + width, centerY + height);
+			}
 		}
 
 	}

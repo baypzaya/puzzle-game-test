@@ -58,10 +58,8 @@ public class MindMapActivity extends Activity implements OnClickListener, OnTouc
 			Node childNode = new Node();
 			childNode.parentNode= node;
 			mindMap.addNode(childNode);
-			LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 			NodeView nv = new NodeView(this,childNode);
-//			nv.setLayoutParams(lp);
-			mindMapPad.addView(nv,lp);
+			mindMapPad.addView(nv);
 			
 			nv.setTag(childNode);
 			nv.setOnClickListener(this);
