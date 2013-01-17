@@ -10,11 +10,14 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
 import android.view.View.OnTouchListener;
+import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.FrameLayout;
 
 public class MindMapActivity extends Activity implements OnClickListener, OnTouchListener, OnFocusChangeListener {
 	private FrameLayout mindMapPad;
 	private MindMapManager mindMapManager;
+	private MindMap mindMap;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -23,16 +26,13 @@ public class MindMapActivity extends Activity implements OnClickListener, OnTouc
 
 		mindMapPad = (FrameLayout) findViewById(R.id.fl_pad);
 		mindMapManager = new MindMapManager();
-		
-//		int mw = mindMapPad.getMeasuredWidth();
-//		Log.i("yujsh log","mw:"+mw);
 
-		MindMap mindMap = mindMapManager.getRecentMindMap();
+		mindMap = mindMapManager.getRecentMindMap();
 		if (mindMap == null) {
 			mindMap = mindMapManager.createMindMap();
 			Node rootNode = new Node();
 			rootNode.isRootNode = true;
-			rootNode.title = "";
+			rootNode.title = "root node";
 			mindMap.addNode(rootNode);
 		}
 
@@ -44,12 +44,28 @@ public class MindMapActivity extends Activity implements OnClickListener, OnTouc
 		for (Node node : nodeList) {
 			NodeView et = new NodeView(this,node);
 			mindMapPad.addView(et);
+			
+			et.setTag(node);
+			et.setOnClickListener(this);
+			
 		}
 	}
 
 	@Override
 	public void onClick(View v) {
-		Log.i("yujsh log", "v:" + v);
+		if(v instanceof NodeView){
+			Node node = (Node)v.getTag();
+			Node childNode = new Node();
+			childNode.parentNode= node;
+			mindMap.addNode(childNode);
+			LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+			NodeView nv = new NodeView(this,childNode);
+//			nv.setLayoutParams(lp);
+			mindMapPad.addView(nv,lp);
+			
+			nv.setTag(childNode);
+			nv.setOnClickListener(this);
+		}
 	}
 
 	@Override

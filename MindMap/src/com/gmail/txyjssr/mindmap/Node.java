@@ -9,6 +9,7 @@ public class Node {
 	public String title="";
 	public float x;
 	public float y;
+	public Node parentNode;
 	public List<Node> nodeChildren;
 	public boolean isRootNode;
 
