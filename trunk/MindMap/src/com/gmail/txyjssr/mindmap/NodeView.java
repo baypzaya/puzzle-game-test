@@ -103,12 +103,12 @@ public class NodeView extends View {
 		canvas.drawBitmap(bitmap, 0, 0, paint);
 		canvas.restore();
 		
-		Paint paintL = new Paint();
-		paintL.setAntiAlias(true);
-		paintL.setColor(Color.BLACK);
-		paintL.setStyle(Style.FILL);
-		paintL.setStrokeWidth(20);
-		canvas.drawLine(0, 0, getMeasuredWidth(), getMeasuredHeight(), paintL);
+//		Paint paintL = new Paint();
+//		paintL.setAntiAlias(true);
+//		paintL.setColor(Color.BLACK);
+//		paintL.setStyle(Style.FILL);
+//		paintL.setStrokeWidth(20);
+//		canvas.drawLine(0, 0, getMeasuredWidth(), getMeasuredHeight(), paintL);
 	}
 
 	public void setTitle(String title) {
@@ -123,11 +123,11 @@ public class NodeView extends View {
 		invalidate();
 	}
 
-	public float getX() {
+	public float getPointX() {
 		return x;
 	}
 
-	public float getY() {
+	public float getPointY() {
 		return y;
 	}
 }
