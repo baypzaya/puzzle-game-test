@@ -1,19 +1,26 @@
 package com.gmail.txyjssr.mindmap;
 
 import android.content.Context;
-import android.graphics.Canvas;
+import android.graphics.Camera;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 
 public class MindMapView extends FrameLayout {
+	private final int TOUCH_MODE_NONE = 0;
+	private final int TOUCH_MODE_SINGLE = 1;
+	private final int TOUCH_MODE_DOUBLE = 2;
 
 	private float downX;
 	private float downY;
+	private Camera camera = new Camera();
+	private float distancePoints = 0;
 
-	private float currentScale = 1;
+	private float currentScale = 1f;
+	private int lastTouchMode = TOUCH_MODE_NONE;
 
 	public MindMapView(Context context) {
 		super(context);
@@ -29,9 +36,20 @@ public class MindMapView extends FrameLayout {
 
 	// @Override
 	// protected void onDraw(Canvas canvas) {
-	// canvas.translate(getMeasuredWidth()/2f, getMeasuredHeight()/2f);
 	// canvas.save();
+	// Matrix matrix = new Matrix();
+	// camera.save();
+	// camera.translate(0, 0, 300f);
+	// camera.getMatrix(matrix);
+	// camera.restore();
+	//
+	// canvas.concat(matrix);
 	// super.onDraw(canvas);
+	//
+	// Paint roundPaint = new Paint();
+	// roundPaint.setColor(Color.RED);
+	// Rect rectF = new Rect(20, 20, 400, 400);
+	// canvas.drawRect(rectF, roundPaint);
 	// canvas.restore();
 	// }
 
@@ -40,29 +58,27 @@ public class MindMapView extends FrameLayout {
 		int childCount = getChildCount();
 		for (int i = 0; i < childCount; i++) {
 			final View child = getChildAt(i);
-
 			if (child instanceof NodeView) {
 				NodeView nodeView = (NodeView) child;
-				int centerX = (r - l) / 2 + (int) nodeView.getPointX();
-				int centerY = (b - t) / 2 + (int) nodeView.getPointY();
-				int width = child.getMeasuredWidth() / 2;
-				int height = child.getMeasuredHeight() / 2;
+				int centerX = (r - l) / 2 + (int) (nodeView.getPointX() * currentScale);
+				int centerY = (b - t) / 2 + (int) (nodeView.getPointY() * currentScale);
+				int width = (int) (child.getMeasuredWidth() * currentScale / 2);
+				int height = (int) (child.getMeasuredHeight() * currentScale / 2);
 				child.layout(centerX - width, centerY - height, centerX + width, centerY + height);
 			} else if (child instanceof LinkView) {
 				LinkView linkView = (LinkView) child;
 				int centerX = (r - l) / 2;
 				int centerY = (b - t) / 2;
-				int childL = centerX + (int) linkView.startX - 15;
-				int childT = centerY + (int) linkView.startY - 15;
-				int childR = centerX + (int) linkView.endX + 15;
-				int childB = centerY + (int) linkView.endY + 15;
+				int childL = centerX + (int) ((linkView.startX - 15) * currentScale);
+				int childT = centerY + (int) ((linkView.startY - 15) * currentScale);
+				int childR = centerX + (int) ((linkView.endX + 15) * currentScale);
+				int childB = centerY + (int) ((linkView.endY + 15) * currentScale);
 				Log.i("yujsh log", "childL:" + childL + "childT:" + childT + "childR:" + childR + "childB:" + childB);
 				int tempL = childL <= childR ? childL : childR;
 				int tempR = childL >= childR ? childL : childR;
 				int tempT = childT <= childB ? childT : childB;
-				int tempB = childT >= childB ? childT : childB; 
+				int tempB = childT >= childB ? childT : childB;
 				child.layout(tempL, tempT, tempR, tempB);
-				// child.layout(l,t,r,b);
 			}
 		}
 
@@ -70,7 +86,14 @@ public class MindMapView extends FrameLayout {
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
+		Log.i("yujsh log", "pointerCount:" + event.getPointerCount());
 		if (event.getPointerCount() == 1) {
+			if (lastTouchMode != TOUCH_MODE_SINGLE) {
+				distancePoints = 0;
+				downX = event.getX();
+				downY = event.getY();
+				lastTouchMode = TOUCH_MODE_SINGLE;
+			}
 			int action = event.getAction();
 			switch (action) {
 			case MotionEvent.ACTION_DOWN:
@@ -81,8 +104,6 @@ public class MindMapView extends FrameLayout {
 				float moveX = event.getX();
 				float moveY = event.getY();
 				scrollBy((int) (downX - moveX), (int) (downY - moveY));
-				// requestLayout();
-				// invalidate();
 				downX = moveX;
 				downY = moveY;
 				break;
@@ -90,8 +111,48 @@ public class MindMapView extends FrameLayout {
 				break;
 			}
 			return true;
-		} else {
-			return false;
+		} else if (event.getPointerCount() == 2) {
+			if (lastTouchMode != TOUCH_MODE_DOUBLE) {
+				lastTouchMode = TOUCH_MODE_DOUBLE;
+			}
+			int action = event.getAction();
+			switch (action) {
+			case MotionEvent.ACTION_DOWN:
+				float downX0 = event.getX(0);
+				float downY0 = event.getY(0);
+				float downX1 = event.getX(1);
+				float downY1 = event.getY(1);
+				distancePoints = (float) Math.sqrt((downX0 - downX1) * (downX0 - downX1) + (downY0 - downY1)
+						* (downY0 - downY1));
+				Log.i("yujsh log", "distancePoints:" + distancePoints);
+				break;
+			case MotionEvent.ACTION_MOVE:
+				float moveX0 = event.getX(0);
+				float moveY0 = event.getY(0);
+				float moveX1 = event.getX(1);
+				float moveY1 = event.getY(1);
+				float moveDistancePoints = (float) Math.sqrt((moveX0 - moveX1) * (moveX0 - moveX1) + (moveY0 - moveY1)
+						* (moveY0 - moveY1));
+				Log.i("yujsh log", "moveDistancePoints:" + moveDistancePoints);
+				if (distancePoints != 0) {
+					float scale = moveDistancePoints / distancePoints;
+					currentScale = scale;
+					currentScale = currentScale > 3 ? 3 : currentScale;
+					currentScale = currentScale < 0.3f ? 0.3f : currentScale;
+					Log.i("yujsh log", "currentScale:" + currentScale);
+					requestLayout();
+				} else {
+					distancePoints = moveDistancePoints / currentScale;
+				}
+				// invalidate();
+				break;
+			case MotionEvent.ACTION_UP:
+				distancePoints = 0;
+				break;
+			}
+			return true;
 		}
+		lastTouchMode = TOUCH_MODE_NONE;
+		return false;
 	}
 }

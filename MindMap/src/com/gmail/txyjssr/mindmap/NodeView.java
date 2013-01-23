@@ -2,8 +2,10 @@ package com.gmail.txyjssr.mindmap;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Camera;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
@@ -26,6 +28,8 @@ public class NodeView extends View {
 	private Paint tilePaint;
 	private Paint roundPaint;
 	private Bitmap bitmap;
+
+	// private Camera camera = new Camera();
 
 	public NodeView(Context context) {
 		super(context);
@@ -53,10 +57,10 @@ public class NodeView extends View {
 
 	@Override
 	protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-		if(changed){
-			
+		if (changed) {
+
 		}
-		
+
 	}
 
 	@Override
@@ -69,7 +73,7 @@ public class NodeView extends View {
 
 		int roundWidth = titleWidth + 2 * padding;
 		int roundHeight = titleHeight + 2 * padding;
-		
+
 		setMeasuredDimension(roundWidth + 2 * roundStrokeWidth, roundHeight + 2 * roundStrokeWidth);
 	}
 
@@ -77,13 +81,14 @@ public class NodeView extends View {
 		Rect roundRect = new Rect();
 		tilePaint.getTextBounds(title, 0, title.length(), roundRect);
 
-		Bitmap bitmap = Bitmap.createBitmap(getMeasuredWidth(), getMeasuredHeight(),Bitmap.Config.ARGB_8888);
+		Bitmap bitmap = Bitmap.createBitmap(getMeasuredWidth(), getMeasuredHeight(), Bitmap.Config.ARGB_8888);
 		int centerX = bitmap.getWidth() / 2;
 		int centerY = bitmap.getHeight() / 2;
 
 		Canvas canvas = new Canvas(bitmap);
 
-		RectF rectF = new RectF(roundStrokeWidth, roundStrokeWidth, getMeasuredWidth()-roundStrokeWidth, getMeasuredHeight()-roundStrokeWidth);
+		RectF rectF = new RectF(roundStrokeWidth, roundStrokeWidth, getMeasuredWidth() - roundStrokeWidth,
+				getMeasuredHeight() - roundStrokeWidth);
 		canvas.drawRoundRect(rectF, 4, 4, roundPaint);
 
 		canvas.translate(centerX - roundRect.centerX(), centerY - roundRect.centerY());
@@ -95,20 +100,32 @@ public class NodeView extends View {
 	protected void onDraw(Canvas canvas) {
 		Paint paint = new Paint();
 		paint.setAntiAlias(true);
-		canvas.save();
-		canvas.drawColor(Color.LTGRAY);
-		if(bitmap==null){
+		if (bitmap == null) {
 			bitmap = getNodeBitmap(title);
 		}
+
+		float layoutWidth = Math.abs(getRight() - getLeft());
+//		float layoutHeight = Math.abs(getBottom() - getTop());
+
+		float scale = layoutWidth / getMeasuredWidth();
+
+		 canvas.save();
+		 canvas.scale(scale, scale);
+		// Matrix matrix = new Matrix();
+		// camera.save();
+		// camera.translate(getMeasuredWidth()/2, -getMeasuredHeight()/2, 400f);
+		// camera.getMatrix(matrix);
+		// camera.restore();
+
+		// canvas.concat(matrix);
+		canvas.drawColor(Color.LTGRAY);
+		// Paint roundPaint = new Paint();
+		// roundPaint.setColor(Color.RED);
+		// Rect rectF = new Rect(0, 0, 200, 200);
+		// canvas.drawRect(rectF, roundPaint);
+
 		canvas.drawBitmap(bitmap, 0, 0, paint);
-		canvas.restore();
-		
-//		Paint paintL = new Paint();
-//		paintL.setAntiAlias(true);
-//		paintL.setColor(Color.BLACK);
-//		paintL.setStyle(Style.FILL);
-//		paintL.setStrokeWidth(20);
-//		canvas.drawLine(0, 0, getMeasuredWidth(), getMeasuredHeight(), paintL);
+		// canvas.restore();
 	}
 
 	public void setTitle(String title) {
