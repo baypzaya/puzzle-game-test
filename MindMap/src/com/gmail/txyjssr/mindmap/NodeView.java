@@ -105,27 +105,14 @@ public class NodeView extends View {
 		}
 
 		float layoutWidth = Math.abs(getRight() - getLeft());
-//		float layoutHeight = Math.abs(getBottom() - getTop());
-
 		float scale = layoutWidth / getMeasuredWidth();
 
-		 canvas.save();
-		 canvas.scale(scale, scale);
-		// Matrix matrix = new Matrix();
-		// camera.save();
-		// camera.translate(getMeasuredWidth()/2, -getMeasuredHeight()/2, 400f);
-		// camera.getMatrix(matrix);
-		// camera.restore();
-
-		// canvas.concat(matrix);
+		canvas.save();
+		canvas.scale(scale, scale);
 		canvas.drawColor(Color.LTGRAY);
-		// Paint roundPaint = new Paint();
-		// roundPaint.setColor(Color.RED);
-		// Rect rectF = new Rect(0, 0, 200, 200);
-		// canvas.drawRect(rectF, roundPaint);
 
 		canvas.drawBitmap(bitmap, 0, 0, paint);
-		// canvas.restore();
+		canvas.restore();
 	}
 
 	public void setTitle(String title) {

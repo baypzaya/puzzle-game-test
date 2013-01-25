@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.FrameLayout;
 
-public class MindMapActivity extends Activity implements OnClickListener, OnTouchListener, OnFocusChangeListener {
+public class MindMapActivity extends Activity implements OnClickListener {
 	private FrameLayout mindMapPad;
 	private MindMapManager mindMapManager;
 	private MindMap mindMap;
@@ -56,7 +56,9 @@ public class MindMapActivity extends Activity implements OnClickListener, OnTouc
 		if(v instanceof NodeView){
 			Node node = (Node)v.getTag();
 			Node childNode = new Node();
-			childNode.parentNode= node;
+			childNode.setParentNode(node);
+			
+			
 			mindMap.addNode(childNode);
 			NodeView nv = new NodeView(this,childNode);
 			mindMapPad.addView(nv);
@@ -68,16 +70,6 @@ public class MindMapActivity extends Activity implements OnClickListener, OnTouc
 			lv.setLink(node.x,node.y,childNode.x,childNode.y);
 			mindMapPad.addView(lv,0);
 		}
-	}
-
-	@Override
-	public boolean onTouch(View v, MotionEvent event) {
-		return false;
-	}
-
-	@Override
-	public void onFocusChange(View v, boolean hasFocus) {
-		Log.i("yujsh log", "v:" + v.getClass().getName());
 	}
 
 }
