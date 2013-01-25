@@ -58,28 +58,31 @@ public class MindMapView extends FrameLayout {
 		int childCount = getChildCount();
 		for (int i = 0; i < childCount; i++) {
 			final View child = getChildAt(i);
+
+			int centerX = 0;
+			int centerY = 0;
+			int width = 0;
+			int height = 0;
+
 			if (child instanceof NodeView) {
 				NodeView nodeView = (NodeView) child;
-				int centerX = (r - l) / 2 + (int) (nodeView.getPointX() * currentScale);
-				int centerY = (b - t) / 2 + (int) (nodeView.getPointY() * currentScale);
-				int width = (int) (child.getMeasuredWidth() * currentScale / 2);
-				int height = (int) (child.getMeasuredHeight() * currentScale / 2);
+				centerX = (r - l) / 2 + (int) (nodeView.getPointX() * currentScale);
+				centerY = (b - t) / 2 + (int) (nodeView.getPointY() * currentScale);
+				width = (int) (child.getMeasuredWidth() * currentScale / 2);
+				height = (int) (child.getMeasuredHeight() * currentScale / 2);
 				child.layout(centerX - width, centerY - height, centerX + width, centerY + height);
 			} else if (child instanceof LinkView) {
 				LinkView linkView = (LinkView) child;
-				int centerX = (r - l) / 2;
-				int centerY = (b - t) / 2;
-				int childL = centerX + (int) ((linkView.startX - 15) * currentScale);
-				int childT = centerY + (int) ((linkView.startY - 15) * currentScale);
-				int childR = centerX + (int) ((linkView.endX + 15) * currentScale);
-				int childB = centerY + (int) ((linkView.endY + 15) * currentScale);
-				Log.i("yujsh log", "childL:" + childL + "childT:" + childT + "childR:" + childR + "childB:" + childB);
-				int tempL = childL <= childR ? childL : childR;
-				int tempR = childL >= childR ? childL : childR;
-				int tempT = childT <= childB ? childT : childB;
-				int tempB = childT >= childB ? childT : childB;
-				child.layout(tempL, tempT, tempR, tempB);
+				int childCenterX = (int) ((linkView.startX + linkView.endX) / 2 * currentScale);
+				int childCenterY = (int) ((linkView.startY + linkView.endY) / 2 * currentScale);
+				centerX = (r - l) / 2 + childCenterX;
+				centerY = (b - t) / 2 + childCenterY;
+				width = (int) (linkView.getMeasuredWidth() * currentScale / 2);
+				height = (int) (linkView.getMeasuredHeight() * currentScale / 2);
+
 			}
+
+			child.layout(centerX - width, centerY - height, centerX + width, centerY + height);
 		}
 
 	}
