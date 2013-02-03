@@ -18,7 +18,7 @@ public class NodeView extends View {
 
 	private final int padding = 16;
 	private final int roundStrokeWidth = 2;
-	private final int titleSize = 40;
+	private final int titleSize = 20;
 
 	private String title;
 	private int type;
@@ -68,13 +68,16 @@ public class NodeView extends View {
 		Rect roundRect = new Rect();
 		tilePaint.getTextBounds(title, 0, title.length(), roundRect);
 
-		int titleWidth = roundRect.width() < 100 ? 100 : roundRect.width();
-		int titleHeight = roundRect.height() < 50 ? 50 : roundRect.height();
+		int titleWidth = roundRect.width() < 50 ? 50 : roundRect.width();
+		int titleHeight = roundRect.height() < 20 ? 20 : roundRect.height();
 
 		int roundWidth = titleWidth + 2 * padding;
 		int roundHeight = titleHeight + 2 * padding;
 
 		setMeasuredDimension(roundWidth + 2 * roundStrokeWidth, roundHeight + 2 * roundStrokeWidth);
+		
+		Log.i("yujsh log", "onMeasure getMeasuredWidth:"+getMeasuredWidth());
+		Log.i("yujsh log", "onMeasure getMeasuredHeight:"+getMeasuredHeight());
 	}
 
 	private Bitmap getNodeBitmap(String title) {

@@ -57,7 +57,7 @@ public class MindMapActivity extends Activity implements OnClickListener {
 			Node node = (Node)v.getTag();
 			Node childNode = new Node();
 			childNode.setParentNode(node);
-			
+			childNode.title = "child node";
 			
 			mindMap.addNode(childNode);
 			NodeView nv = new NodeView(this,childNode);
