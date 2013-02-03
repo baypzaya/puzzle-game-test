@@ -20,16 +20,15 @@ public class MindMap {
 
 		if (node.parentNode != null) {
 			int childCount = node.parentNode.getChildCount();
-			int unit = (int) log2(childCount)+1;
-			int mod = childCount % unit;
-			
-			Log.i("yujsh log","childCount:"+childCount);
-			Log.i("yujsh log","unit:"+unit+" mod:"+mod);
-			
-			double angle = 2 * Math.PI / unit * mod;
-			double x = Math.cos(angle) * 100;
-			double y = Math.sin(angle) * 100;
+			int unit = (int) log2(childCount);
 
+			Log.i("yujsh log", "childCount:" + childCount);
+			double angle = 0;
+			if (unit != 0) {
+				angle = 2 * Math.PI / Math.pow(2, unit) * (2 * ((childCount - 1) - Math.pow(2, unit - 1)) - 1);
+			}
+			double x = Math.cos(angle) * 150;
+			double y = Math.sin(angle) * 150;
 			node.x = node.parentNode.x + Math.round(x);
 			node.y = node.parentNode.y + Math.round(y);
 		}

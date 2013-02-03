@@ -29,7 +29,7 @@ public class LinkView extends View {
 
 	@Override
 	protected void onDraw(Canvas canvas) {
-		canvas.drawColor(Color.YELLOW);
+//		canvas.drawColor(Color.YELLOW);
 
 		Paint paint = new Paint();
 		paint.setAntiAlias(true);
@@ -38,7 +38,12 @@ public class LinkView extends View {
 		paint.setStrokeWidth(strokeWidth);
 
 		int padding = strokeWidth / 2;
-		canvas.drawLine(0 + padding, 0 + padding, getMeasuredWidth() - padding, getMeasuredHeight() - padding, paint);
+		Log.i("yujsh log","startY:"+startY+" endY:"+endY);
+		if((startY<endY&&startX<endX)||(startY>endY&&startX>endX)){
+			canvas.drawLine(0 + padding, 0 + padding, getMeasuredWidth() - padding, getMeasuredHeight() - padding, paint);
+		}else{
+			canvas.drawLine(0 + padding, getMeasuredHeight() - padding, getMeasuredWidth() - padding, 0 + padding, paint);
+		}
 	}
 
 	@Override
