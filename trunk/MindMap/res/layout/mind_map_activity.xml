@@ -6,17 +6,23 @@
     <LinearLayout
         android:id="@+id/tools_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" android:visibility="gone">
+        android:layout_height="50dip"
+        android:layout_gravity="center_vertical"
+        android:background="@android:drawable/title_bar"
+        android:gravity="right"
+        android:orientation="horizontal" >
 
         <Button
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="create" />
+            android:layout_height="fill_parent"
+            android:layout_margin="4dip"
+            android:text="@string/btn_mind_map" />
+
     </LinearLayout>
 
     <com.gmail.txyjssr.mindmap.MindMapView
         android:id="@+id/fl_pad"
+        android:layout_below="@id/tools_bar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical" >
