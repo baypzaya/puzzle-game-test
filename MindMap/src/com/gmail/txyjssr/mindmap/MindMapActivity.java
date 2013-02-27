@@ -42,7 +42,7 @@ public class MindMapActivity extends Activity implements OnClickListener {
 	private void createMindMapUI(MindMap mindMap) {
 		List<Node> nodeList = mindMap.getNodes();
 		for (Node node : nodeList) {
-			NodeView et = new NodeView(this,node);
+			EditTextNode et = new EditTextNode(this,node);
 			mindMapPad.addView(et);
 			
 			et.setTag(node);
@@ -53,14 +53,14 @@ public class MindMapActivity extends Activity implements OnClickListener {
 
 	@Override
 	public void onClick(View v) {
-		if(v instanceof NodeView){
+		if(v instanceof EditTextNode){
 			Node node = (Node)v.getTag();
 			Node childNode = new Node();
 			childNode.setParentNode(node);
 			childNode.title = "child node";
 			
 			mindMap.addNode(childNode);
-			NodeView nv = new NodeView(this,childNode);
+			EditTextNode nv = new EditTextNode(this,childNode);
 			mindMapPad.addView(nv);
 			
 			nv.setTag(childNode);

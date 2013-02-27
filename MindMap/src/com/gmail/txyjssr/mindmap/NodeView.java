@@ -14,7 +14,7 @@ import android.graphics.Paint.Style;
 import android.util.Log;
 import android.view.View;
 
-public class NodeView extends View {
+public class NodeView extends View implements INode {
 
 	private final int padding = 16;
 	private final int roundStrokeWidth = 2;
@@ -118,22 +118,38 @@ public class NodeView extends View {
 		canvas.restore();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.gmail.txyjssr.mindmap.INode#setTitle(java.lang.String)
+	 */
+	@Override
 	public void setTitle(String title) {
 		this.title = title;
 		requestLayout();
 		invalidate();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.gmail.txyjssr.mindmap.INode#setLocation(float, float)
+	 */
+	@Override
 	public void setLocation(float x, float y) {
 		this.x = x;
 		this.y = y;
 		invalidate();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.gmail.txyjssr.mindmap.INode#getPointX()
+	 */
+	@Override
 	public float getPointX() {
 		return x;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.gmail.txyjssr.mindmap.INode#getPointY()
+	 */
+	@Override
 	public float getPointY() {
 		return y;
 	}

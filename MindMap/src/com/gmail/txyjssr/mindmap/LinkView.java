@@ -30,7 +30,7 @@ public class LinkView extends View {
 	@Override
 	protected void onDraw(Canvas canvas) {
 //		canvas.drawColor(Color.YELLOW);
-
+		Log.i("yujsh log","line onDraw");
 		Paint paint = new Paint();
 		paint.setAntiAlias(true);
 		paint.setColor(Color.BLACK);

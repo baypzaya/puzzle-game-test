@@ -64,13 +64,15 @@ public class MindMapView extends FrameLayout {
 			int width = 0;
 			int height = 0;
 
-			if (child instanceof NodeView) {
-				NodeView nodeView = (NodeView) child;
+			if (child instanceof EditTextNode) {
+				EditTextNode nodeView = (EditTextNode) child;
 				centerX = (r - l) / 2 + (int) (nodeView.getPointX() * currentScale);
 				centerY = (b - t) / 2 + (int) (nodeView.getPointY() * currentScale);
 				width = (int) (child.getMeasuredWidth() * currentScale / 2);
 				height = (int) (child.getMeasuredHeight() * currentScale / 2);
 				child.layout(centerX - width, centerY - height, centerX + width, centerY + height);
+				Log.i("yujsh log","line nodecenterX:"+centerX);
+				Log.i("yujsh log","line nodecenterY:"+centerY);
 			} else if (child instanceof LinkView) {
 				LinkView linkView = (LinkView) child;
 				int childCenterX = (int) ((linkView.startX + linkView.endX) / 2 * currentScale);
@@ -79,7 +81,10 @@ public class MindMapView extends FrameLayout {
 				centerY = (b - t) / 2 + childCenterY;
 				width = (int) (linkView.getMeasuredWidth() * currentScale / 2);
 				height = (int) (linkView.getMeasuredHeight() * currentScale / 2);
-
+				Log.i("yujsh log","line linecenterX:"+childCenterX);
+				Log.i("yujsh log","line linecenterY:"+childCenterY);
+				Log.i("yujsh log","line width:"+width);
+				Log.i("yujsh log","line height:"+height);
 			}
 
 			child.layout(centerX - width, centerY - height, centerX + width, centerY + height);

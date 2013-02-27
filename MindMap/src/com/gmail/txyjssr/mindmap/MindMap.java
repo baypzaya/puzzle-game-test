@@ -20,13 +20,18 @@ public class MindMap {
 
 		if (node.parentNode != null) {
 			int childCount = node.parentNode.getChildCount();
-			int unit = (int) log2(childCount);
-
-			Log.i("yujsh log", "childCount:" + childCount);
-			double angle = 0;
-			if (unit != 0) {
-				angle = 2 * Math.PI / Math.pow(2, unit) * (2 * ((childCount - 1) - Math.pow(2, unit - 1)) - 1);
+			double result = log2(childCount);
+			int unit = (int) result;
+			if (unit != result) {
+				unit += 1;
 			}
+
+			double angle = 0;
+			if (childCount > 1) {
+				angle = 2 * Math.PI / Math.pow(2, unit) * (2 * (childCount - Math.pow(2, unit - 1)) + 1);
+			}
+			double angleR = 180f * angle / Math.PI;
+			Log.i("yujsh log", "angleR:" + angleR);
 			double x = Math.cos(angle) * 150;
 			double y = Math.sin(angle) * 150;
 			node.x = node.parentNode.x + Math.round(x);
