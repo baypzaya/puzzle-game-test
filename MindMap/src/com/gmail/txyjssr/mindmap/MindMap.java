@@ -7,6 +7,7 @@ import android.util.Log;
 
 public class MindMap {
 	private List<Node> nodeList;
+	private int currentId = 0;
 
 	public List<Node> getNodes() {
 		return nodeList;
@@ -16,8 +17,9 @@ public class MindMap {
 		if (nodeList == null) {
 			nodeList = new ArrayList<Node>();
 		}
+		node.id = currentId;
 		nodeList.add(node);
-
+		currentId++;
 		if (node.parentNode != null) {
 			int childCount = node.parentNode.getChildCount();
 			double result = log2(childCount);
