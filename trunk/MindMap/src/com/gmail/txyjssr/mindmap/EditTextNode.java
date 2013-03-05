@@ -13,8 +13,6 @@ public class EditTextNode extends EditText implements INode {
 	private float x;
 	private float y;
 	private String title;
-	private boolean defaultEditable = false;
-	private MovementMethod defaultMovementMethod = null;
 
 	public EditTextNode(Context context, Node node) {
 		super(context);
@@ -48,28 +46,17 @@ public class EditTextNode extends EditText implements INode {
 		return y;
 	}
 
-	@Override
-	protected boolean getDefaultEditable() {
-		Log.i("yujsh log","getDefaultEditable");
-		return defaultEditable;
-	}
-
-	@Override
-	protected MovementMethod getDefaultMovementMethod() {
-		Log.i("yujsh log","getDefaultMovementMethod");
-		return defaultMovementMethod;
-	}
-
 	public void setEditEnable(boolean b) {
-		defaultEditable = b;
 		if (b) {
-			defaultMovementMethod = ArrowKeyMovementMethod.getInstance();
-			 setKeyListener(TextKeyListener.getInstance());
+
+//			setCursorVisible(true);
+			setKeyListener(TextKeyListener.getInstance());
 		} else {
-			defaultMovementMethod = null;
+
+//			setCursorVisible(false);
 			setKeyListener(null);
 		}
-		setMovementMethod(defaultMovementMethod);
+
 	}
 
 }
