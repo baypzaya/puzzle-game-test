@@ -3,15 +3,13 @@ package com.gmail.txyjssr.mindmap;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.MotionEvent;
+import android.os.Handler;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
-import android.view.View.OnTouchListener;
-import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 
 public class MindMapActivity extends Activity implements OnClickListener, OnFocusChangeListener {
@@ -19,6 +17,7 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 	private MindMapManager mindMapManager;
 	private MindMap mindMap;
 	private EditTextNode currentFocusedNode;
+	private Handler mHandler = new Handler();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +25,7 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 		setContentView(R.layout.mind_map_activity);
 
 		mindMapPad = (FrameLayout) findViewById(R.id.fl_pad);
+		mindMapPad.setOnClickListener(this);
 		mindMapManager = new MindMapManager();
 
 		mindMap = mindMapManager.getRecentMindMap();
@@ -53,31 +53,25 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 			EditTextNode et = new EditTextNode(this, node);
 			mindMapPad.addView(et);
 			et.setOnFocusChangeListener(this);
-
+			et.setEditEnable(false);
 			et.setTag(node);
 			et.setOnClickListener(this);
-
 		}
 	}
 
 	@Override
 	public void onClick(View v) {
 		if (v instanceof EditTextNode) {
-			// Node node = (Node)v.getTag();
-			// Node childNode = new Node();
-			// childNode.setParentNode(node);
-			// childNode.title = "child node";
-			//
-			// mindMap.addNode(childNode);
-			// EditTextNode nv = new EditTextNode(this,childNode);
-			// mindMapPad.addView(nv);
-			//
-			// nv.setTag(childNode);
-			// nv.setOnClickListener(this);
-			//
-			// LinkView lv = new LinkView(this);
-			// lv.setLink(node.x,node.y,childNode.x,childNode.y);
-			// mindMapPad.addView(lv,0);
+			// EditTextNode etn = (EditTextNode) v;
+			// if (etn.isFocused()) {
+			// etn.setEditEnable(true);
+			// }
+//			v.setFocusableInTouchMode(true);
+		} else {
+			if (currentFocusedNode != null) {
+				currentFocusedNode.setEditEnable(false);
+			}
+			findViewById(R.id.et_focus).requestFocus();
 		}
 	}
 
@@ -86,12 +80,22 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 		if (v instanceof EditTextNode) {
 			EditTextNode etNode = (EditTextNode) v;
 			if (etNode.isFocused()) {
-//				if(currentFocusedNode == etNode){
-//					etNode.setEditEnable(true);
-//				}else{
-//					currentFocusedNode = etNode;
-//					etNode.setEditEnable(false);
-//				}
+
+				if (currentFocusedNode != null)
+					currentFocusedNode.setEditEnable(false);
+				currentFocusedNode = etNode;
+				Runnable r = new Runnable() {
+
+					@Override
+					public void run() {
+						currentFocusedNode.setEditEnable(true);
+					}
+
+				};
+				mHandler.postDelayed(r, 100);
+			}else{
+				InputMethodManager imm=(InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+				imm.hideSoftInputFromWindow(etNode.getWindowToken(), 0);
 			}
 		}
 

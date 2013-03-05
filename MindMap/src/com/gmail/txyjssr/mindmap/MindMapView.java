@@ -92,75 +92,74 @@ public class MindMapView extends FrameLayout {
 
 	}
 
-	@Override
-	public boolean onTouchEvent(MotionEvent event) {
-		Log.i("yujsh log", "pointerCount:" + event.getPointerCount());
-		if (event.getPointerCount() == 1) {
-			if (lastTouchMode != TOUCH_MODE_SINGLE) {
-				distancePoints = 0;
-				downX = event.getX();
-				downY = event.getY();
-				lastTouchMode = TOUCH_MODE_SINGLE;
-			}
-			int action = event.getAction();
-			switch (action) {
-			case MotionEvent.ACTION_DOWN:
-				downX = event.getX();
-				downY = event.getY();
-				break;
-			case MotionEvent.ACTION_MOVE:
-				float moveX = event.getX();
-				float moveY = event.getY();
-				scrollBy((int) (downX - moveX), (int) (downY - moveY));
-				downX = moveX;
-				downY = moveY;
-				break;
-			case MotionEvent.ACTION_UP:
-				break;
-			}
-			return true;
-		} else if (event.getPointerCount() == 2) {
-			if (lastTouchMode != TOUCH_MODE_DOUBLE) {
-				lastTouchMode = TOUCH_MODE_DOUBLE;
-			}
-			int action = event.getAction();
-			switch (action) {
-			case MotionEvent.ACTION_DOWN:
-				float downX0 = event.getX(0);
-				float downY0 = event.getY(0);
-				float downX1 = event.getX(1);
-				float downY1 = event.getY(1);
-				distancePoints = (float) Math.sqrt((downX0 - downX1) * (downX0 - downX1) + (downY0 - downY1)
-						* (downY0 - downY1));
-				Log.i("yujsh log", "distancePoints:" + distancePoints);
-				break;
-			case MotionEvent.ACTION_MOVE:
-				float moveX0 = event.getX(0);
-				float moveY0 = event.getY(0);
-				float moveX1 = event.getX(1);
-				float moveY1 = event.getY(1);
-				float moveDistancePoints = (float) Math.sqrt((moveX0 - moveX1) * (moveX0 - moveX1) + (moveY0 - moveY1)
-						* (moveY0 - moveY1));
-				Log.i("yujsh log", "moveDistancePoints:" + moveDistancePoints);
-				if (distancePoints != 0) {
-					float scale = moveDistancePoints / distancePoints;
-					currentScale = scale;
-					currentScale = currentScale > 3 ? 3 : currentScale;
-					currentScale = currentScale < 0.3f ? 0.3f : currentScale;
-					Log.i("yujsh log", "currentScale:" + currentScale);
-					requestLayout();
-				} else {
-					distancePoints = moveDistancePoints / currentScale;
-				}
-				// invalidate();
-				break;
-			case MotionEvent.ACTION_UP:
-				distancePoints = 0;
-				break;
-			}
-			return true;
-		}
-		lastTouchMode = TOUCH_MODE_NONE;
-		return false;
-	}
+//	@Override
+//	public boolean onTouchEvent(MotionEvent event) {
+//		if (event.getPointerCount() == 1) {
+//			if (lastTouchMode != TOUCH_MODE_SINGLE) {
+//				distancePoints = 0;
+//				downX = event.getX();
+//				downY = event.getY();
+//				lastTouchMode = TOUCH_MODE_SINGLE;
+//			}
+//			int action = event.getAction();
+//			switch (action) {
+//			case MotionEvent.ACTION_DOWN:
+//				downX = event.getX();
+//				downY = event.getY();
+//				break;
+//			case MotionEvent.ACTION_MOVE:
+//				float moveX = event.getX();
+//				float moveY = event.getY();
+//				scrollBy((int) (downX - moveX), (int) (downY - moveY));
+//				downX = moveX;
+//				downY = moveY;
+//				break;
+//			case MotionEvent.ACTION_UP:
+//				break;
+//			}
+//			return true;
+//		} else if (event.getPointerCount() == 2) {
+//			if (lastTouchMode != TOUCH_MODE_DOUBLE) {
+//				lastTouchMode = TOUCH_MODE_DOUBLE;
+//			}
+//			int action = event.getAction();
+//			switch (action) {
+//			case MotionEvent.ACTION_DOWN:
+//				float downX0 = event.getX(0);
+//				float downY0 = event.getY(0);
+//				float downX1 = event.getX(1);
+//				float downY1 = event.getY(1);
+//				distancePoints = (float) Math.sqrt((downX0 - downX1) * (downX0 - downX1) + (downY0 - downY1)
+//						* (downY0 - downY1));
+//				Log.i("yujsh log", "distancePoints:" + distancePoints);
+//				break;
+//			case MotionEvent.ACTION_MOVE:
+//				float moveX0 = event.getX(0);
+//				float moveY0 = event.getY(0);
+//				float moveX1 = event.getX(1);
+//				float moveY1 = event.getY(1);
+//				float moveDistancePoints = (float) Math.sqrt((moveX0 - moveX1) * (moveX0 - moveX1) + (moveY0 - moveY1)
+//						* (moveY0 - moveY1));
+//				Log.i("yujsh log", "moveDistancePoints:" + moveDistancePoints);
+//				if (distancePoints != 0) {
+//					float scale = moveDistancePoints / distancePoints;
+//					currentScale = scale;
+//					currentScale = currentScale > 3 ? 3 : currentScale;
+//					currentScale = currentScale < 0.3f ? 0.3f : currentScale;
+//					Log.i("yujsh log", "currentScale:" + currentScale);
+//					requestLayout();
+//				} else {
+//					distancePoints = moveDistancePoints / currentScale;
+//				}
+//				// invalidate();
+//				break;
+//			case MotionEvent.ACTION_UP:
+//				distancePoints = 0;
+//				break;
+//			}
+//			return true;
+//		}
+//		lastTouchMode = TOUCH_MODE_NONE;
+//		return false;
+//	}
 }
