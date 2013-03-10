@@ -4,6 +4,8 @@ public interface INode {
 
 	public abstract void setTitle(String title);
 
+	public String getTitle();
+
 	public abstract void setLocation(float x, float y);
 
 	public abstract float getPointX();
