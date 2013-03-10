@@ -64,8 +64,8 @@ public class MindMapView extends FrameLayout {
 			int width = 0;
 			int height = 0;
 
-			if (child instanceof EditTextNode) {
-				EditTextNode nodeView = (EditTextNode) child;
+			if (child instanceof INode) {
+				INode nodeView = (INode) child;
 				centerX = (r - l) / 2 + (int) (nodeView.getPointX() * currentScale);
 				centerY = (b - t) / 2 + (int) (nodeView.getPointY() * currentScale);
 				width = (int) (child.getMeasuredWidth() * currentScale / 2);

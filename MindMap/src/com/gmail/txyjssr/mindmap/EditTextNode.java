@@ -4,6 +4,7 @@ import android.content.Context;
 import android.text.method.ArrowKeyMovementMethod;
 import android.text.method.MovementMethod;
 import android.text.method.TextKeyListener;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.ViewGroup.LayoutParams;
 import android.view.inputmethod.EditorInfo;
@@ -12,7 +13,6 @@ import android.widget.EditText;
 public class EditTextNode extends EditText implements INode {
 	private float x;
 	private float y;
-	private String title;
 
 	public EditTextNode(Context context, Node node) {
 		super(context);
@@ -23,11 +23,23 @@ public class EditTextNode extends EditText implements INode {
 		this.y = node.y;
 		setTitle(node.title);
 	}
+	
+	
+
+	public EditTextNode(Context context, AttributeSet attrs) {
+		super(context, attrs);
+	}
+
+
 
 	@Override
 	public void setTitle(String title) {
-		this.title = title;
 		setText(title);
+	}
+	
+	@Override
+	public String getTitle() {
+		return getEditableText().toString();
 	}
 
 	@Override

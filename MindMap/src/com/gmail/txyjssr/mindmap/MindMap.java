@@ -34,8 +34,8 @@ public class MindMap {
 			}
 			double angleR = 180f * angle / Math.PI;
 			Log.i("yujsh log", "angleR:" + angleR);
-			double x = Math.cos(angle) * 150;
-			double y = Math.sin(angle) * 150;
+			double x = Math.cos(angle) * 300;
+			double y = Math.sin(angle) * 300;
 			node.x = node.parentNode.x + Math.round(x);
 			node.y = node.parentNode.y + Math.round(y);
 		}

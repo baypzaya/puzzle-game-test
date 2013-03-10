@@ -153,4 +153,9 @@ public class NodeView extends View implements INode {
 	public float getPointY() {
 		return y;
 	}
+
+	@Override
+	public String getTitle() {
+		return title;
+	}
 }
