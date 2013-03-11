@@ -9,10 +9,13 @@ public class Node {
 	public String title = "";
 	public float x;
 	public float y;
+	public boolean isRootNode;
+	public int parentNodeId;
+	
+	
 	public Node parentNode;
 	private List<Node> nodeChildren = new ArrayList<Node>();
-	public boolean isRootNode;
-
+	
 	public void addChild(Node childNode) {
 		nodeChildren.add(childNode);
 	}
