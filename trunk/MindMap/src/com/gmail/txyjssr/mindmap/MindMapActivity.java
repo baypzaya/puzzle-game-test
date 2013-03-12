@@ -4,13 +4,14 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.FrameLayout;
 
 import com.gmail.txyjssr.mindmap.NodeLayout.OnButtonClickListener;
@@ -26,6 +27,9 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.mind_map_activity);
+
+		Button btnMindMap = (Button) findViewById(R.id.btn_mind_map);
+		btnMindMap.setOnClickListener(this);
 
 		mindMapPad = (FrameLayout) findViewById(R.id.fl_pad);
 		mindMapPad.setOnClickListener(this);
@@ -54,12 +58,19 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 
 	@Override
 	public void onClick(View v) {
-		if (v instanceof NodeLayout) {
-		} else {
+		if (v instanceof MindMapView) {
 			if (currentFocusedNode != null) {
 				currentFocusedNode.setEditEnable(false);
 			}
 			findViewById(R.id.et_focus).requestFocus();
+		} else {
+			int id = v.getId();
+			switch (id) {
+			case R.id.btn_mind_map:
+				Intent intent  = new Intent(this,MMManagerActivity.class);
+				startActivity(intent);
+				break;
+			}
 		}
 	}
 
@@ -126,6 +137,7 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 		nv.setNode(node);
 		nv.setEditEnable(false);
 		nv.setOnButtonListener(this);
+		nv.setOnFocusChangeListener(this);
 		return nv;
 	}
 
