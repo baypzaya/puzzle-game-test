@@ -49,11 +49,32 @@ public class NodeDao extends BaseDao {
 		return node;
 	}
 
+	public List<Node> getNodesBy(long id) {
+		String selection = COLUMN_ID + " = ? or " + COLUMN_PARENTNODEID + " = ?";
+		String[] selectionArgs = new String[] { "" + id, "" + id };
+		Cursor c = mDBManager.qury(TABLE_NAME, null, selection, selectionArgs, null, null);
+
+		List<Node> nodeList = new ArrayList<Node>();
+		if (c != null && c.moveToFirst()) {
+			do {
+				Node node = transformNodeBy(c);
+				nodeList.add(node);
+			} while (c.moveToNext());
+
+			c.close();
+		}
+		return nodeList;
+	}
+
+	public void deleteNodesBy(long id) {
+		String whereClause = COLUMN_ID + " = ? or " + COLUMN_PARENTNODEID + " = ?";
+		String[] whereArgs = new String[] { "" + id, "" + id };
+		mDBManager.delete(TABLE_NAME, whereClause, whereArgs);
+	}
+
 	private Node transformNodeBy(Cursor c) {
 		Node node = new Node();
 		node._id = c.getLong(c.getColumnIndex(COLUMN_ID));
-		Log.i("yujsh log","ci:"+c.getColumnIndex(COLUMN_TITLE));
-		Log.i("yujsh log","title:"+c.getString(c.getColumnIndex(COLUMN_TITLE)));
 		node.title = c.getString(c.getColumnIndex(COLUMN_TITLE));
 		node.x = c.getLong(c.getColumnIndex(COLUMN_X));
 		node.y = c.getLong(c.getColumnIndex(COLUMN_Y));

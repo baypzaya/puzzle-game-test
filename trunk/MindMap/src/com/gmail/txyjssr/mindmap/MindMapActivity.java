@@ -42,17 +42,10 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 	private void createMindMapUI(MindMap mindMap) {
 		List<Node> nodeList = mindMap.getNodes();
 		for (Node node : nodeList) {
-			NodeLayout nl = new NodeLayout(this);
-			nl.setTitle(node.title);
-			nl.setLocation(node.x, node.y);
+			NodeLayout nl = createNodeLayout(node);
 			mindMapPad.addView(nl);
-			nl.setEditEnable(false);
-			nl.setNode(node);
-			nl.setOnButtonListener(this);
-
 			if (!node.isRootNode) {
-				LinkView lv = new LinkView(this);
-				lv.setLink(node.parentNode.x, node.parentNode.y, node.x, node.y);
+				LinkView lv = createLinkView(node);
 				mindMapPad.addView(lv, 0);
 			}
 
@@ -62,11 +55,6 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 	@Override
 	public void onClick(View v) {
 		if (v instanceof NodeLayout) {
-			// EditTextNode etn = (EditTextNode) v;
-			// if (etn.isFocused()) {
-			// etn.setEditEnable(true);
-			// }
-			// v.setFocusableInTouchMode(true);
 		} else {
 			if (currentFocusedNode != null) {
 				currentFocusedNode.setEditEnable(false);
@@ -107,28 +95,45 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 		Node childNode = new Node();
 		childNode.setParentNode(node);
 		childNode.title = "child node";
-
 		mindMap.addNode(childNode);
-		NodeLayout nv = new NodeLayout(this);
-		nv.setTitle(childNode.title);
-		nv.setLocation(childNode.x, childNode.y);
+
+		NodeLayout nv = createNodeLayout(childNode);
 		mindMapPad.addView(nv);
 
-		nv.setNode(childNode);
-		// nv.setOnClickListener(this);
-		nv.setEditEnable(false);
-		nv.setOnButtonListener(this);
-
-		LinkView lv = new LinkView(this);
-		lv.setLink(node.x, node.y, childNode.x, childNode.y);
+		LinkView lv = createLinkView(childNode);
 		mindMapPad.addView(lv, 0);
 
 	}
 
 	@Override
 	public void onDeleteClick(Node node) {
-		// TODO Auto-generated method stub
+		List<Node> nodeList = mindMap.removeNode(node);
+		for (Node n : nodeList) {
+			View nodeView = mindMapPad.findViewById((int) n._id);
+			mindMapPad.removeView(nodeView);
+			View linkView = mindMapPad.findViewWithTag(n._id);
+			mindMapPad.removeView(linkView);
+		}
 
+	}
+
+	private NodeLayout createNodeLayout(Node node) {
+		NodeLayout nv = new NodeLayout(this);
+		nv.setId((int) node._id);
+		nv.setTitle(node.title);
+		nv.setLocation(node.x, node.y);
+
+		nv.setNode(node);
+		nv.setEditEnable(false);
+		nv.setOnButtonListener(this);
+		return nv;
+	}
+
+	private LinkView createLinkView(Node node) {
+		LinkView lv = new LinkView(this);
+		lv.setLink(node.parentNode.x, node.parentNode.y, node.x, node.y);
+		lv.setTag(node._id);
+		return lv;
 	}
 
 }
