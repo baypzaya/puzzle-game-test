@@ -12,7 +12,7 @@ public class Node extends BaseData{
 	public float x;
 	public float y;
 	public boolean isRootNode;
-	public int parentNodeId;
+	public long parentNodeId;
 	public long mindMapId;
 	
 	
@@ -34,6 +34,7 @@ public class Node extends BaseData{
 
 	public void setParentNode(Node parentNode) {
 		this.parentNode = parentNode;
+		this.parentNodeId = parentNode._id;
 		parentNode.addChild(this);
 	}
 

@@ -14,11 +14,14 @@ public class MindMapDao extends BaseDao {
 
 	public TabMindMap getCurrentMindMap() {
 		TabMindMap mm = null;
-		Cursor c = mDBManager.qury(TABLE_MINDMAP, null, null, null, null, null);
+		String selection = COLUMN_ISCURRENT + " = ?";
+		String[] selectionArgs = new String[]{""+1};
+		Cursor c = mDBManager.qury(TABLE_MINDMAP, null, selection, selectionArgs, null, null);
 		if (c != null && c.moveToFirst()) {
-			int columnIndex = c.getColumnIndex("isCurrent");
-			int isCurrent = c.getInt(columnIndex);
-			Log.i("yujsh log", "isCurrent:" + isCurrent);
+			mm = new TabMindMap();
+			mm._id = c.getLong(c.getColumnIndex(COLUMN_ID));
+			mm.name = c.getString(c.getColumnIndex(COLUMN_NAME));
+			mm.isCurrent = c.getInt(c.getColumnIndex(COLUMN_ISCURRENT)) == 1;
 		}
 
 		return mm;

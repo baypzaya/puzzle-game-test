@@ -49,6 +49,13 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 			nl.setEditEnable(false);
 			nl.setNode(node);
 			nl.setOnButtonListener(this);
+
+			if (!node.isRootNode) {
+				LinkView lv = new LinkView(this);
+				lv.setLink(node.parentNode.x, node.parentNode.y, node.x, node.y);
+				mindMapPad.addView(lv, 0);
+			}
+
 		}
 	}
 
@@ -97,7 +104,6 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 
 	@Override
 	public void onAddClick(Node node) {
-		Log.i("yujsh log", "onAddClick");
 		Node childNode = new Node();
 		childNode.setParentNode(node);
 		childNode.title = "child node";

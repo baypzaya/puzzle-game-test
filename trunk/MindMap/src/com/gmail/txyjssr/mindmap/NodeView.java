@@ -75,9 +75,6 @@ public class NodeView extends View implements INode {
 		int roundHeight = titleHeight + 2 * padding;
 
 		setMeasuredDimension(roundWidth + 2 * roundStrokeWidth, roundHeight + 2 * roundStrokeWidth);
-		
-		Log.i("yujsh log", "onMeasure getMeasuredWidth:"+getMeasuredWidth());
-		Log.i("yujsh log", "onMeasure getMeasuredHeight:"+getMeasuredHeight());
 	}
 
 	private Bitmap getNodeBitmap(String title) {
