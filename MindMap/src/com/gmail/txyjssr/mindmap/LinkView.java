@@ -29,8 +29,7 @@ public class LinkView extends View {
 
 	@Override
 	protected void onDraw(Canvas canvas) {
-//		canvas.drawColor(Color.YELLOW);
-		Log.i("yujsh log","line onDraw");
+
 		Paint paint = new Paint();
 		paint.setAntiAlias(true);
 		paint.setColor(Color.BLACK);
@@ -38,7 +37,6 @@ public class LinkView extends View {
 		paint.setStrokeWidth(strokeWidth);
 
 		int padding = strokeWidth / 2;
-		Log.i("yujsh log","startY:"+startY+" endY:"+endY);
 		if((startY<endY&&startX<endX)||(startY>endY&&startX>endX)){
 			canvas.drawLine(0 + padding, 0 + padding, getMeasuredWidth() - padding, getMeasuredHeight() - padding, paint);
 		}else{

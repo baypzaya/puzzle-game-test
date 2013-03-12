@@ -52,8 +52,6 @@ public class MindMapView extends FrameLayout {
 				width = (int) (child.getMeasuredWidth() * currentScale / 2);
 				height = (int) (child.getMeasuredHeight() * currentScale / 2);
 				child.layout(centerX - width, centerY - height, centerX + width, centerY + height);
-//				Log.i("yujsh log","line nodecenterX:"+centerX);
-//				Log.i("yujsh log","line nodecenterY:"+centerY);
 			} else if (child instanceof LinkView) {
 				LinkView linkView = (LinkView) child;
 				int childCenterX = (int) ((linkView.startX + linkView.endX) / 2 * currentScale);
@@ -62,10 +60,6 @@ public class MindMapView extends FrameLayout {
 				centerY = (b - t) / 2 + childCenterY;
 				width = (int) (linkView.getMeasuredWidth() * currentScale / 2);
 				height = (int) (linkView.getMeasuredHeight() * currentScale / 2);
-//				Log.i("yujsh log","line linecenterX:"+childCenterX);
-//				Log.i("yujsh log","line linecenterY:"+childCenterY);
-//				Log.i("yujsh log","line width:"+width);
-//				Log.i("yujsh log","line height:"+height);
 			}
 
 			child.layout(centerX - width, centerY - height, centerX + width, centerY + height);
@@ -113,7 +107,6 @@ public class MindMapView extends FrameLayout {
 //				float downY1 = event.getY(1);
 //				distancePoints = (float) Math.sqrt((downX0 - downX1) * (downX0 - downX1) + (downY0 - downY1)
 //						* (downY0 - downY1));
-//				Log.i("yujsh log", "distancePoints:" + distancePoints);
 //				break;
 //			case MotionEvent.ACTION_MOVE:
 //				float moveX0 = event.getX(0);
@@ -122,13 +115,11 @@ public class MindMapView extends FrameLayout {
 //				float moveY1 = event.getY(1);
 //				float moveDistancePoints = (float) Math.sqrt((moveX0 - moveX1) * (moveX0 - moveX1) + (moveY0 - moveY1)
 //						* (moveY0 - moveY1));
-//				Log.i("yujsh log", "moveDistancePoints:" + moveDistancePoints);
 //				if (distancePoints != 0) {
 //					float scale = moveDistancePoints / distancePoints;
 //					currentScale = scale;
 //					currentScale = currentScale > 3 ? 3 : currentScale;
 //					currentScale = currentScale < 0.3f ? 0.3f : currentScale;
-//					Log.i("yujsh log", "currentScale:" + currentScale);
 //					requestLayout();
 //				} else {
 //					distancePoints = moveDistancePoints / currentScale;

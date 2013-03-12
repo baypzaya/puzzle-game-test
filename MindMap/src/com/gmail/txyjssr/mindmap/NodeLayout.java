@@ -90,7 +90,6 @@ public class NodeLayout extends LinearLayout implements INode, OnClickListener {
 
 	@Override
 	public void onClick(View v) {
-		Log.i("yujsh log", "onClick");
 		if(listener==null) return;
 		switch (v.getId()) {
 		case R.id.iv_add:

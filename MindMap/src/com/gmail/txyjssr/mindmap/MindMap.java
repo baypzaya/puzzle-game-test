@@ -9,7 +9,7 @@ public class MindMap {
 	public long mindMapId;
 	public String name;
 	public List<Node> nodeList;
-	private int currentId = 0;
+	private NodeDao nodeDao = new NodeDao();
 
 	public List<Node> getNodes() {
 		return nodeList;
@@ -19,9 +19,9 @@ public class MindMap {
 		if (nodeList == null) {
 			nodeList = new ArrayList<Node>();
 		}
-		node._id = currentId;
-		nodeList.add(node);
-		currentId++;
+		node.mindMapId = mindMapId;
+		
+		//¼ÆËãnode×ø±ê
 		if (node.parentNode != null) {
 			int childCount = node.parentNode.getChildCount();
 			double result = log2(childCount);
@@ -34,13 +34,16 @@ public class MindMap {
 			if (childCount > 1) {
 				angle = 2 * Math.PI / Math.pow(2, unit) * (2 * (childCount - Math.pow(2, unit - 1)) + 1);
 			}
-			double angleR = 180f * angle / Math.PI;
-			Log.i("yujsh log", "angleR:" + angleR);
+//			double angleR = 180f * angle / Math.PI;
 			double x = Math.cos(angle) * 300;
 			double y = Math.sin(angle) * 300;
 			node.x = node.parentNode.x + Math.round(x);
 			node.y = node.parentNode.y + Math.round(y);
 		}
+		
+		long id = nodeDao.insert(node);
+		node._id = id;
+		nodeList.add(node);
 	}
 
 	public boolean hasNode() {
