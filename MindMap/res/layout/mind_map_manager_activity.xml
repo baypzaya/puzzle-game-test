@@ -2,9 +2,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
-	<EditText android:id="@+id/et_focus" android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        />
     <LinearLayout
         android:id="@+id/tools_bar"
         android:layout_width="match_parent"
@@ -13,22 +10,13 @@
         android:background="@android:drawable/title_bar"
         android:gravity="right"
         android:orientation="horizontal" >
-
-        <Button
-            android:id="@+id/btn_mind_map"
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:layout_margin="4dip"
-            android:text="@string/btn_mind_map" />
-
+               
     </LinearLayout>
 
-    <com.gmail.txyjssr.mindmap.MindMapView
-        android:id="@+id/fl_pad"
+    <ListView
+        android:id="@android:id/list"
         android:layout_below="@id/tools_bar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical" >
-    </com.gmail.txyjssr.mindmap.MindMapView>
+        android:layout_height="match_parent" />
 
 </RelativeLayout>

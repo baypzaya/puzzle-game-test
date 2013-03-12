@@ -69,31 +69,31 @@ public class MindMapView extends FrameLayout {
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		if (event.getPointerCount() == 1) {
-			if (lastTouchMode != TOUCH_MODE_SINGLE) {
-				distancePoints = 0;
-				downX = event.getX();
-				downY = event.getY();
-				lastTouchMode = TOUCH_MODE_SINGLE;
-			}
-			int action = event.getAction();
-			switch (action) {
-			case MotionEvent.ACTION_DOWN:
-				downX = event.getX();
-				downY = event.getY();
-				break;
-			case MotionEvent.ACTION_MOVE:
-				float moveX = event.getX();
-				float moveY = event.getY();
-				scrollBy((int) (downX - moveX), (int) (downY - moveY));
-				downX = moveX;
-				downY = moveY;
-				break;
-			case MotionEvent.ACTION_UP:
-				break;
-			}
-			return true;
-		} 
+//		if (event.getPointerCount() == 1) {
+//			if (lastTouchMode != TOUCH_MODE_SINGLE) {
+//				distancePoints = 0;
+//				downX = event.getX();
+//				downY = event.getY();
+//				lastTouchMode = TOUCH_MODE_SINGLE;
+//			}
+//			int action = event.getAction();
+//			switch (action) {
+//			case MotionEvent.ACTION_DOWN:
+//				downX = event.getX();
+//				downY = event.getY();
+//				break;
+//			case MotionEvent.ACTION_MOVE:
+//				float moveX = event.getX();
+//				float moveY = event.getY();
+//				scrollBy((int) (downX - moveX), (int) (downY - moveY));
+//				downX = moveX;
+//				downY = moveY;
+//				break;
+//			case MotionEvent.ACTION_UP:
+//				break;
+//			}
+//			return true;
+//		} 
 //		else if (event.getPointerCount() == 2) {
 //			if (lastTouchMode != TOUCH_MODE_DOUBLE) {
 //				lastTouchMode = TOUCH_MODE_DOUBLE;
@@ -133,6 +133,6 @@ public class MindMapView extends FrameLayout {
 //			return true;
 //		}
 //		lastTouchMode = TOUCH_MODE_NONE;
-		return false;
+		return super.onTouchEvent(event);
 	}
 }
