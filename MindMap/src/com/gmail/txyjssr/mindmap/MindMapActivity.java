@@ -34,10 +34,6 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 		mindMap = mindMapManager.getRecentMindMap();
 		if (mindMap == null) {
 			mindMap = mindMapManager.createMindMap();
-			Node rootNode = new Node();
-			rootNode.isRootNode = true;
-			rootNode.title = "root node";
-			mindMap.addNode(rootNode);
 		}
 
 		createMindMapUI(mindMap);

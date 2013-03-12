@@ -18,7 +18,7 @@ public class EditTextNode extends EditText implements INode {
 		super(context);
 		LayoutParams layout = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		setLayoutParams(layout);
-		setId(node.id);
+		setId((int)node._id);
 		this.x = node.x;
 		this.y = node.y;
 		setTitle(node.title);
