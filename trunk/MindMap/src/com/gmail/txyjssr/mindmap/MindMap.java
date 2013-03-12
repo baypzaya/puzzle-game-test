@@ -6,7 +6,9 @@ import java.util.List;
 import android.util.Log;
 
 public class MindMap {
-	private List<Node> nodeList;
+	public long mindMapId;
+	public String name;
+	public List<Node> nodeList;
 	private int currentId = 0;
 
 	public List<Node> getNodes() {
@@ -17,7 +19,7 @@ public class MindMap {
 		if (nodeList == null) {
 			nodeList = new ArrayList<Node>();
 		}
-		node.id = currentId;
+		node._id = currentId;
 		nodeList.add(node);
 		currentId++;
 		if (node.parentNode != null) {

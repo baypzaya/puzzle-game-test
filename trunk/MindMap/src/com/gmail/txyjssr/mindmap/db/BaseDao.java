@@ -7,12 +7,12 @@ import java.util.List;
 import android.content.ContentValues;
 import android.database.Cursor;
 
-public class BaseDao<T extends BaseData> {
-
+public class BaseDao{
+	public static final String COLUMN_ID = "_id";
 	protected DBManager mDBManager = DBManager.getInstance();
 
-	public String getCreateTableSQL(Class tClass) {
-		String tableName = tClass.getName();
+	public static String getCreateTableSQL(Class tClass) {
+		String tableName = tClass.getSimpleName();
 		StringBuffer sb = new StringBuffer("CREATE  TABLE ");
 		sb.append(tableName).append(" (_id INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL ,");
 
@@ -31,7 +31,7 @@ public class BaseDao<T extends BaseData> {
 
 	public long insert(Object o) {
 		Class tClass = o.getClass();
-		String tableName = tClass.getName();
+		String tableName = tClass.getSimpleName();
 		ContentValues values = DatabaseUtils.transformObject(o);
 		long id = mDBManager.insert(tableName, values);
 		return id;
@@ -39,7 +39,7 @@ public class BaseDao<T extends BaseData> {
 
 	public int update(Object o) {
 		Class tClass = o.getClass();
-		String tableName = tClass.getName();
+		String tableName = tClass.getSimpleName();
 		ContentValues values = DatabaseUtils.transformObject(o);
 		String whereClause = "_id = ?";
 		String[] whereArgs = new String[] { "" + ((BaseData) o)._id };

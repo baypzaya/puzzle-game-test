@@ -4,6 +4,9 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.gmail.txyjssr.mindmap.Node;
+import com.gmail.txyjssr.mindmap.TabMindMap;
+
 public class DBHelper extends SQLiteOpenHelper {
 
 	private static final String DATABASE_NAME = "database.db";
@@ -15,8 +18,12 @@ public class DBHelper extends SQLiteOpenHelper {
 	
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		//book table
-
+		
+		String sqlMindMap = BaseDao.getCreateTableSQL(TabMindMap.class);
+		db.execSQL(sqlMindMap);
+		
+		String sqlNode = BaseDao.getCreateTableSQL(Node.class);
+		db.execSQL(sqlNode);
 	}
 
 	

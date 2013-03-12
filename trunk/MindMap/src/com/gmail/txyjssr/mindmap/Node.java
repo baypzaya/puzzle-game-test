@@ -3,14 +3,17 @@ package com.gmail.txyjssr.mindmap;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Node {
+import com.gmail.txyjssr.mindmap.db.BaseData;
 
-	public int id;
+public class Node extends BaseData{
+
+//	public int id;
 	public String title = "";
 	public float x;
 	public float y;
 	public boolean isRootNode;
 	public int parentNodeId;
+	public long mindMapId;
 	
 	
 	public Node parentNode;
@@ -24,7 +27,7 @@ public class Node {
 	public boolean equals(Object o) {
 		if (o instanceof Node) {
 			Node another = (Node) o;
-			return this.id == another.id;
+			return this._id == another._id;
 		}
 		return false;
 	}

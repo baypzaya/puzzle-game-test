@@ -15,6 +15,9 @@ public class DatabaseUtils {
 			Field[] fields = c.getFields();
 			for (Field field : fields) {
 				String key = field.getName();
+				if("_id".equals(key)){
+					continue;
+				}
 				String fieldType = field.getType().getName();
 				field.setAccessible(true);
 
@@ -25,6 +28,11 @@ public class DatabaseUtils {
 				// int
 				if (isIntegerType(fieldType)) {
 					values.put(key, (Integer) field.get(o));
+				}
+				
+				//long
+				if(isLongType(fieldType)){
+					values.put(key, (Long) field.get(o));
 				}
 
 				// boolean
@@ -123,6 +131,11 @@ public class DatabaseUtils {
 			if (isIntegerType(fieldType)) {
 				columType = "INTEGER";
 			}
+			
+			//long
+			if(isLongType(fieldType)){
+				columType = "INTEGER";
+			}
 
 			// boolean
 			if (isBooleanType(fieldType)) {
@@ -167,6 +180,10 @@ public class DatabaseUtils {
 
 	private static boolean isIntegerType(String fieldType) {
 		return fieldType.equals("int") || fieldType.equals("java.lang.Integer");
+	}
+	
+	private static boolean isLongType(String fieldType) {
+		return fieldType.equals("long") || fieldType.equals("java.lang.Long");
 	}
 
 	private static boolean isStringType(String fieldType) {
