@@ -54,4 +54,11 @@ public class MindMap {
 		return Math.log(value) / Math.log(2.0);
 
 	}
+
+	public List<Node> removeNode(Node node) {
+		List<Node> listNode = nodeDao.getNodesBy(node._id);
+		nodeList.removeAll(listNode);
+		nodeDao.deleteNodesBy(node._id);
+		return listNode;
+	}
 }
