@@ -14,15 +14,15 @@ public class EditTextNode extends EditText implements INode {
 	private float x;
 	private float y;
 
-	public EditTextNode(Context context, Node node) {
-		super(context);
-		LayoutParams layout = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		setLayoutParams(layout);
-		setId((int)node._id);
-		this.x = node.x;
-		this.y = node.y;
-		setTitle(node.title);
-	}
+//	public EditTextNode(Context context, Node node) {
+//		super(context);
+//		LayoutParams layout = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+//		setLayoutParams(layout);
+//		setId((int)node._id);
+//		this.x = node.x;
+//		this.y = node.y;
+//		setTitle(node.title);
+//	}
 	
 	
 
@@ -60,12 +60,8 @@ public class EditTextNode extends EditText implements INode {
 
 	public void setEditEnable(boolean b) {
 		if (b) {
-
-//			setCursorVisible(true);
 			setKeyListener(TextKeyListener.getInstance());
 		} else {
-
-//			setCursorVisible(false);
 			setKeyListener(null);
 		}
 

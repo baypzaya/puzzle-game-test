@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
@@ -67,7 +68,7 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 			int id = v.getId();
 			switch (id) {
 			case R.id.btn_mind_map:
-				Intent intent  = new Intent(this,MMManagerActivity.class);
+				Intent intent = new Intent(this, MMManagerActivity.class);
 				startActivity(intent);
 				break;
 			}
@@ -83,41 +84,80 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 				if (currentFocusedNode != null)
 					currentFocusedNode.setEditEnable(false);
 				currentFocusedNode = etNode;
-
+				setButtonVisible((Node) etNode.getTag(), View.VISIBLE);
 				Runnable r = new Runnable() {
 
 					@Override
 					public void run() {
 						currentFocusedNode.setEditEnable(true);
 					}
-
 				};
 				mHandler.postDelayed(r, 100);
 			} else {
+				setButtonVisible((Node) etNode.getTag(), View.INVISIBLE);
 				InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 				imm.hideSoftInputFromWindow(etNode.getWindowToken(), 0);
+				EditTextNode etn = (EditTextNode) v;
+				String title = etn.getTitle();
+				Node node = (Node) etn.getTag();
+				if (TextUtils.isEmpty(title.trim())) {
+					if (TextUtils.isEmpty(node.title)) {
+						deleteNode(node);
+					} else {
+						etNode.setText(node.title);
+					}
+				} else if (!title.equals(node.title)) {
+					node.title = title;
+					updateNodeTitle(node);
+				}
+				etNode.setEditEnable(false);
+				currentFocusedNode = null;
 			}
+		} else {
+			currentFocusedNode = null;
 		}
+
+	}
+
+	private void setButtonVisible(Node node, int visible) {
+		NodeLayout nl = (NodeLayout) findViewById((int) node._id);
+		nl.setButtonVisible(visible);
+	}
+
+	private void updateNodeTitle(Node node) {
+		mindMap.updateNodeTile(node);
 
 	}
 
 	@Override
 	public void onAddClick(Node node) {
-		Node childNode = new Node();
-		childNode.setParentNode(node);
-		childNode.title = "child node";
-		mindMap.addNode(childNode);
-
-		NodeLayout nv = createNodeLayout(childNode);
-		mindMapPad.addView(nv);
-
-		LinkView lv = createLinkView(childNode);
-		mindMapPad.addView(lv, 0);
-
+		if (!TextUtils.isEmpty(node.title)) {
+			addNode(node);
+		}
 	}
 
 	@Override
 	public void onDeleteClick(Node node) {
+		deleteNode(node);
+	}
+
+	private void addNode(Node parentNode) {
+		Node childNode = new Node();
+		childNode.title = "test";
+		childNode.setParentNode(parentNode);
+		mindMap.addNode(childNode);
+
+		NodeLayout nv = createNodeLayout(childNode);
+		nv.setEditEnable(true);
+		mindMapPad.addView(nv);
+		nv.requestEditFocus();
+
+		int addIndex = mindMap.getNodes().size() - 2;
+		LinkView lv = createLinkView(childNode);
+		mindMapPad.addView(lv, addIndex);
+	}
+
+	private void deleteNode(Node node) {
 		List<Node> nodeList = mindMap.removeNode(node);
 		for (Node n : nodeList) {
 			View nodeView = mindMapPad.findViewById((int) n._id);
@@ -125,7 +165,6 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 			View linkView = mindMapPad.findViewWithTag(n._id);
 			mindMapPad.removeView(linkView);
 		}
-
 	}
 
 	private NodeLayout createNodeLayout(Node node) {
@@ -146,6 +185,23 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 		lv.setLink(node.parentNode.x, node.parentNode.y, node.x, node.y);
 		lv.setTag(node._id);
 		return lv;
+	}
+
+	@Override
+	protected void onDestroy() {
+		if (currentFocusedNode != null) {
+			String title = currentFocusedNode.getTitle();
+			Node node = (Node) currentFocusedNode.getTag();
+			if (TextUtils.isEmpty(title.trim())) {
+				if (TextUtils.isEmpty(node.title)) {
+					deleteNode(node);
+				}
+			} else if (!title.equals(node.title)) {
+				node.title = title;
+				updateNodeTitle(node);
+			}
+		}
+		super.onDestroy();
 	}
 
 }

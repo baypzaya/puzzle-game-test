@@ -24,6 +24,7 @@ public class NodeLayout extends LinearLayout implements INode, OnClickListener {
 
 	public void setNode(Node node) {
 		this.node = node;
+		etn.setTag(node);
 	}
 
 	public NodeLayout(Context context, AttributeSet attrs) {
@@ -87,6 +88,11 @@ public class NodeLayout extends LinearLayout implements INode, OnClickListener {
 	public void setOnButtonListener(OnButtonClickListener listener){
 		this.listener = listener;
 	}
+	
+	
+	public boolean requestEditFocus(){
+		return etn.requestFocus();
+	}
 
 	@Override
 	public void onClick(View v) {
@@ -117,6 +123,11 @@ public class NodeLayout extends LinearLayout implements INode, OnClickListener {
 		public void onAddClick(Node node);
 
 		public void onDeleteClick(Node node);
+	}
+
+	public void setButtonVisible(int visible) {
+		ivAdd.setVisibility(visible);
+		ivDelete.setVisibility(visible);
 	}
 
 }

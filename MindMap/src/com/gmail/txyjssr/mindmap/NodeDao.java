@@ -49,9 +49,16 @@ public class NodeDao extends BaseDao {
 		return node;
 	}
 
-	public List<Node> getNodesBy(long id) {
-		String selection = COLUMN_ID + " = ? or " + COLUMN_PARENTNODEID + " = ?";
-		String[] selectionArgs = new String[] { "" + id, "" + id };
+	public List<Node> getNodesBy(long id, boolean holdRootNode) {
+		String selection = "";
+		String[] selectionArgs = null;
+		if (!holdRootNode) {
+			selection = COLUMN_ID + " = ? or " + COLUMN_PARENTNODEID + " = ?";
+			selectionArgs = new String[] { "" + id, "" + id };
+		} else {
+			selection = COLUMN_PARENTNODEID + " = ?";
+			selectionArgs = new String[] { "" + id};
+		}
 		Cursor c = mDBManager.qury(TABLE_NAME, null, selection, selectionArgs, null, null);
 
 		List<Node> nodeList = new ArrayList<Node>();
@@ -66,9 +73,16 @@ public class NodeDao extends BaseDao {
 		return nodeList;
 	}
 
-	public void deleteNodesBy(long id) {
-		String whereClause = COLUMN_ID + " = ? or " + COLUMN_PARENTNODEID + " = ?";
-		String[] whereArgs = new String[] { "" + id, "" + id };
+	public void deleteNodesBy(long id, boolean holdRootNode) {
+		String whereClause = "";
+		String[] whereArgs = null;
+		if (!holdRootNode) {
+			whereClause = COLUMN_ID + " = ? or " + COLUMN_PARENTNODEID + " = ?";
+			whereArgs = new String[] { "" + id, "" + id };
+		} else {
+			whereClause = COLUMN_PARENTNODEID + " = ?";
+			whereArgs = new String[] {"" + id };
+		}
 		mDBManager.delete(TABLE_NAME, whereClause, whereArgs);
 	}
 

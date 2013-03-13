@@ -59,4 +59,14 @@ public class MindMapDao extends BaseDao {
 
 		return tmmList;
 	}
+
+	public void updateMindMapnnName(long mindMapId, String name) {
+		ContentValues values = new ContentValues();
+		values.put(COLUMN_NAME, name);
+
+		String whereClause = COLUMN_ID + " = ?";
+		String[] whereArgs = new String[] { "" + mindMapId };
+		mDBManager.update(TABLE_MINDMAP, values, whereClause, whereArgs);
+		
+	}
 }

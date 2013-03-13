@@ -5,11 +5,11 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
-import android.util.Log;
+import android.graphics.Path;
 import android.view.View;
 
 public class LinkView extends View {
-	private final int strokeWidth = 10;
+	private final int strokeWidth = 2;
 
 	public float startX;
 	public float startY;
@@ -23,25 +23,35 @@ public class LinkView extends View {
 		paint = new Paint();
 		paint.setAntiAlias(true);
 		paint.setColor(Color.BLACK);
-		paint.setStyle(Style.FILL);
-		paint.setStrokeWidth(20);
+		paint.setStrokeWidth(strokeWidth);
+        paint.setStyle(Style.STROKE); 
 	}
 
 	@Override
 	protected void onDraw(Canvas canvas) {
-
-		Paint paint = new Paint();
-		paint.setAntiAlias(true);
-		paint.setColor(Color.BLACK);
-		paint.setStyle(Style.FILL);
-		paint.setStrokeWidth(strokeWidth);
+		canvas.drawColor(Color.TRANSPARENT);
+		
 
 		int padding = strokeWidth / 2;
 		if((startY<endY&&startX<endX)||(startY>endY&&startX>endX)){
-			canvas.drawLine(0 + padding, 0 + padding, getMeasuredWidth() - padding, getMeasuredHeight() - padding, paint);
+			drawLineByPath(canvas,0 + padding, 0 + padding, getMeasuredWidth() - padding, getMeasuredHeight() - padding, paint);
 		}else{
-			canvas.drawLine(0 + padding, getMeasuredHeight() - padding, getMeasuredWidth() - padding, 0 + padding, paint);
+			drawLineByPath(canvas,0 + padding, getMeasuredHeight() - padding, getMeasuredWidth() - padding, 0 + padding, paint);
 		}
+	}
+	
+	private void drawLineByPath(Canvas canvas,float startX, float startY, float stopX, float stopY, Paint paint){
+		float controlX = (startX+stopX)/2;
+		 Path path = new Path();  
+         path.moveTo(startX,startY);  
+         path.cubicTo(controlX, startY,   
+        		 controlX, stopY,   
+                 stopX, stopY);  
+         canvas.drawPath(path, paint);  
+//         canvas.drawLine(mPoints[C_START].x,mPoints[C_START].y,   
+//                 mPoints[C_CONTROL_1].x, mPoints[C_CONTROL_1].y, paint);  
+//         canvas.drawLine(mPoints[C_END].x, mPoints[C_END].y,   
+//                 mPoints[C_CONTROL_2].x, mPoints[C_CONTROL_2].y, paint); 
 	}
 
 	@Override
