@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
@@ -15,9 +16,13 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
 
+import com.gmail.txyjssr.mindmap.EditTextNode.OnMoveListener;
 import com.gmail.txyjssr.mindmap.NodeLayout.OnButtonClickListener;
 
-public class MindMapActivity extends Activity implements OnClickListener, OnFocusChangeListener, OnButtonClickListener {
+public class MindMapActivity extends Activity implements OnClickListener, OnFocusChangeListener, OnButtonClickListener,
+		OnMoveListener {
+	private static final int REQUST_CODE_MANAGE_MINDMAP = 1;
+
 	private FrameLayout mindMapPad;
 	private MindMapManager mindMapManager;
 	private MindMap mindMap;
@@ -45,6 +50,7 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 	}
 
 	private void createMindMapUI(MindMap mindMap) {
+		mindMapPad.removeAllViews();
 		List<Node> nodeList = mindMap.getNodes();
 		for (Node node : nodeList) {
 			NodeLayout nl = createNodeLayout(node);
@@ -69,10 +75,27 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 			switch (id) {
 			case R.id.btn_mind_map:
 				Intent intent = new Intent(this, MMManagerActivity.class);
-				startActivity(intent);
+				startActivityForResult(intent, REQUST_CODE_MANAGE_MINDMAP);
 				break;
 			}
 		}
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == REQUST_CODE_MANAGE_MINDMAP) {
+			if (resultCode == MMManagerActivity.RESULT_CODE_NEW) {
+				mindMap = mindMapManager.createMindMap();
+				createMindMapUI(mindMap);
+			} else if (resultCode == MMManagerActivity.RESULT_CODE_OPEN) {
+				long mindMapId = data.getLongExtra(MMManagerActivity.EXTRA_OPEN_MINDMAP_ID, -1);
+				if (mindMapId != -1 && mindMapId != mindMap.mindMapId) {
+					mindMap = mindMapManager.getMindMapBy(mindMapId);
+					createMindMapUI(mindMap);
+				}
+			}
+		}
+
 	}
 
 	@Override
@@ -177,6 +200,7 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 		nv.setEditEnable(false);
 		nv.setOnButtonListener(this);
 		nv.setOnFocusChangeListener(this);
+		nv.setOnMoveListener(this);
 		return nv;
 	}
 
@@ -202,6 +226,32 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 			}
 		}
 		super.onDestroy();
+	}
+
+	@Override
+	public void onMove(EditTextNode etn) {
+		Node node = (Node) etn.getTag();
+		LinkView lv = (LinkView) mindMapPad.findViewWithTag(node._id);
+		if (lv != null) {
+			lv.childX = etn.getPointX();
+			lv.childY = etn.getPointY();
+		}
+		List<Node> childrenNodes = node.nodeChildren;
+		for(Node n:childrenNodes){
+			LinkView tlv = (LinkView) mindMapPad.findViewWithTag(n._id);
+			if (tlv != null) {
+				tlv.parentX = etn.getPointX();
+				tlv.parentY = etn.getPointY();
+			}
+		}
+	}
+
+	@Override
+	public void endMove(EditTextNode etn) {
+		Node node = (Node) etn.getTag();
+		node.x = etn.getPointX();;
+		node.y = etn.getPointY();
+		mindMap.updateNodeLocation(node);
 	}
 
 }

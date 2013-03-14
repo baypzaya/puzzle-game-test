@@ -62,4 +62,19 @@ public class MindMapManager {
 		}
 	}
 
+	public MindMap getMindMapBy(long mindMapId) {
+		MindMap mindMap = new MindMap();
+		TabMindMap tmm = mindMapDao.getMindMapBy(mindMapId);
+		if (tmm == null) {
+			return null;
+		}
+
+		mindMap.mindMapId = tmm._id;
+		mindMap.nodeList = nodeDao.getAllNodesBy(tmm._id);
+		orderNodeList(mindMap.nodeList);
+		
+		updateRecentMindMap(mindMapId);
+		return mindMap;
+	}
+
 }

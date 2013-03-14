@@ -67,4 +67,8 @@ public class MindMap {
 			mindMapDao.updateMindMapnnName(mindMapId,name);
 		}
 	}
+
+	public void updateNodeLocation(Node node) {
+		nodeDao.update(node);
+	}
 }

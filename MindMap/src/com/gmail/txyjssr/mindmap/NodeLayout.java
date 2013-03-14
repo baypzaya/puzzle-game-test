@@ -1,5 +1,7 @@
 package com.gmail.txyjssr.mindmap;
 
+import com.gmail.txyjssr.mindmap.EditTextNode.OnMoveListener;
+
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -78,6 +80,10 @@ public class NodeLayout extends LinearLayout implements INode, OnClickListener {
 	@Override
 	public String getTitle() {
 		return etn.getTitle();
+	}
+	
+	public void setOnMoveListener(OnMoveListener onMoveListener) {
+		etn.setOnMoveListener(onMoveListener);
 	}
 
 	@Override
