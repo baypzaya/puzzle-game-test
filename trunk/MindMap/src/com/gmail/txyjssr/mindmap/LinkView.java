@@ -11,10 +11,10 @@ import android.view.View;
 public class LinkView extends View {
 	private final int strokeWidth = 2;
 
-	public float startX;
-	public float startY;
-	public float endX;
-	public float endY;
+	public float parentX;
+	public float parentY;
+	public float childX;
+	public float childY;
 
 	private Paint paint;
 
@@ -33,7 +33,7 @@ public class LinkView extends View {
 		
 
 		int padding = strokeWidth / 2;
-		if((startY<endY&&startX<endX)||(startY>endY&&startX>endX)){
+		if((parentY<childY&&parentX<childX)||(parentY>childY&&parentX>childX)){
 			drawLineByPath(canvas,0 + padding, 0 + padding, getMeasuredWidth() - padding, getMeasuredHeight() - padding, paint);
 		}else{
 			drawLineByPath(canvas,0 + padding, getMeasuredHeight() - padding, getMeasuredWidth() - padding, 0 + padding, paint);
@@ -56,14 +56,14 @@ public class LinkView extends View {
 
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-		setMeasuredDimension((int) Math.abs(endX - startX) + strokeWidth, (int) Math.abs(endY - startY) + strokeWidth);
+		setMeasuredDimension((int) Math.abs(childX - parentX) + strokeWidth, (int) Math.abs(childY - parentY) + strokeWidth);
 	}
 
 	public void setLink(float x, float y, float x2, float y2) {
-		startX = x;
-		startY = y;
-		endX = x2;
-		endY = y2;
+		parentX = x;
+		parentY = y;
+		childX = x2;
+		childY = y2;
 	}
 
 }

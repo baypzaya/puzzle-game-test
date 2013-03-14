@@ -69,4 +69,21 @@ public class MindMapDao extends BaseDao {
 		mDBManager.update(TABLE_MINDMAP, values, whereClause, whereArgs);
 		
 	}
+
+	public TabMindMap getMindMapBy(long mindMapId) {
+		TabMindMap mm = null;
+		String selection = COLUMN_ID + " = ?";
+		String[] selectionArgs = new String[] { "" + mindMapId };
+		Cursor c = mDBManager.qury(TABLE_MINDMAP, null, selection, selectionArgs, null, null);
+		if (c != null && c.moveToFirst()) {
+			mm = new TabMindMap();
+			mm._id = c.getLong(c.getColumnIndex(COLUMN_ID));
+			mm.name = c.getString(c.getColumnIndex(COLUMN_NAME));
+			mm.isCurrent = c.getInt(c.getColumnIndex(COLUMN_ISCURRENT)) == 1;
+
+			c.close();
+		}
+
+		return mm;
+	}
 }

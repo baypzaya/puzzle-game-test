@@ -17,7 +17,7 @@ public class Node extends BaseData{
 	
 	
 	public Node parentNode;
-	private List<Node> nodeChildren = new ArrayList<Node>();
+	public List<Node> nodeChildren = new ArrayList<Node>();
 	
 	public void addChild(Node childNode) {
 		nodeChildren.add(childNode);

@@ -54,8 +54,8 @@ public class MindMapView extends FrameLayout {
 				child.layout(centerX - width, centerY - height, centerX + width, centerY + height);
 			} else if (child instanceof LinkView) {
 				LinkView linkView = (LinkView) child;
-				int childCenterX = (int) ((linkView.startX + linkView.endX) / 2 * currentScale);
-				int childCenterY = (int) ((linkView.startY + linkView.endY) / 2 * currentScale);
+				int childCenterX = (int) ((linkView.parentX + linkView.childX) / 2 * currentScale);
+				int childCenterY = (int) ((linkView.parentY + linkView.childY) / 2 * currentScale);
 				centerX = (r - l) / 2 + childCenterX;
 				centerY = (b - t) / 2 + childCenterY;
 				width = (int) (linkView.getMeasuredWidth() * currentScale / 2);
@@ -69,70 +69,103 @@ public class MindMapView extends FrameLayout {
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-//		if (event.getPointerCount() == 1) {
-//			if (lastTouchMode != TOUCH_MODE_SINGLE) {
-//				distancePoints = 0;
-//				downX = event.getX();
-//				downY = event.getY();
-//				lastTouchMode = TOUCH_MODE_SINGLE;
-//			}
-//			int action = event.getAction();
-//			switch (action) {
-//			case MotionEvent.ACTION_DOWN:
-//				downX = event.getX();
-//				downY = event.getY();
-//				break;
-//			case MotionEvent.ACTION_MOVE:
-//				float moveX = event.getX();
-//				float moveY = event.getY();
-//				scrollBy((int) (downX - moveX), (int) (downY - moveY));
-//				downX = moveX;
-//				downY = moveY;
-//				break;
-//			case MotionEvent.ACTION_UP:
-//				break;
-//			}
-//			return true;
-//		} 
-//		else if (event.getPointerCount() == 2) {
-//			if (lastTouchMode != TOUCH_MODE_DOUBLE) {
-//				lastTouchMode = TOUCH_MODE_DOUBLE;
-//			}
-//			int action = event.getAction();
-//			switch (action) {
-//			case MotionEvent.ACTION_DOWN:
-//				float downX0 = event.getX(0);
-//				float downY0 = event.getY(0);
-//				float downX1 = event.getX(1);
-//				float downY1 = event.getY(1);
-//				distancePoints = (float) Math.sqrt((downX0 - downX1) * (downX0 - downX1) + (downY0 - downY1)
-//						* (downY0 - downY1));
-//				break;
-//			case MotionEvent.ACTION_MOVE:
-//				float moveX0 = event.getX(0);
-//				float moveY0 = event.getY(0);
-//				float moveX1 = event.getX(1);
-//				float moveY1 = event.getY(1);
-//				float moveDistancePoints = (float) Math.sqrt((moveX0 - moveX1) * (moveX0 - moveX1) + (moveY0 - moveY1)
-//						* (moveY0 - moveY1));
-//				if (distancePoints != 0) {
-//					float scale = moveDistancePoints / distancePoints;
-//					currentScale = scale;
-//					currentScale = currentScale > 3 ? 3 : currentScale;
-//					currentScale = currentScale < 0.3f ? 0.3f : currentScale;
-//					requestLayout();
-//				} else {
-//					distancePoints = moveDistancePoints / currentScale;
-//				}
-//				// invalidate();
-//				break;
-//			case MotionEvent.ACTION_UP:
-//				distancePoints = 0;
-//				break;
-//			}
-//			return true;
-//		}
-//		lastTouchMode = TOUCH_MODE_NONE;
-		return super.onTouchEvent(event);
+		// if (event.getPointerCount() == 1) {
+		int action = event.getAction();
+		switch (action) {
+		case MotionEvent.ACTION_DOWN:
+			lastTouchMode = TOUCH_MODE_NONE;
+			distancePoints = 0;
+			downX = event.getX();
+			downY = event.getY();
+			break;
+		case MotionEvent.ACTION_MOVE:
+			if (event.getPointerCount() == 1) {
+				float moveX = event.getX();
+				float moveY = event.getY();
+				
+				if (lastTouchMode == TOUCH_MODE_NONE && (Math.abs(downX - moveX) > 20 || Math.abs(downY - moveY) > 20)) {
+					lastTouchMode = TOUCH_MODE_SINGLE;
+				}else if(lastTouchMode == TOUCH_MODE_DOUBLE){
+					lastTouchMode = TOUCH_MODE_NONE;
+					downX = moveX;
+					downY = moveY;
+				}
+				
+				if (lastTouchMode == TOUCH_MODE_SINGLE) {
+					scrollBy((int) (downX - moveX), (int) (downY - moveY));
+					downX = moveX;
+					downY = moveY;
+				}
+			}else if (event.getPointerCount() == 2) {
+				lastTouchMode = TOUCH_MODE_DOUBLE;
+				float moveX0 = event.getX(0);
+				float moveY0 = event.getY(0);
+				float moveX1 = event.getX(1);
+				float moveY1 = event.getY(1);
+				float moveDistancePoints = (float) Math.sqrt((moveX0 - moveX1) * (moveX0 - moveX1) + (moveY0 - moveY1)
+						* (moveY0 - moveY1));
+				if (distancePoints != 0) {
+					float scale = moveDistancePoints / distancePoints;
+					currentScale = scale;
+					currentScale = currentScale > 3 ? 3 : currentScale;
+					currentScale = currentScale < 0.3f ? 0.3f : currentScale;
+					requestLayout();
+				} else {
+					distancePoints = moveDistancePoints / currentScale;
+				}
+			}
+			break;
+		case MotionEvent.ACTION_UP:
+			break;
+		}
+
+		if (lastTouchMode == TOUCH_MODE_NONE) {
+			return super.onTouchEvent(event);
+		} else {
+			return true;
+		}
+		// } else if (event.getPointerCount() == 2) {
+		// if (lastTouchMode != TOUCH_MODE_DOUBLE) {
+		// lastTouchMode = TOUCH_MODE_DOUBLE;
+		// }
+		// int action = event.getAction();
+		// switch (action) {
+		// case MotionEvent.ACTION_DOWN:
+		// Log.i("yujsh log", "double action down");
+		// float downX0 = event.getX(0);
+		// float downY0 = event.getY(0);
+		// float downX1 = event.getX(1);
+		// float downY1 = event.getY(1);
+		// distancePoints = (float) Math.sqrt((downX0 - downX1) * (downX0 -
+		// downX1) + (downY0 - downY1)
+		// * (downY0 - downY1));
+		// break;
+		// case MotionEvent.ACTION_MOVE:
+		// float moveX0 = event.getX(0);
+		// float moveY0 = event.getY(0);
+		// float moveX1 = event.getX(1);
+		// float moveY1 = event.getY(1);
+		// float moveDistancePoints = (float) Math.sqrt((moveX0 - moveX1) *
+		// (moveX0 - moveX1) + (moveY0 - moveY1)
+		// * (moveY0 - moveY1));
+		// if (distancePoints != 0) {
+		// float scale = moveDistancePoints / distancePoints;
+		// currentScale = scale;
+		// currentScale = currentScale > 3 ? 3 : currentScale;
+		// currentScale = currentScale < 0.3f ? 0.3f : currentScale;
+		// requestLayout();
+		// } else {
+		// distancePoints = moveDistancePoints / currentScale;
+		// }
+		// // invalidate();
+		// break;
+		// case MotionEvent.ACTION_UP:
+		// distancePoints = 0;
+		// lastTouchMode = TOUCH_MODE_NONE;
+		// break;
+		// }
+		// return true;
+		// }
+
 	}
 }
