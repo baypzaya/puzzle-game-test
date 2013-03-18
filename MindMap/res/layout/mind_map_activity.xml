@@ -2,13 +2,17 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
-	<EditText android:id="@+id/et_focus" android:layout_width="wrap_content"
+
+    <EditText
+        android:id="@+id/et_focus"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        />
+        android:background="@android:color/transparent" />
+
     <LinearLayout
         android:id="@+id/tools_bar"
         android:layout_width="match_parent"
-        android:layout_height="50dip"
+        android:layout_height="40dip"
         android:layout_gravity="center_vertical"
         android:background="@android:drawable/title_bar"
         android:gravity="right"
@@ -18,17 +22,77 @@
             android:id="@+id/btn_mind_map"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
-            android:layout_margin="4dip"
-            android:text="@string/btn_mind_map" />
-
+            android:text="@string/btn_mind_map" 
+            android:background="@drawable/bottom_bar_item_selector"/>
     </LinearLayout>
 
     <com.gmail.txyjssr.mindmap.MindMapView
         android:id="@+id/fl_pad"
-        android:layout_below="@id/tools_bar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/tools_bar"
         android:orientation="vertical" >
     </com.gmail.txyjssr.mindmap.MindMapView>
+
+    <LinearLayout
+        android:id="@+id/bottom_bar"
+        android:layout_width="match_parent"
+        android:layout_height="50dip"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="center_vertical"
+        android:background="@android:drawable/title_bar"
+        android:orientation="horizontal" >
+
+        <ImageView
+            android:id="@+id/iv_root"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:background="@drawable/bottom_bar_item_selector"
+            android:scaleType="centerInside"
+            android:src="@drawable/node_root" />
+
+        <View
+            android:layout_width="1px"
+            android:layout_height="fill_parent"
+            android:background="@drawable/menu_divider" />
+
+        <ImageView
+            android:id="@+id/iv_clear"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:background="@drawable/bottom_bar_item_selector"
+            android:scaleType="centerInside"
+            android:src="@drawable/node_clear" />
+
+        <View
+            android:layout_width="1px"
+            android:layout_height="fill_parent"
+            android:background="@drawable/menu_divider" />
+
+        <ImageView
+            android:id="@+id/iv_delete"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:background="@drawable/bottom_bar_item_selector"
+            android:scaleType="centerInside"
+            android:src="@drawable/node_delete" />
+
+        <View
+            android:layout_width="1px"
+            android:layout_height="fill_parent"
+            android:background="@drawable/menu_divider" />
+
+        <ImageView
+            android:id="@+id/iv_add"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:background="@drawable/bottom_bar_item_selector"
+            android:scaleType="centerInside"
+            android:src="@drawable/node_add" />
+    </LinearLayout>
 
 </RelativeLayout>

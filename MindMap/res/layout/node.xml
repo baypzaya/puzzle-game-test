@@ -10,7 +10,7 @@
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:background="#80ff0000"
-        android:visibility="invisible" />
+        android:visibility="gone" />
 
     <com.gmail.txyjssr.mindmap.EditTextNode
         android:id="@+id/etn_node"
@@ -27,6 +27,6 @@
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:background="#800000ff"
-        android:visibility="invisible" />
+        android:visibility="gone" />
 
 </LinearLayout>

@@ -8,13 +8,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.gmail.txyjssr.mindmap.EditTextNode.OnMoveListener;
@@ -24,7 +24,7 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 		OnMoveListener {
 	private static final int REQUST_CODE_MANAGE_MINDMAP = 1;
 
-	private FrameLayout mindMapPad;
+	private MindMapView mindMapPad;
 	private MindMapManager mindMapManager;
 	private MindMap mindMap;
 	private EditTextNode currentFocusedNode;
@@ -37,8 +37,18 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 
 		Button btnMindMap = (Button) findViewById(R.id.btn_mind_map);
 		btnMindMap.setOnClickListener(this);
+		
+		ImageView ivRoot = (ImageView)findViewById(R.id.iv_root);
+		ImageView ivClear = (ImageView)findViewById(R.id.iv_clear);
+		ImageView ivDelete = (ImageView)findViewById(R.id.iv_delete);
+		ImageView ivAdd = (ImageView)findViewById(R.id.iv_add);
+		ivRoot.setOnClickListener(this);
+		ivClear.setOnClickListener(this);
+		ivDelete.setOnClickListener(this);
+		ivAdd.setOnClickListener(this);
+		
 
-		mindMapPad = (FrameLayout) findViewById(R.id.fl_pad);
+		mindMapPad = (MindMapView) findViewById(R.id.fl_pad);
 		mindMapPad.setOnClickListener(this);
 		mindMapManager = new MindMapManager();
 
@@ -78,8 +88,44 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 				Intent intent = new Intent(this, MMManagerActivity.class);
 				startActivityForResult(intent, REQUST_CODE_MANAGE_MINDMAP);
 				break;
+			case R.id.iv_root:
+				moveToRootNode();
+				break;
+			case R.id.iv_clear:
+				clearNodes();
+				break;
+			case R.id.iv_delete:
+				deleteNode();
+				break;
+			case R.id.iv_add:
+				addNode();
+				break;
 			}
 		}
+	}
+
+	private void addNode() {
+		if(currentFocusedNode!=null){
+			addNode((Node)currentFocusedNode.getTag());
+		}
+	}
+
+	private void deleteNode() {
+		if(currentFocusedNode!=null){
+			deleteNode((Node)currentFocusedNode.getTag());
+		}
+		
+	}
+
+	private void clearNodes() {
+		Node rootNode = mindMap.getRootNode();
+		deleteNode(rootNode);
+		
+	}
+
+	private void moveToRootNode() {
+		Node rootNode = mindMap.getRootNode();
+		mindMapPad.moveToNodeLocation(rootNode.x,rootNode.y);
 	}
 
 	@Override
@@ -144,8 +190,8 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 	}
 
 	private void setButtonVisible(Node node, int visible) {
-		NodeLayout nl = (NodeLayout) findViewById((int) node._id);
-		nl.setButtonVisible(visible);
+//		NodeLayout nl = (NodeLayout) findViewById((int) node._id);
+//		nl.setButtonVisible(visible);
 	}
 
 	private void updateNodeTitle(Node node) {
