@@ -1,10 +1,7 @@
 package com.gmail.txyjssr.mindmap;
 
 import android.content.Context;
-import android.graphics.Camera;
 import android.util.AttributeSet;
-import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -16,7 +13,6 @@ public class MindMapView extends FrameLayout {
 
 	private float downX;
 	private float downY;
-	private Camera camera = new Camera();
 	private float distancePoints = 0;
 
 	private float currentScale = 1f;
@@ -97,22 +93,22 @@ public class MindMapView extends FrameLayout {
 					downY = moveY;
 				}
 			}else if (event.getPointerCount() == 2) {
-				lastTouchMode = TOUCH_MODE_DOUBLE;
-				float moveX0 = event.getX(0);
-				float moveY0 = event.getY(0);
-				float moveX1 = event.getX(1);
-				float moveY1 = event.getY(1);
-				float moveDistancePoints = (float) Math.sqrt((moveX0 - moveX1) * (moveX0 - moveX1) + (moveY0 - moveY1)
-						* (moveY0 - moveY1));
-				if (distancePoints != 0) {
-					float scale = moveDistancePoints / distancePoints;
-					currentScale = scale;
-					currentScale = currentScale > 3 ? 3 : currentScale;
-					currentScale = currentScale < 0.3f ? 0.3f : currentScale;
-					requestLayout();
-				} else {
-					distancePoints = moveDistancePoints / currentScale;
-				}
+//				lastTouchMode = TOUCH_MODE_DOUBLE;
+//				float moveX0 = event.getX(0);
+//				float moveY0 = event.getY(0);
+//				float moveX1 = event.getX(1);
+//				float moveY1 = event.getY(1);
+//				float moveDistancePoints = (float) Math.sqrt((moveX0 - moveX1) * (moveX0 - moveX1) + (moveY0 - moveY1)
+//						* (moveY0 - moveY1));
+//				if (distancePoints != 0) {
+//					float scale = moveDistancePoints / distancePoints;
+//					currentScale = scale;
+//					currentScale = currentScale > 3 ? 3 : currentScale;
+//					currentScale = currentScale < 0.3f ? 0.3f : currentScale;
+//					requestLayout();
+//				} else {
+//					distancePoints = moveDistancePoints / currentScale;
+//				}
 			}
 			break;
 		case MotionEvent.ACTION_UP:

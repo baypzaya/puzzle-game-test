@@ -57,7 +57,7 @@ public class NodeDao extends BaseDao {
 			selectionArgs = new String[] { "" + id, "" + id };
 		} else {
 			selection = COLUMN_PARENTNODEID + " = ?";
-			selectionArgs = new String[] { "" + id};
+			selectionArgs = new String[] { "" + id };
 		}
 		Cursor c = mDBManager.qury(TABLE_NAME, null, selection, selectionArgs, null, null);
 
@@ -81,7 +81,7 @@ public class NodeDao extends BaseDao {
 			whereArgs = new String[] { "" + id, "" + id };
 		} else {
 			whereClause = COLUMN_PARENTNODEID + " = ?";
-			whereArgs = new String[] {"" + id };
+			whereArgs = new String[] { "" + id };
 		}
 		mDBManager.delete(TABLE_NAME, whereClause, whereArgs);
 	}
@@ -98,4 +98,21 @@ public class NodeDao extends BaseDao {
 		return node;
 	}
 
+	public List<Node> getChildNodesBy(long id) {
+		return getNodesBy(id, true);
+	}
+
+	public void deleteNodesBy(List<Node> listNode) {
+		if (listNode != null && listNode.size() > 0) {
+			
+			StringBuffer sb = new StringBuffer("(");
+			for (Node n : listNode) {
+				sb.append(n._id).append(",");
+			}
+			sb.deleteCharAt(sb.length()-1).append(")");
+			String whereClause = COLUMN_ID + " in "+sb.toString();
+//			String[] whereArgs = new String[] {};
+			mDBManager.delete(TABLE_NAME, whereClause, null);
+		}
+	}
 }
