@@ -48,19 +48,29 @@ public class MindMap {
 				double angleT = 0;
 				if (yT == 0) {
 					if(node.parentNode.x > node.parentNode.parentNode.x){
-						angleT = Math.PI /2;
-					}else if(node.parentNode.x > node.parentNode.parentNode.x){
-						angleT = -Math.PI /2;
+						angleT = 0 ;
+					}else if(node.parentNode.x < node.parentNode.parentNode.x){
+						angleT = Math.PI ;
+					}
+				}else if(xT == 0){
+					if(node.parentNode.y > node.parentNode.parentNode.y){
+						angleT = Math.PI/2 ;
+					}else if(node.parentNode.y < node.parentNode.parentNode.y){
+						angleT = -Math.PI/2 ;
 					}
 				} else {
 					angleT = Math.atan(xT / yT);
+					if(node.parentNode.x < node.parentNode.parentNode.x){
+						angleT = Math.PI+angleT ;
+					}
 				}
 				// log code start
 				double angleRT = 180f * angleT / Math.PI;
 
 				Log.i("yujsh log", "angleRT:" + angleRT);
 				// log code end
-				angle = angle - angleT;
+//				angle = angle - angleT;
+				angle = angleT;
 			}
 
 			// log code start
@@ -69,8 +79,8 @@ public class MindMap {
 			Log.i("yujsh log", "angleR:" + angleR);
 			// log code end
 
-			double x = Math.cos(angle) * 300;
-			double y = Math.sin(angle) * 300;
+			double x = Math.cos(angle) * 180;
+			double y = Math.sin(angle) * 180;
 			node.x = node.parentNode.x + Math.round(x);
 			node.y = node.parentNode.y + Math.round(y);
 		}

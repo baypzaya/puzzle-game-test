@@ -19,7 +19,7 @@
         android:maxLength="20"
         android:maxWidth="100dp"
         android:maxHeight="100dp"
-        android:textSize="20dp" 
+        android:textSize="15dp" 
         android:gravity="center"/>
 
     <ImageView
