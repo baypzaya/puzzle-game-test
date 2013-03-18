@@ -15,6 +15,7 @@ import android.view.View.OnFocusChangeListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.gmail.txyjssr.mindmap.EditTextNode.OnMoveListener;
 import com.gmail.txyjssr.mindmap.NodeLayout.OnButtonClickListener;
@@ -165,15 +166,21 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 	}
 
 	private void addNode(Node parentNode) {
+		
+		if(parentNode.nodeChildren.size()>=20){
+			Toast.makeText(this, "the node already had 20 nodes", Toast.LENGTH_LONG).show();
+			return;
+		}
+		
 		Node childNode = new Node();
 		childNode.title = "test";
 		childNode.setParentNode(parentNode);
 		mindMap.addNode(childNode);
 
 		NodeLayout nv = createNodeLayout(childNode);
-		nv.setEditEnable(true);
+//		nv.setEditEnable(true);
 		mindMapPad.addView(nv);
-		nv.requestEditFocus();
+//		nv.requestEditFocus();
 
 		int addIndex = mindMap.getNodes().size() - 2;
 		LinkView lv = createLinkView(childNode);

@@ -5,7 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.gmail.txyjssr.engine.core.EngineApplication;
+import com.gmail.txyjssr.mindmap.EngineApplication;
 
 public class DBManager {
 	private static DBManager sDBManager;
