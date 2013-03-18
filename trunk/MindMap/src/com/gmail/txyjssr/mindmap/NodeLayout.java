@@ -116,13 +116,13 @@ public class NodeLayout extends LinearLayout implements INode, OnClickListener {
 	}
 	
 	public void hideButtons(){
-		ivAdd.setVisibility(View.INVISIBLE);
-		ivDelete.setVisibility(View.INVISIBLE);
+		ivAdd.setVisibility(View.GONE);
+		ivDelete.setVisibility(View.GONE);
 	}
 	
 	public void showButtons(){
-		ivAdd.setVisibility(View.VISIBLE);
-		ivDelete.setVisibility(View.VISIBLE);
+		ivAdd.setVisibility(View.GONE);
+		ivDelete.setVisibility(View.GONE);
 	}
 
 	public interface OnButtonClickListener {

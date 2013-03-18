@@ -65,7 +65,6 @@ public class MindMapView extends FrameLayout {
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		// if (event.getPointerCount() == 1) {
 		int action = event.getAction();
 		switch (action) {
 		case MotionEvent.ACTION_DOWN:
@@ -120,48 +119,9 @@ public class MindMapView extends FrameLayout {
 		} else {
 			return true;
 		}
-		// } else if (event.getPointerCount() == 2) {
-		// if (lastTouchMode != TOUCH_MODE_DOUBLE) {
-		// lastTouchMode = TOUCH_MODE_DOUBLE;
-		// }
-		// int action = event.getAction();
-		// switch (action) {
-		// case MotionEvent.ACTION_DOWN:
-		// Log.i("yujsh log", "double action down");
-		// float downX0 = event.getX(0);
-		// float downY0 = event.getY(0);
-		// float downX1 = event.getX(1);
-		// float downY1 = event.getY(1);
-		// distancePoints = (float) Math.sqrt((downX0 - downX1) * (downX0 -
-		// downX1) + (downY0 - downY1)
-		// * (downY0 - downY1));
-		// break;
-		// case MotionEvent.ACTION_MOVE:
-		// float moveX0 = event.getX(0);
-		// float moveY0 = event.getY(0);
-		// float moveX1 = event.getX(1);
-		// float moveY1 = event.getY(1);
-		// float moveDistancePoints = (float) Math.sqrt((moveX0 - moveX1) *
-		// (moveX0 - moveX1) + (moveY0 - moveY1)
-		// * (moveY0 - moveY1));
-		// if (distancePoints != 0) {
-		// float scale = moveDistancePoints / distancePoints;
-		// currentScale = scale;
-		// currentScale = currentScale > 3 ? 3 : currentScale;
-		// currentScale = currentScale < 0.3f ? 0.3f : currentScale;
-		// requestLayout();
-		// } else {
-		// distancePoints = moveDistancePoints / currentScale;
-		// }
-		// // invalidate();
-		// break;
-		// case MotionEvent.ACTION_UP:
-		// distancePoints = 0;
-		// lastTouchMode = TOUCH_MODE_NONE;
-		// break;
-		// }
-		// return true;
-		// }
+	}
 
+	public void moveToNodeLocation(float x, float y) {
+		scrollTo((int)x, (int)y);
 	}
 }

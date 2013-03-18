@@ -136,4 +136,13 @@ public class MindMap {
 	public void updateNodeLocation(Node node) {
 		nodeDao.update(node);
 	}
+
+	public Node getRootNode() {
+		for(Node n : nodeList){
+			if(n.isRootNode){
+				return n;
+			}
+		}
+		return null;
+	}
 }
