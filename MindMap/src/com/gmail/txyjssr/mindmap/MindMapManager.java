@@ -39,6 +39,7 @@ public class MindMapManager {
 		}
 
 		mindMap.mindMapId = tmm._id;
+		mindMap.name = tmm.name;
 		mindMap.nodeList = nodeDao.getAllNodesBy(tmm._id);
 		orderNodeList(mindMap.nodeList);
 		return mindMap;

@@ -15,6 +15,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gmail.txyjssr.mindmap.EditTextNode.OnMoveListener;
@@ -35,18 +36,19 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.mind_map_activity);
 
-		Button btnMindMap = (Button) findViewById(R.id.btn_mind_map);
-		btnMindMap.setOnClickListener(this);
+		ImageView ivMindMapMore = (ImageView) findViewById(R.id.iv_mind_map_more);
+		ivMindMapMore.setOnClickListener(this);
 		
 		ImageView ivRoot = (ImageView)findViewById(R.id.iv_root);
 		ImageView ivClear = (ImageView)findViewById(R.id.iv_clear);
 		ImageView ivDelete = (ImageView)findViewById(R.id.iv_delete);
 		ImageView ivAdd = (ImageView)findViewById(R.id.iv_add);
+		ImageView ivEdit = (ImageView)findViewById(R.id.iv_edit);
 		ivRoot.setOnClickListener(this);
 		ivClear.setOnClickListener(this);
 		ivDelete.setOnClickListener(this);
 		ivAdd.setOnClickListener(this);
-		
+		ivEdit.setOnClickListener(this);
 
 		mindMapPad = (MindMapView) findViewById(R.id.fl_pad);
 		mindMapPad.setOnClickListener(this);
@@ -61,6 +63,8 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 	}
 
 	private void createMindMapUI(MindMap mindMap) {
+		TextView tvName = (TextView)findViewById(R.id.tv_mind_map_name);
+		tvName.setText(mindMap.name);
 		mindMapPad.removeAllViews();
 		List<Node> nodeList = mindMap.getNodes();
 		for (Node node : nodeList) {
@@ -84,7 +88,7 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 		} else {
 			int id = v.getId();
 			switch (id) {
-			case R.id.btn_mind_map:
+			case R.id.iv_mind_map_more:
 				Intent intent = new Intent(this, MMManagerActivity.class);
 				startActivityForResult(intent, REQUST_CODE_MANAGE_MINDMAP);
 				break;
@@ -100,8 +104,16 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 			case R.id.iv_add:
 				addNode();
 				break;
+			case R.id.iv_edit:
+				editNode();
+				break;
 			}
 		}
+	}
+
+	private void editNode() {
+		//show dialog
+		
 	}
 
 	private void addNode() {
