@@ -72,10 +72,10 @@ public class NodeLayout extends LinearLayout implements INode, OnClickListener {
 		return etn.getPointY();
 	}
 
-	public void setEditEnable(boolean b) {
-		etn.setEditEnable(b);
-
-	}
+//	public void setEditEnable(boolean b) {
+//		etn.setEditEnable(b);
+//
+//	}
 
 	@Override
 	public String getTitle() {

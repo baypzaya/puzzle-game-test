@@ -4,6 +4,7 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,8 +13,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,8 +20,7 @@ import android.widget.Toast;
 import com.gmail.txyjssr.mindmap.EditTextNode.OnMoveListener;
 import com.gmail.txyjssr.mindmap.NodeLayout.OnButtonClickListener;
 
-public class MindMapActivity extends Activity implements OnClickListener, OnFocusChangeListener, OnButtonClickListener,
-		OnMoveListener {
+public class MindMapActivity extends Activity implements OnClickListener, OnFocusChangeListener, OnMoveListener {
 	private static final int REQUST_CODE_MANAGE_MINDMAP = 1;
 
 	private MindMapView mindMapPad;
@@ -38,12 +36,12 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 
 		ImageView ivMindMapMore = (ImageView) findViewById(R.id.iv_mind_map_more);
 		ivMindMapMore.setOnClickListener(this);
-		
-		ImageView ivRoot = (ImageView)findViewById(R.id.iv_root);
-		ImageView ivClear = (ImageView)findViewById(R.id.iv_clear);
-		ImageView ivDelete = (ImageView)findViewById(R.id.iv_delete);
-		ImageView ivAdd = (ImageView)findViewById(R.id.iv_add);
-		ImageView ivEdit = (ImageView)findViewById(R.id.iv_edit);
+
+		ImageView ivRoot = (ImageView) findViewById(R.id.iv_root);
+		ImageView ivClear = (ImageView) findViewById(R.id.iv_clear);
+		ImageView ivDelete = (ImageView) findViewById(R.id.iv_delete);
+		ImageView ivAdd = (ImageView) findViewById(R.id.iv_add);
+		ImageView ivEdit = (ImageView) findViewById(R.id.iv_edit);
 		ivRoot.setOnClickListener(this);
 		ivClear.setOnClickListener(this);
 		ivDelete.setOnClickListener(this);
@@ -63,7 +61,7 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 	}
 
 	private void createMindMapUI(MindMap mindMap) {
-		TextView tvName = (TextView)findViewById(R.id.tv_mind_map_name);
+		TextView tvName = (TextView) findViewById(R.id.tv_mind_map_name);
 		tvName.setText(mindMap.name);
 		mindMapPad.removeAllViews();
 		List<Node> nodeList = mindMap.getNodes();
@@ -76,14 +74,13 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 			}
 
 		}
+		Node rootNode =mindMap.getRootNode();
+		mindMapPad.scrollTo((int)rootNode.x,(int)rootNode.y);
 	}
 
 	@Override
 	public void onClick(View v) {
 		if (v instanceof MindMapView) {
-			if (currentFocusedNode != null) {
-				currentFocusedNode.setEditEnable(false);
-			}
 			findViewById(R.id.et_focus).requestFocus();
 		} else {
 			int id = v.getId();
@@ -112,32 +109,75 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 	}
 
 	private void editNode() {
-		//show dialog
-		
+		if (currentFocusedNode != null) {
+			DialogUtils.showInputDialog(this, "修改新节点", null, new InputListener() {
+
+				@Override
+				public void onInputCompleted(String inputStr) {
+					if (!TextUtils.isEmpty(inputStr)) {
+						editNode((Node) currentFocusedNode.getTag(), inputStr);
+					}
+				}
+			});
+
+		}
+
 	}
 
 	private void addNode() {
-		if(currentFocusedNode!=null){
-			addNode((Node)currentFocusedNode.getTag());
+		if (currentFocusedNode != null) {
+			DialogUtils.showInputDialog(this, "添加新节点", null, new InputListener() {
+
+				@Override
+				public void onInputCompleted(String inputStr) {
+					if (!TextUtils.isEmpty(inputStr)) {
+						addNode((Node) currentFocusedNode.getTag(), inputStr);
+					}
+				}
+			});
+
 		}
 	}
 
 	private void deleteNode() {
-		if(currentFocusedNode!=null){
-			deleteNode((Node)currentFocusedNode.getTag());
+		if (currentFocusedNode != null) {
+			final Node node = (Node) currentFocusedNode.getTag();
+			String message = "您确定删除节点(" + node.title + ")";
+			DialogUtils.showHintDilog(this, message, "删除", "取消", new DialogInterface.OnClickListener() {
+
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					if (which == DialogInterface.BUTTON_POSITIVE) {
+						deleteNode(node);
+					}
+
+				}
+
+			});
+
 		}
-		
+
 	}
 
 	private void clearNodes() {
-		Node rootNode = mindMap.getRootNode();
-		deleteNode(rootNode);
-		
+		final Node rootNode = mindMap.getRootNode();
+		String message = "您确定删除全部节点?";
+		DialogUtils.showHintDilog(this, message, "删除全部", "取消", new DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				if (which == DialogInterface.BUTTON_POSITIVE) {
+					deleteNode(rootNode);
+				}
+			}
+
+		});
+
 	}
 
 	private void moveToRootNode() {
 		Node rootNode = mindMap.getRootNode();
-		mindMapPad.moveToNodeLocation(rootNode.x,rootNode.y);
+		mindMapPad.moveToNodeLocation(rootNode.x, rootNode.y);
 	}
 
 	@Override
@@ -162,87 +202,59 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 		if (v instanceof EditTextNode) {
 			EditTextNode etNode = (EditTextNode) v;
 			if (etNode.isFocused()) {
-
-				if (currentFocusedNode != null)
-					currentFocusedNode.setEditEnable(false);
 				currentFocusedNode = etNode;
-				setButtonVisible((Node) etNode.getTag(), View.VISIBLE);
-				Runnable r = new Runnable() {
-
-					@Override
-					public void run() {
-						currentFocusedNode.setEditEnable(true);
-					}
-				};
-				mHandler.postDelayed(r, 100);
 			} else {
-				setButtonVisible((Node) etNode.getTag(), View.INVISIBLE);
 				InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 				imm.hideSoftInputFromWindow(etNode.getWindowToken(), 0);
-				EditTextNode etn = (EditTextNode) v;
-				String title = etn.getTitle();
-				Node node = (Node) etn.getTag();
-				if (TextUtils.isEmpty(title.trim())) {
-					if (TextUtils.isEmpty(node.title)) {
-						deleteNode(node);
-					} else {
-						etNode.setText(node.title);
-					}
-				} else if (!title.equals(node.title)) {
-					node.title = title;
-					updateNodeTitle(node);
-				}
-				etNode.setEditEnable(false);
 				currentFocusedNode = null;
 			}
 		} else {
 			currentFocusedNode = null;
 		}
 
-	}
-
-	private void setButtonVisible(Node node, int visible) {
-//		NodeLayout nl = (NodeLayout) findViewById((int) node._id);
-//		nl.setButtonVisible(visible);
-	}
-
-	private void updateNodeTitle(Node node) {
-		mindMap.updateNodeTile(node);
-
-	}
-
-	@Override
-	public void onAddClick(Node node) {
-		if (!TextUtils.isEmpty(node.title)) {
-			addNode(node);
+		if (currentFocusedNode != null) {
+			findViewById(R.id.bottom_bar).setVisibility(View.VISIBLE);
+		} else {
+			findViewById(R.id.bottom_bar).setVisibility(View.GONE);
 		}
+
 	}
 
-	@Override
-	public void onDeleteClick(Node node) {
-		deleteNode(node);
-	}
+	// private void updateNodeTitle(Node node) {
+	//
+	// }
 
-	private void addNode(Node parentNode) {
-		
-		if(parentNode.nodeChildren.size()>=20){
+	private void addNode(Node parentNode, String nodeTitle) {
+
+		if (parentNode.nodeChildren.size() >= 20) {
 			Toast.makeText(this, "the node already had 20 nodes", Toast.LENGTH_LONG).show();
 			return;
 		}
-		
+
 		Node childNode = new Node();
-		childNode.title = "test";
+		childNode.title = nodeTitle;
 		childNode.setParentNode(parentNode);
 		mindMap.addNode(childNode);
 
 		NodeLayout nv = createNodeLayout(childNode);
-//		nv.setEditEnable(true);
 		mindMapPad.addView(nv);
-//		nv.requestEditFocus();
+		nv.requestEditFocus();
 
 		int addIndex = mindMap.getNodes().size() - 2;
 		LinkView lv = createLinkView(childNode);
 		mindMapPad.addView(lv, addIndex);
+	}
+
+	private void editNode(Node node, String nodeTile) {
+
+		if (!TextUtils.isEmpty(nodeTile.trim())) {
+			node.title = nodeTile;
+			mindMap.updateNodeTile(node);
+			NodeLayout nl = (NodeLayout) findViewById((int) node._id);
+			nl.setTitle(nodeTile);
+			TextView tvMindMapName = (TextView) findViewById(R.id.tv_mind_map_name);
+			tvMindMapName.setText(mindMap.name);
+		}
 	}
 
 	private void deleteNode(Node node) {
@@ -262,8 +274,6 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 		nv.setLocation(node.x, node.y);
 
 		nv.setNode(node);
-		nv.setEditEnable(false);
-		nv.setOnButtonListener(this);
 		nv.setOnFocusChangeListener(this);
 		nv.setOnMoveListener(this);
 		return nv;
@@ -278,18 +288,6 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 
 	@Override
 	protected void onDestroy() {
-		if (currentFocusedNode != null) {
-			String title = currentFocusedNode.getTitle();
-			Node node = (Node) currentFocusedNode.getTag();
-			if (TextUtils.isEmpty(title.trim())) {
-				if (TextUtils.isEmpty(node.title)) {
-					deleteNode(node);
-				}
-			} else if (!title.equals(node.title)) {
-				node.title = title;
-				updateNodeTitle(node);
-			}
-		}
 		super.onDestroy();
 	}
 
@@ -302,7 +300,7 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 			lv.childY = etn.getPointY();
 		}
 		List<Node> childrenNodes = node.nodeChildren;
-		for(Node n:childrenNodes){
+		for (Node n : childrenNodes) {
 			LinkView tlv = (LinkView) mindMapPad.findViewWithTag(n._id);
 			if (tlv != null) {
 				tlv.parentX = etn.getPointX();
@@ -314,7 +312,7 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 	@Override
 	public void endMove(EditTextNode etn) {
 		Node node = (Node) etn.getTag();
-		node.x = etn.getPointX();;
+		node.x = etn.getPointX();
 		node.y = etn.getPointY();
 		mindMap.updateNodeLocation(node);
 	}
