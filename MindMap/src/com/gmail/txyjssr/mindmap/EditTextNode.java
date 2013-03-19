@@ -1,6 +1,7 @@
 package com.gmail.txyjssr.mindmap;
 
 import android.content.Context;
+import android.text.InputType;
 import android.text.method.ArrowKeyMovementMethod;
 import android.text.method.MovementMethod;
 import android.text.method.TextKeyListener;
@@ -15,6 +16,8 @@ public class EditTextNode extends EditText implements INode {
 	private float x;
 	private float y;
 	private OnMoveListener mMoveListener;
+	
+	private int lastInputType = InputType.TYPE_NULL;
 
 	// public EditTextNode(Context context, Node node) {
 	// super(context);
@@ -33,6 +36,8 @@ public class EditTextNode extends EditText implements INode {
 
 	public EditTextNode(Context context, AttributeSet attrs) {
 		super(context, attrs);
+		lastInputType = getInputType();
+		setInputType(InputType.TYPE_NULL);
 	}
 
 	private float motionX;
@@ -108,14 +113,16 @@ public class EditTextNode extends EditText implements INode {
 		return y;
 	}
 
-	public void setEditEnable(boolean b) {
-		if (b) {
-			setKeyListener(TextKeyListener.getInstance());
-		} else {
-			setKeyListener(null);
-		}
+//	public void setEditEnable(boolean b) {
+//		if (b) {
+//			setInputType(lastInputType);
+//			setKeyListener(TextKeyListener.getInstance());
+//		} else {
+//			setKeyListener(null);
+//			setInputType(InputType.TYPE_NULL);
+//		}
 
-	}
+//	}
 	
 	public interface OnMoveListener{
 		public void onMove(EditTextNode etn);

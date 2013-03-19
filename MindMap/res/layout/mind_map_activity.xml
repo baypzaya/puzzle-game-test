@@ -83,7 +83,8 @@
         android:layout_alignParentBottom="true"
         android:layout_gravity="center_vertical"
         android:background="@android:drawable/title_bar"
-        android:orientation="horizontal" >        
+        android:orientation="horizontal" 
+        android:visibility="gone">        
 
         <ImageView
             android:id="@+id/iv_edit"
