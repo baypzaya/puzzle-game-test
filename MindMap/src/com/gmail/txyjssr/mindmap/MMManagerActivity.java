@@ -6,37 +6,57 @@ import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-public class MMManagerActivity extends ListActivity implements OnItemClickListener {
+public class MMManagerActivity extends ListActivity implements OnItemClickListener, OnClickListener {
 	public static final int RESULT_CODE_NEW = 1001;
 	public static final int RESULT_CODE_OPEN = 1002;
-	
+
 	public static final String EXTRA_OPEN_MINDMAP_ID = "EXTRA_OPEN_MINDMAP_ID";
+	public static final String EXTRA_NEW_MINDMAP_NAME = "EXTRA_NEW_MINDMAP_NAME";
+	MindMapDao midMapDao = new MindMapDao();
+	NodeDao nodeDao = new NodeDao();
+	private MindMapAdapter adapter;
+	private ImageView ivdelete;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.mind_map_manager_activity);
 
-		MindMapDao dao = new MindMapDao();
-		List<TabMindMap> tmmList = dao.getAllMindMap();
+		List<TabMindMap> tmmList = midMapDao.getAllMindMap();
 
-		MindMapAdapter adapter = new MindMapAdapter(this, tmmList);
+		adapter = new MindMapAdapter(this, tmmList);
 		getListView().setAdapter(adapter);
-		
+
 		getListView().setOnItemClickListener(this);
+
+		ImageView ivBack = (ImageView) findViewById(R.id.iv_arrow_back);
+		ivBack.setOnClickListener(this);
+
+		ImageView ivAdd = (ImageView) findViewById(R.id.iv_mm_menu_add);
+		ivAdd.setOnClickListener(this);
+
+		ivdelete = (ImageView) findViewById(R.id.iv_mm_menu_delete);
+		ivdelete.setOnClickListener(this);
 	}
 
 	class MindMapAdapter extends BaseAdapter {
+		public static final int TYPE_NORMAL = 0;
+		public static final int TYPE_EDIT = 1;
+
 		private Context context;
 		private List<TabMindMap> tmmList;
+		private int currentType = TYPE_NORMAL;
 
 		public MindMapAdapter(Context context, List<TabMindMap> tmmList) {
 			this.tmmList = tmmList;
@@ -45,15 +65,12 @@ public class MMManagerActivity extends ListActivity implements OnItemClickListen
 
 		@Override
 		public int getCount() {
-			return tmmList.size() + 1;
+			return tmmList.size();
 		}
 
 		@Override
 		public Object getItem(int position) {
-			if (position == 0) {
-				return null;
-			}
-			return tmmList.get(position - 1);
+			return tmmList.get(position);
 		}
 
 		@Override
@@ -67,29 +84,90 @@ public class MMManagerActivity extends ListActivity implements OnItemClickListen
 				convertView = LayoutInflater.from(context).inflate(R.layout.mind_map_adapter, null);
 			}
 			TextView tvName = (TextView) convertView.findViewById(R.id.tv_mm_name);
-			if (position == 0) {
-				tvName.setText("NEW MindMap");
+
+			TabMindMap tmm = tmmList.get(position);
+			tvName.setText(tmm.name);
+
+			ImageView ivIcon = (ImageView) convertView.findViewById(R.id.iv_mm_icon);
+			ImageView ivDelete = (ImageView) convertView.findViewById(R.id.iv_mm_delete);
+			ivDelete.setTag(position);
+			if (currentType == TYPE_EDIT) {
+				ivIcon.setVisibility(View.GONE);
+				ivDelete.setVisibility(View.VISIBLE);
 			} else {
-				TabMindMap tmm = tmmList.get(position-1);
-				tvName.setText(tmm.name);
+				ivIcon.setVisibility(View.VISIBLE);
+				ivDelete.setVisibility(View.GONE);
+				ivDelete.setOnClickListener(MMManagerActivity.this);
 			}
 
 			return convertView;
+		}
+
+		public void setCurrentType(int type) {
+			this.currentType = type;
+			notifyDataSetChanged();
+		}
+
+		public int getCurrentType() {
+			return currentType;
+		}
+
+		public void removeItem(int position) {
+			tmmList.remove(position);
+			notifyDataSetChanged();
 		}
 
 	}
 
 	@Override
 	public void onItemClick(AdapterView<?> adapterView, View view, int position, long index) {
-		if(position == 0){
-			setResult(RESULT_CODE_NEW);
-		}else{
-			TabMindMap tmm = (TabMindMap) getListView().getAdapter().getItem(position);
-			Intent intent = new Intent(this,MindMapActivity.class);
-			intent.putExtra(EXTRA_OPEN_MINDMAP_ID, tmm._id);
-			setResult(RESULT_CODE_OPEN,intent);
-		}
-		
+
+		TabMindMap tmm = (TabMindMap) getListView().getAdapter().getItem(position);
+		Intent intent = new Intent();
+		intent.putExtra(EXTRA_OPEN_MINDMAP_ID, tmm._id);
+		setResult(RESULT_CODE_OPEN, intent);
+
 		finish();
+	}
+
+	@Override
+	public void onClick(View view) {
+		int id = view.getId();
+		switch (id) {
+		case R.id.iv_arrow_back:
+			finish();
+			break;
+		case R.id.iv_mm_delete:
+			int position = (Integer) view.getTag();
+			TabMindMap tmm = (TabMindMap) getListView().getAdapter().getItem(position);
+			nodeDao.deleteNodesBy(tmm._id);
+			midMapDao.deleteTabMindMap(tmm);
+			adapter.removeItem(position);
+			break;
+		case R.id.iv_mm_menu_add:
+			DialogUtils.showInputDialog(this, "please input mindmap name", null, new InputListener() {
+
+				@Override
+				public void onInputCompleted(String inputStr) {
+					if (!TextUtils.isEmpty(inputStr)) {
+						Intent intent = new Intent();
+						intent.putExtra(EXTRA_NEW_MINDMAP_NAME, inputStr);
+						setResult(RESULT_CODE_NEW, intent);
+						finish();
+					}
+				}
+			});
+			break;
+		case R.id.iv_mm_menu_delete:
+			if (adapter.getCurrentType() == MindMapAdapter.TYPE_NORMAL) {
+				adapter.setCurrentType(MindMapAdapter.TYPE_EDIT);
+				ivdelete.setImageResource(R.drawable.mm_menu_finish);
+			} else {
+				adapter.setCurrentType(MindMapAdapter.TYPE_NORMAL);
+				ivdelete.setImageResource(R.drawable.mm_menu_delete);
+			}
+			break;
+		}
+
 	}
 }

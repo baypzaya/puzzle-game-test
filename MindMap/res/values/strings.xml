@@ -5,5 +5,6 @@
     <string name="dialog_title_hint">温馨提示</string>
     <string name="entry">确定</string>
     <string name="cancel">取消</string>
+    <string name="mind_map_list">思维导图列表</string>
 
 </resources>

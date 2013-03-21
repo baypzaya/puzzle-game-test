@@ -115,4 +115,10 @@ public class NodeDao extends BaseDao {
 			mDBManager.delete(TABLE_NAME, whereClause, null);
 		}
 	}
+
+	public void deleteNodesBy(long mindMapId) {
+		String whereClause = COLUMN_MINDMAPID + " = ?";
+		String[] whereArgs = new String[] {""+mindMapId};
+		mDBManager.delete(TABLE_NAME, whereClause, whereArgs);
+	}
 }

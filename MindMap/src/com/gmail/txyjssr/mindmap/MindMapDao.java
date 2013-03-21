@@ -86,4 +86,10 @@ public class MindMapDao extends BaseDao {
 
 		return mm;
 	}
+
+	public void deleteTabMindMap(TabMindMap tmm) {
+		String whereClause = COLUMN_ID + " = ?";
+		String[] whereArgs = new String[] { "" + tmm._id };
+		mDBManager.delete(TABLE_MINDMAP, whereClause, whereArgs);
+	}
 }
