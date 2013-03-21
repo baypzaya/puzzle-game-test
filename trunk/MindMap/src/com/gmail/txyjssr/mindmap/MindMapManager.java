@@ -8,8 +8,12 @@ public class MindMapManager {
 	NodeDao nodeDao = new NodeDao();
 
 	public MindMap createMindMap() {
+		return createMindMap("new mindmap");
+	}
+	
+	public MindMap createMindMap(String name) {
 		TabMindMap tabMindMap = new TabMindMap();
-		tabMindMap.name = "new mindmap";
+		tabMindMap.name = name;
 		tabMindMap.isCurrent = true;
 		long id = mindMapDao.insert(tabMindMap);
 
@@ -18,7 +22,7 @@ public class MindMapManager {
 		node.parentNodeId = -1;
 		node.x = 0;
 		node.y = 0;
-		node.title = "new mindmap";
+		node.title = name;
 		node.mindMapId = id;
 
 		MindMap mindMap = new MindMap();

@@ -110,7 +110,7 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 
 	private void editNode() {
 		if (currentFocusedNode != null) {
-			DialogUtils.showInputDialog(this, "修改新节点", null, new InputListener() {
+			DialogUtils.showInputDialog(this, "please input node name", currentFocusedNode.getTitle(), new InputListener() {
 
 				@Override
 				public void onInputCompleted(String inputStr) {
@@ -126,7 +126,7 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 
 	private void addNode() {
 		if (currentFocusedNode != null) {
-			DialogUtils.showInputDialog(this, "添加新节点", null, new InputListener() {
+			DialogUtils.showInputDialog(this, "please input node name", null, new InputListener() {
 
 				@Override
 				public void onInputCompleted(String inputStr) {
@@ -142,8 +142,8 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 	private void deleteNode() {
 		if (currentFocusedNode != null) {
 			final Node node = (Node) currentFocusedNode.getTag();
-			String message = "您确定删除节点(" + node.title + ")";
-			DialogUtils.showHintDilog(this, message, "删除", "取消", new DialogInterface.OnClickListener() {
+			String message = "delete node(" + node.title + ")";
+			DialogUtils.showHintDilog(this, message, "delete", "cancel", new DialogInterface.OnClickListener() {
 
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
@@ -161,8 +161,8 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 
 	private void clearNodes() {
 		final Node rootNode = mindMap.getRootNode();
-		String message = "您确定删除全部节点?";
-		DialogUtils.showHintDilog(this, message, "删除全部", "取消", new DialogInterface.OnClickListener() {
+		String message = "delete all nodes?";
+		DialogUtils.showHintDilog(this, message, "delete all", "cancel", new DialogInterface.OnClickListener() {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
@@ -184,7 +184,8 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == REQUST_CODE_MANAGE_MINDMAP) {
 			if (resultCode == MMManagerActivity.RESULT_CODE_NEW) {
-				mindMap = mindMapManager.createMindMap();
+				String mindMapName = data.getStringExtra(MMManagerActivity.EXTRA_NEW_MINDMAP_NAME);
+				mindMap = mindMapManager.createMindMap(mindMapName);
 				createMindMapUI(mindMap);
 			} else if (resultCode == MMManagerActivity.RESULT_CODE_OPEN) {
 				long mindMapId = data.getLongExtra(MMManagerActivity.EXTRA_OPEN_MINDMAP_ID, -1);
