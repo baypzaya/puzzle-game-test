@@ -36,6 +36,8 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dip"
         android:layout_weight="1"
-        android:textSize="20dip" />
+        android:textSize="20dip" 
+        android:singleLine="true"
+        android:ellipsize="end"/>
 
 </LinearLayout>

@@ -16,9 +16,11 @@
         android:id="@+id/etn_node"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@drawable/node_status_selector"
+        android:focusableInTouchMode="true"
+        android:focusable="true" 
         android:maxLength="20"
-        android:maxWidth="100dp"
-        android:maxHeight="100dp"
+        android:padding="10dip"
         android:textSize="15dp" 
         android:gravity="center"/>
 

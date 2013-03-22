@@ -6,6 +6,7 @@ import java.util.List;
 import android.util.Log;
 
 public class MindMap {
+	public static final float DISTANCE_dEFAULT = 120; // Âçï‰Ωçdp
 	public long mindMapId;
 	public String name;
 	public List<Node> nodeList;
@@ -23,7 +24,6 @@ public class MindMap {
 		}
 		node.mindMapId = mindMapId;
 
-		// º∆À„node◊¯±Í
 		if (node.parentNode != null) {
 			int childCount = node.parentNode.getChildCount();
 			double result = log2(childCount);
@@ -37,7 +37,10 @@ public class MindMap {
 				if (node.parentNode.isRootNode) {
 					angle = 2 * Math.PI / Math.pow(2, unit) * (2 * (childCount - Math.pow(2, unit - 1)) - 1);
 				} else {
-					angle = Math.PI / Math.pow(2, unit) * (2 * (childCount - Math.pow(2, unit - 1)) - 1);
+					int childCountT = childCount - 1;
+					double temp = Math.pow(-1f, childCountT % 2) * (childCountT - childCountT / 2);
+					Log.i("yujsh log", childCountT + " temp:" + temp);
+					angle = temp / 9f * Math.PI;
 				}
 			}
 
@@ -47,40 +50,30 @@ public class MindMap {
 
 				double angleT = 0;
 				if (yT == 0) {
-					if(node.parentNode.x > node.parentNode.parentNode.x){
-						angleT = 0 ;
-					}else if(node.parentNode.x < node.parentNode.parentNode.x){
-						angleT = Math.PI ;
+					if (node.parentNode.x > node.parentNode.parentNode.x) {
+						angleT = 0;
+					} else if (node.parentNode.x < node.parentNode.parentNode.x) {
+						angleT = Math.PI;
 					}
-				}else if(xT == 0){
-					if(node.parentNode.y > node.parentNode.parentNode.y){
-						angleT = Math.PI/2 ;
-					}else if(node.parentNode.y < node.parentNode.parentNode.y){
-						angleT = -Math.PI/2 ;
+				} else if (xT == 0) {
+					if (node.parentNode.y > node.parentNode.parentNode.y) {
+						angleT = Math.PI / 2;
+					} else if (node.parentNode.y < node.parentNode.parentNode.y) {
+						angleT = -Math.PI / 2;
 					}
 				} else {
-					angleT = Math.atan(xT / yT);
-					if(node.parentNode.x < node.parentNode.parentNode.x){
-						angleT = Math.PI+angleT ;
+					angleT = Math.atan(yT / xT);
+					if (node.parentNode.x < node.parentNode.parentNode.x) {
+						angleT = Math.PI + angleT;
 					}
 				}
-				// log code start
-				double angleRT = 180f * angleT / Math.PI;
-
-				Log.i("yujsh log", "angleRT:" + angleRT);
-				// log code end
-//				angle = angle - angleT;
-				angle = angleT;
+				angle = angleT + angle;
+			} else {
+				angle = 1 / 12f * Math.PI + angle;
 			}
 
-			// log code start
-			double angleR = 180f * angle / Math.PI;
-
-			Log.i("yujsh log", "angleR:" + angleR);
-			// log code end
-
-			double x = Math.cos(angle) * 180;
-			double y = Math.sin(angle) * 180;
+			double x = Math.cos(angle) * transformDP2PX(DISTANCE_dEFAULT);
+			double y = Math.sin(angle) * transformDP2PX(DISTANCE_dEFAULT);
 			node.x = node.parentNode.x + Math.round(x);
 			node.y = node.parentNode.y + Math.round(y);
 		}
@@ -88,6 +81,10 @@ public class MindMap {
 		long id = nodeDao.insert(node);
 		node._id = id;
 		nodeList.add(node);
+	}
+
+	private float transformDP2PX(float value) {
+		return value * EngineApplication.sDensity;
 	}
 
 	public boolean hasNode() {
@@ -104,7 +101,7 @@ public class MindMap {
 		if (!node.isRootNode) {
 			listNode.add(node);
 			node.parentNode.nodeChildren.remove(node);
-		}else{
+		} else {
 			node.nodeChildren.clear();
 		}
 		nodeList.removeAll(listNode);
@@ -138,8 +135,8 @@ public class MindMap {
 	}
 
 	public Node getRootNode() {
-		for(Node n : nodeList){
-			if(n.isRootNode){
+		for (Node n : nodeList) {
+			if (n.isRootNode) {
 				return n;
 			}
 		}
