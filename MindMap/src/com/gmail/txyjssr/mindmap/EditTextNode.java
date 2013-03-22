@@ -2,17 +2,12 @@ package com.gmail.txyjssr.mindmap;
 
 import android.content.Context;
 import android.text.InputType;
-import android.text.method.ArrowKeyMovementMethod;
-import android.text.method.MovementMethod;
-import android.text.method.TextKeyListener;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
-import android.view.ViewGroup.LayoutParams;
-import android.view.inputmethod.EditorInfo;
-import android.widget.EditText;
+import android.widget.TextView;
 
-public class EditTextNode extends EditText implements INode {
+public class EditTextNode extends TextView implements INode {
 	private float x;
 	private float y;
 	private OnMoveListener mMoveListener;
@@ -76,14 +71,20 @@ public class EditTextNode extends EditText implements INode {
 				if(mMoveListener!=null){
 					mMoveListener.endMove(this);
 				}
+			}else{
+				long downTime = event.getDownTime();
+				long eventTime = event.getEventTime();
+				if(eventTime-downTime<500){
+					requestFocus();
+				}
 			}
 			break;
 		}
-		if(currentModel == 0){
-			return super.onTouchEvent(event);
-		}else{
+//		if(currentModel == 0){
+//			return super.onTouchEvent(event);
+//		}else{
 			return true;
-		}
+//		}
 		
 	}
 

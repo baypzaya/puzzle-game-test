@@ -9,6 +9,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
@@ -18,7 +20,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gmail.txyjssr.mindmap.EditTextNode.OnMoveListener;
-import com.gmail.txyjssr.mindmap.NodeLayout.OnButtonClickListener;
 
 public class MindMapActivity extends Activity implements OnClickListener, OnFocusChangeListener, OnMoveListener {
 	private static final int REQUST_CODE_MANAGE_MINDMAP = 1;
@@ -27,12 +28,15 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 	private MindMapManager mindMapManager;
 	private MindMap mindMap;
 	private EditTextNode currentFocusedNode;
-	private Handler mHandler = new Handler();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.mind_map_activity);
+		
+		DisplayMetrics dm = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
+        EngineApplication.sDensity = dm.scaledDensity;
 
 		ImageView ivMindMapMore = (ImageView) findViewById(R.id.iv_mind_map_more);
 		ivMindMapMore.setOnClickListener(this);
@@ -72,7 +76,6 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 				LinkView lv = createLinkView(node);
 				mindMapPad.addView(lv, 0);
 			}
-
 		}
 		Node rootNode =mindMap.getRootNode();
 		mindMapPad.scrollTo((int)rootNode.x,(int)rootNode.y);
