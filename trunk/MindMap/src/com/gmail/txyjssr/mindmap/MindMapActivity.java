@@ -207,6 +207,7 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 			EditTextNode etNode = (EditTextNode) v;
 			if (etNode.isFocused()) {
 				currentFocusedNode = etNode;
+				mindMapPad.scroll(currentFocusedNode);
 			} else {
 				InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 				imm.hideSoftInputFromWindow(etNode.getWindowToken(), 0);

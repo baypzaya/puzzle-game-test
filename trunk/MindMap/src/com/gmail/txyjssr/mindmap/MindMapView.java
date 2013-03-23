@@ -2,6 +2,7 @@ package com.gmail.txyjssr.mindmap;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -48,6 +49,13 @@ public class MindMapView extends FrameLayout {
 				width = (int) (child.getMeasuredWidth() * currentScale / 2);
 				height = (int) (child.getMeasuredHeight() * currentScale / 2);
 				child.layout(centerX - width, centerY - height, centerX + width, centerY + height);
+				if(child instanceof NodeLayout){
+					EditTextNode tv = ((NodeLayout)child).getEditNode();
+					if(tv.isFocused()){
+						Log.i("yujsh log","node title:"+tv.getTitle());
+						scroll(tv);
+					}
+				}
 			} else if (child instanceof LinkView) {
 				LinkView linkView = (LinkView) child;
 				int childCenterX = (int) ((linkView.parentX + linkView.childX) / 2 * currentScale);
@@ -77,37 +85,38 @@ public class MindMapView extends FrameLayout {
 			if (event.getPointerCount() == 1) {
 				float moveX = event.getX();
 				float moveY = event.getY();
-				
+
 				if (lastTouchMode == TOUCH_MODE_NONE && (Math.abs(downX - moveX) > 20 || Math.abs(downY - moveY) > 20)) {
 					lastTouchMode = TOUCH_MODE_SINGLE;
-				}else if(lastTouchMode == TOUCH_MODE_DOUBLE){
+				} else if (lastTouchMode == TOUCH_MODE_DOUBLE) {
 					lastTouchMode = TOUCH_MODE_NONE;
 					downX = moveX;
 					downY = moveY;
 				}
-				
+
 				if (lastTouchMode == TOUCH_MODE_SINGLE) {
 					scrollBy((int) (downX - moveX), (int) (downY - moveY));
 					downX = moveX;
 					downY = moveY;
 				}
-			}else if (event.getPointerCount() == 2) {
-//				lastTouchMode = TOUCH_MODE_DOUBLE;
-//				float moveX0 = event.getX(0);
-//				float moveY0 = event.getY(0);
-//				float moveX1 = event.getX(1);
-//				float moveY1 = event.getY(1);
-//				float moveDistancePoints = (float) Math.sqrt((moveX0 - moveX1) * (moveX0 - moveX1) + (moveY0 - moveY1)
-//						* (moveY0 - moveY1));
-//				if (distancePoints != 0) {
-//					float scale = moveDistancePoints / distancePoints;
-//					currentScale = scale;
-//					currentScale = currentScale > 3 ? 3 : currentScale;
-//					currentScale = currentScale < 0.3f ? 0.3f : currentScale;
-//					requestLayout();
-//				} else {
-//					distancePoints = moveDistancePoints / currentScale;
-//				}
+			} else if (event.getPointerCount() == 2) {
+				// lastTouchMode = TOUCH_MODE_DOUBLE;
+				// float moveX0 = event.getX(0);
+				// float moveY0 = event.getY(0);
+				// float moveX1 = event.getX(1);
+				// float moveY1 = event.getY(1);
+				// float moveDistancePoints = (float) Math.sqrt((moveX0 -
+				// moveX1) * (moveX0 - moveX1) + (moveY0 - moveY1)
+				// * (moveY0 - moveY1));
+				// if (distancePoints != 0) {
+				// float scale = moveDistancePoints / distancePoints;
+				// currentScale = scale;
+				// currentScale = currentScale > 3 ? 3 : currentScale;
+				// currentScale = currentScale < 0.3f ? 0.3f : currentScale;
+				// requestLayout();
+				// } else {
+				// distancePoints = moveDistancePoints / currentScale;
+				// }
 			}
 			break;
 		case MotionEvent.ACTION_UP:
@@ -122,6 +131,41 @@ public class MindMapView extends FrameLayout {
 	}
 
 	public void moveToNodeLocation(float x, float y) {
-		scrollTo((int)x, (int)y);
+		scrollTo((int) x, (int) y);
+	}
+
+	public void scroll(EditTextNode currentFocusedNode) {
+
+		float nodeX = currentFocusedNode.getPointX();
+		float nodeY = currentFocusedNode.getPointY();
+
+		int top = (int) (nodeY - currentFocusedNode.getMeasuredHeight() / 2);
+		int bottom = (int) (nodeY + currentFocusedNode.getMeasuredHeight() / 2);
+		int left = (int) (nodeX - currentFocusedNode.getMeasuredWidth() / 2);
+		int right = (int) (nodeX + currentFocusedNode.getMeasuredWidth() / 2);
+
+		int cscrollX = this.getScrollX();
+		int cscrollY = this.getScrollY();
+		int padWidth = this.getMeasuredWidth();
+		int padHeight = this.getMeasuredHeight();
+
+		int nscrollX = 0;
+		int nscrollY = 0;
+
+		if (top < cscrollY - padHeight / 2) {
+			nscrollY = top - (cscrollY - padHeight / 2);
+		} else if (bottom > cscrollY + padHeight / 2) {
+			nscrollY = bottom - (cscrollY + padHeight / 2);
+		}
+
+		if (left < cscrollX - padWidth / 2) {
+			nscrollX = left - (cscrollX - padWidth / 2);
+		} else if (right > cscrollX+ padWidth / 2) {
+			nscrollX = right - (cscrollX + padWidth / 2);
+		}
+
+		if (nscrollX != 0 || nscrollY != 0) {
+			scrollBy(nscrollX, nscrollY);
+		}
 	}
 }

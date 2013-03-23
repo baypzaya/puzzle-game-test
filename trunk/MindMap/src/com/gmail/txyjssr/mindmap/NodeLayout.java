@@ -136,4 +136,9 @@ public class NodeLayout extends LinearLayout implements INode, OnClickListener {
 		ivDelete.setVisibility(visible);
 	}
 
+	public EditTextNode getEditNode() {
+		// TODO Auto-generated method stub
+		return etn;
+	}
+
 }
