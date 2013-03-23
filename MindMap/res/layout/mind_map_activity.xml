@@ -67,15 +67,8 @@
             android:scaleType="centerInside"
             android:src="@drawable/mind_map_more" />
     </LinearLayout>
-
-    <com.gmail.txyjssr.mindmap.MindMapView
-        android:id="@+id/fl_pad"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/tools_bar"
-        android:orientation="vertical" >
-    </com.gmail.txyjssr.mindmap.MindMapView>
-
+    
+    
     <LinearLayout
         android:id="@+id/bottom_bar"
         android:layout_width="match_parent"
@@ -123,5 +116,15 @@
             android:scaleType="centerInside"
             android:src="@drawable/node_add" />
     </LinearLayout>
+
+    <com.gmail.txyjssr.mindmap.MindMapView
+        android:id="@+id/fl_pad"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/tools_bar"
+        android:layout_above="@id/bottom_bar"
+        android:orientation="vertical" >
+    </com.gmail.txyjssr.mindmap.MindMapView>
+
 
 </RelativeLayout>
