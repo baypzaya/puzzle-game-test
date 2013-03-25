@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="40dip"
         android:layout_gravity="center_vertical"
-        android:background="@android:drawable/title_bar"
+        android:background="@drawable/activity_title_bar"
         android:orientation="horizontal" >
 
         <TextView

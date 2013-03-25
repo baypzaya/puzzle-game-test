@@ -39,7 +39,6 @@ public class MindMap {
 				} else {
 					int childCountT = childCount - 1;
 					double temp = Math.pow(-1f, childCountT % 2) * (childCountT - childCountT / 2);
-					Log.i("yujsh log", childCountT + " temp:" + temp);
 					angle = temp / 9f * Math.PI;
 				}
 			}

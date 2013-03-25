@@ -145,7 +145,7 @@ public class MMManagerActivity extends ListActivity implements OnItemClickListen
 			adapter.removeItem(position);
 			break;
 		case R.id.iv_mm_menu_add:
-			DialogUtils.showInputDialog(this, "please input mindmap name", null, new InputListener() {
+			DialogUtils.showInputDialog(this, getString(R.string.create_new_mm), null, new InputListener() {
 
 				@Override
 				public void onInputCompleted(String inputStr) {
