@@ -8,7 +8,7 @@ public class MindMapManager {
 	NodeDao nodeDao = new NodeDao();
 
 	public MindMap createMindMap() {
-		return createMindMap("new mindmap");
+		return createMindMap();
 	}
 	
 	public MindMap createMindMap(String name) {
