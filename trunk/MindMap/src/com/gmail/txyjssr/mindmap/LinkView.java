@@ -11,7 +11,7 @@ import android.graphics.PathEffect;
 import android.view.View;
 
 public class LinkView extends View {
-	private final int strokeWidth = 2;
+	private final int strokeWidth = 3;
 
 	public float parentX;
 	public float parentY;
@@ -24,7 +24,7 @@ public class LinkView extends View {
 		super(context);
 		paint = new Paint();
 		paint.setAntiAlias(true);
-		paint.setColor(Color.MAGENTA);
+		paint.setColor(context.getResources().getColor(R.color.line_color_blue));
 		paint.setStrokeWidth(strokeWidth);
         paint.setStyle(Style.STROKE); 
         
