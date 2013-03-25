@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_vertical"
+    android:orientation="horizontal" >
+
+    <ImageView
+        android:id="@+id/iv_mm_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:paddingLeft="10dip"
+        android:paddingRight="10dip"
+        android:scaleType="centerInside"
+        android:src="@drawable/mm_icon" />
+
+    <ImageView
+        android:id="@+id/iv_mm_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:background="@drawable/bottom_bar_item_selector"
+        android:paddingLeft="10dip"
+        android:paddingRight="10dip"
+        android:scaleType="centerInside"
+        android:src="@drawable/mm_delete"
+        android:visibility="gone" />
+
+    <View
+        android:layout_width="1px"
+        android:layout_height="fill_parent"
+        android:background="@drawable/menu_divider" />
+
+    <TextView
+        android:id="@+id/tv_mm_name"
+        android:layout_width="0dip"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dip"
+        android:layout_weight="1"
+        android:textSize="20dip" 
+        android:singleLine="true"
+        android:ellipsize="end"/>
+
+</LinearLayout>

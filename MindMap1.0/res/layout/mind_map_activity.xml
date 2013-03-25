@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <EditText
+        android:id="@+id/et_focus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent" />
+
+    <LinearLayout
+        android:id="@+id/tools_bar"
+        android:layout_width="match_parent"
+        android:layout_height="40dip"
+        android:layout_gravity="center_vertical"
+        android:background="@drawable/activity_title_bar"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/tv_mind_map_name"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:textSize="18dp" 
+            android:singleLine="true"
+            android:gravity="center_vertical"
+            android:textColor="#ffffff"
+            android:layout_marginLeft="10dip"/>
+
+        <ImageView
+            android:id="@+id/iv_root"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:background="@drawable/bottom_bar_item_selector"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/node_root" />
+
+        <View
+            android:layout_width="1px"
+            android:layout_height="fill_parent"
+            android:background="@drawable/menu_divider" />
+
+        <ImageView
+            android:id="@+id/iv_clear"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:background="@drawable/bottom_bar_item_selector"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/node_clear" />
+
+        <View
+            android:layout_width="1px"
+            android:layout_height="fill_parent"
+            android:background="@drawable/menu_divider" />
+
+        <ImageView
+            android:id="@+id/iv_mind_map_more"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:background="@drawable/bottom_bar_item_selector"
+            android:paddingLeft="10dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/mind_map_more" />
+    </LinearLayout>
+    
+    
+    <LinearLayout
+        android:id="@+id/bottom_bar"
+        android:layout_width="match_parent"
+        android:layout_height="50dip"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="center_vertical"
+        android:background="@android:drawable/title_bar"
+        android:orientation="horizontal" 
+        android:visibility="gone">        
+
+        <ImageView
+            android:id="@+id/iv_edit"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:background="@drawable/bottom_bar_item_selector"
+            android:scaleType="centerInside"
+            android:src="@drawable/node_edit" />
+
+        <View
+            android:layout_width="1px"
+            android:layout_height="fill_parent"
+            android:background="@drawable/menu_divider" />
+
+        <ImageView
+            android:id="@+id/iv_delete"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:background="@drawable/bottom_bar_item_selector"
+            android:scaleType="centerInside"
+            android:src="@drawable/node_delete" />
+
+        <View
+            android:layout_width="1px"
+            android:layout_height="fill_parent"
+            android:background="@drawable/menu_divider" />
+
+        <ImageView
+            android:id="@+id/iv_add"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:background="@drawable/bottom_bar_item_selector"
+            android:scaleType="centerInside"
+            android:src="@drawable/node_add" />
+    </LinearLayout>
+
+    <com.gmail.txyjssr.mindmap.MindMapView
+        android:id="@+id/fl_pad"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/tools_bar"
+        android:layout_above="@id/bottom_bar"
+        android:orientation="vertical" >
+    </com.gmail.txyjssr.mindmap.MindMapView>
+
+
+</RelativeLayout>
