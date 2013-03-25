@@ -1,5 +1,6 @@
 package com.gmail.txyjssr.mindmap;
 
+import java.util.Formatter;
 import java.util.List;
 
 import android.app.Activity;
@@ -58,7 +59,7 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 
 		mindMap = mindMapManager.getRecentMindMap();
 		if (mindMap == null) {
-			mindMap = mindMapManager.createMindMap();
+			mindMap = mindMapManager.createMindMap(getString(R.string.new_mind_map));
 		}
 
 		createMindMapUI(mindMap);
@@ -79,6 +80,11 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 		}
 		Node rootNode =mindMap.getRootNode();
 		mindMapPad.scrollTo((int)rootNode.x,(int)rootNode.y);
+		
+		if(nodeList.size()==1){
+			NodeLayout nl = (NodeLayout)mindMapPad.findViewById((int)rootNode._id);
+			nl.requestEditFocus();
+		}
 	}
 
 	@Override
@@ -145,8 +151,10 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 	private void deleteNode() {
 		if (currentFocusedNode != null) {
 			final Node node = (Node) currentFocusedNode.getTag();
-			String message = "delete node(" + node.title + ")";
-			DialogUtils.showHintDilog(this, message, "delete", "cancel", new DialogInterface.OnClickListener() {
+			String message = getString(R.string.delete_node);//"delete node(" + node.title + ")";
+			Formatter ft =new Formatter().format(message, node.title);
+
+			DialogUtils.showHintDilog(this, ft.toString(), getString(R.string.delete), getString(R.string.cancel), new DialogInterface.OnClickListener() {
 
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
@@ -164,8 +172,8 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 
 	private void clearNodes() {
 		final Node rootNode = mindMap.getRootNode();
-		String message = "delete all nodes?";
-		DialogUtils.showHintDilog(this, message, "delete all", "cancel", new DialogInterface.OnClickListener() {
+		String message = getString(R.string.delete_all_nodes);
+		DialogUtils.showHintDilog(this, message, getString(R.string.delete_all), getString(R.string.cancel), new DialogInterface.OnClickListener() {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
