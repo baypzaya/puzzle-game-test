@@ -140,5 +140,12 @@ public class NodeLayout extends LinearLayout implements INode, OnClickListener {
 		// TODO Auto-generated method stub
 		return etn;
 	}
+	
+	@Override
+	public void setBackgroundResource(int resid){
+		etn.setBackgroundResource(resid);
+	}
+
+
 
 }

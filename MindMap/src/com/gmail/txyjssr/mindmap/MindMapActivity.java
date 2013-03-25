@@ -76,6 +76,8 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 			if (!node.isRootNode) {
 				LinkView lv = createLinkView(node);
 				mindMapPad.addView(lv, 0);
+			}else{
+				nl.setBackgroundResource(R.drawable.root_node_status_selector);
 			}
 		}
 		Node rootNode =mindMap.getRootNode();

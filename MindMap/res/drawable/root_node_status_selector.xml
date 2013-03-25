@@ -3,7 +3,7 @@
     <selector  xmlns:android="http://schemas.android.com/apk/res/android">  
         <item android:state_focused="true" >  
             <shape>  
-                <solid android:color="#fff45c"/>
+                <solid android:color="#b1f913"/>
                 <stroke  
                     android:width="3dp"  
                     android:color="@color/bottom_pressed" />  
@@ -22,10 +22,10 @@
         </item>  
         <item>        
             <shape>  
-                <solid android:color="#fff45c"/>  
+                <solid android:color="#b1f913"/>  
                 <stroke  
                     android:width="3dp"  
-                    android:color="#b6aa00" />  
+                    android:color="#638c0b" />  
                 <corners  
                     android:topRightRadius="5dp"  
                     android:bottomLeftRadius="5dp"  
