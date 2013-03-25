@@ -52,7 +52,6 @@ public class MindMapView extends FrameLayout {
 				if(child instanceof NodeLayout){
 					EditTextNode tv = ((NodeLayout)child).getEditNode();
 					if(tv.isFocused()){
-						Log.i("yujsh log","node title:"+tv.getTitle());
 						scroll(tv);
 					}
 				}

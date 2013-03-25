@@ -113,7 +113,7 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 
 	private void editNode() {
 		if (currentFocusedNode != null) {
-			DialogUtils.showInputDialog(this, "please input node name", currentFocusedNode.getTitle(), new InputListener() {
+			DialogUtils.showInputDialog(this, getString(R.string.edit_node), currentFocusedNode.getTitle(), new InputListener() {
 
 				@Override
 				public void onInputCompleted(String inputStr) {
@@ -129,7 +129,7 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 
 	private void addNode() {
 		if (currentFocusedNode != null) {
-			DialogUtils.showInputDialog(this, "please input node name", null, new InputListener() {
+			DialogUtils.showInputDialog(this, getString(R.string.add_node), null, new InputListener() {
 
 				@Override
 				public void onInputCompleted(String inputStr) {
@@ -231,10 +231,10 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 
 	private void addNode(Node parentNode, String nodeTitle) {
 
-		if (parentNode.nodeChildren.size() >= 20) {
-			Toast.makeText(this, "the node already had 20 nodes", Toast.LENGTH_LONG).show();
-			return;
-		}
+//		if (parentNode.nodeChildren.size() >= 20) {
+//			Toast.makeText(this, "the node already had 20 nodes", Toast.LENGTH_LONG).show();
+//			return;
+//		}
 
 		Node childNode = new Node();
 		childNode.title = nodeTitle;
@@ -312,6 +312,7 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 				tlv.parentY = etn.getPointY();
 			}
 		}
+		mindMapPad.scroll(etn);
 	}
 
 	@Override
