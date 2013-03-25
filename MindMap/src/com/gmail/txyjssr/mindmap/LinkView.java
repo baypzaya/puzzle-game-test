@@ -3,9 +3,11 @@ package com.gmail.txyjssr.mindmap;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Path;
+import android.graphics.PathEffect;
 import android.view.View;
 
 public class LinkView extends View {
@@ -22,9 +24,12 @@ public class LinkView extends View {
 		super(context);
 		paint = new Paint();
 		paint.setAntiAlias(true);
-		paint.setColor(Color.BLACK);
+		paint.setColor(Color.MAGENTA);
 		paint.setStrokeWidth(strokeWidth);
         paint.setStyle(Style.STROKE); 
+        
+        PathEffect effect = new DashPathEffect(new float[] { 2, 2}, 1);
+        paint.setPathEffect(effect);
 	}
 
 	@Override
