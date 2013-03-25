@@ -1,0 +1,17 @@
+<resources>
+
+    <string name="app_name">思维记录</string>
+    <string name="dialog_title_hint">温馨提示</string>
+    <string name="entry">确定</string>
+    <string name="delete">删除</string>
+    <string name="cancel">取消</string>
+    <string name="mind_map_list">思维导图列表</string>
+    <string name="hint_input_node_title">请输入节点名称</string>
+    <string name="add_node">添加节点</string>
+	<string name="edit_node">修改节点</string>
+	<string name="create_new_mm">创建思维导图</string>
+	<string name="new_mind_map">思维启点</string>
+	<string name="delete_all_nodes">您确定要删除全部节点吗？</string>
+	<string name="delete_all">删除全部</string>
+	<string name="delete_node">您确定要删除%1$s节点吗？</string>
+</resources>
