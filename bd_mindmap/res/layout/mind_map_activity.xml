@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:baiduadsdk="http://schemas.android.com/apk/res/com.gmail.txyjssr.mindmap"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
@@ -21,12 +22,12 @@
             android:id="@+id/tv_mind_map_name"
             android:layout_width="0dp"
             android:layout_height="fill_parent"
+            android:layout_marginLeft="10dip"
             android:layout_weight="1"
-            android:textSize="18dp" 
-            android:singleLine="true"
             android:gravity="center_vertical"
+            android:singleLine="true"
             android:textColor="#ffffff"
-            android:layout_marginLeft="10dip"/>
+            android:textSize="18dp" />
 
         <ImageView
             android:id="@+id/iv_root"
@@ -67,17 +68,39 @@
             android:scaleType="centerInside"
             android:src="@drawable/mind_map_more" />
     </LinearLayout>
-    
-    
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="50dip"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:background="@drawable/activity_title_bar" >
+
+        <com.baidu.mobads.AdView
+            android:id="@+id/adView"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            baiduadsdk:adSize="0" />
+    </LinearLayout>
+
+    <com.gmail.txyjssr.mindmap.MindMapView
+        android:id="@+id/fl_pad"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/adView"
+        android:layout_below="@id/tools_bar"
+        android:orientation="vertical" >
+    </com.gmail.txyjssr.mindmap.MindMapView>
+
     <LinearLayout
         android:id="@+id/bottom_bar"
         android:layout_width="match_parent"
         android:layout_height="50dip"
         android:layout_alignParentBottom="true"
         android:layout_gravity="center_vertical"
-        android:background="@android:drawable/title_bar"
-        android:orientation="horizontal" 
-        android:visibility="gone">        
+        android:background="@drawable/activity_title_bar"
+        android:orientation="horizontal"
+        android:visibility="gone" >
 
         <ImageView
             android:id="@+id/iv_edit"
@@ -116,15 +139,5 @@
             android:scaleType="centerInside"
             android:src="@drawable/node_add" />
     </LinearLayout>
-
-    <com.gmail.txyjssr.mindmap.MindMapView
-        android:id="@+id/fl_pad"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/tools_bar"
-        android:layout_above="@id/bottom_bar"
-        android:orientation="vertical" >
-    </com.gmail.txyjssr.mindmap.MindMapView>
-
 
 </RelativeLayout>
