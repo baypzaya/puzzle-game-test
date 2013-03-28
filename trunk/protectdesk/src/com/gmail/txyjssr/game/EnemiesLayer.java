@@ -97,7 +97,7 @@ public class EnemiesLayer extends Layer implements Callback {
 		Action action = Action.from(arg0);
 		Node node = action.getTarget();
 		// node.stopAllActions();
-		Enemy enemy = GameData.getInstance().enemyMap.get(node.getPointer());
+		Enemy enemy = GameData.getInstance().getEnemyMap().get(node.getPointer());
 		if (enemy != null) {
 			int index = enemy.getPathIndex();
 			if (path.hasNext(index)) {
