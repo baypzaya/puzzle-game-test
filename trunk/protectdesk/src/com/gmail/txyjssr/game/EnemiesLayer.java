@@ -3,7 +3,7 @@ package com.gmail.txyjssr.game;
 import com.gmail.txyjssr.R;
 import com.gmail.txyjssr.game.data.Enemy;
 import com.gmail.txyjssr.game.data.GameData;
-import com.gmail.txyjssr.game.data.OnLifeChangedListener;
+import com.gmail.txyjssr.game.data.OnEnemyStateChangedListener;
 import com.gmail.txyjssr.game.data.Path;
 import com.wiyun.engine.actions.Action;
 import com.wiyun.engine.actions.Action.Callback;
@@ -37,9 +37,9 @@ public class EnemiesLayer extends Layer implements Callback {
 	float mTileHeight;
 	Path path;
 
-	private OnLifeChangedListener listener;
+	private OnEnemyStateChangedListener listener;
 
-	public EnemiesLayer(float tileWidth, float tileHeight, OnLifeChangedListener listener) {
+	public EnemiesLayer(float tileWidth, float tileHeight, OnEnemyStateChangedListener listener) {
 
 		ITEM_WIDTH = ResolutionIndependent.resolveDp(24);
 		ITEM_HEIGHT = ResolutionIndependent.resolveDp(32);
@@ -81,7 +81,6 @@ public class EnemiesLayer extends Layer implements Callback {
 		moveTo.setCallback(this);
 		enemy.setLifeChangedListener(listener);
 		GameData.getInstance().addEnemy(enemy.getPointer(), enemy);
-
 	}
 
 	private WYRect frameAt(int x, int y) {
@@ -109,6 +108,7 @@ public class EnemiesLayer extends Layer implements Callback {
 			} else {
 				node.stopAllActions();
 				removeChild(node, true);
+				listener.onCrossed(enemy);
 			}
 		}else{
 			node.stopAllActions();

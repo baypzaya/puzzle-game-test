@@ -9,11 +9,15 @@ import com.wiyun.engine.types.WYPoint;
 import com.wiyun.engine.types.WYRect;
 
 public class GameData {
+	public static final int STATUS_OVER = 1;
+	public static final int STATUS_PAUSE = 2;
 
 	public static final int TILE_COUNT_X = 10;
 	public static final int TILE_COUNT_Y = 6;
+	
 	public static GameData sGameData;
 
+	private int gameSafeValue = 100;
 	private int currentGate = 0;
 	private int[][] currentMap;
 	private int[] currentPath;
@@ -120,5 +124,11 @@ public class GameData {
 	public void clear() {
 		enemyMap.clear();
 		towerMap.clear();
+		GameData.sGameData = null;
+	}
+	
+	public boolean destroyGame(int destroyValue){
+		gameSafeValue = gameSafeValue - destroyValue;
+		return gameSafeValue <= 0;
 	}
 }
