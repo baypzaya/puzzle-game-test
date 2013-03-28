@@ -7,8 +7,9 @@ import com.wiyun.engine.types.WYRect;
 public class Enemy extends Sprite {
 	private long life; // 1k - 100k
 	private float speed;// px/s
-	private OnLifeChangedListener lifeChangedListener;
+	private OnEnemyStateChangedListener lifeChangedListener;
 	private int pathIndex = 0;
+	private int destroyValue = 10;
 
 	protected Enemy(Texture2D tex) {
 		super(tex);
@@ -18,6 +19,7 @@ public class Enemy extends Sprite {
 	
 	public Enemy(Texture2D tex,WYRect rect) {
 		super(tex,rect);
+		setAnchorX(0);
 		life = 1000;
 		speed = 100;
 	}
@@ -30,7 +32,7 @@ public class Enemy extends Sprite {
 		if(this.life != life){
 			this.life = life;
 			if(lifeChangedListener != null){
-				lifeChangedListener.onChanged(this, life);
+				lifeChangedListener.onLifeChanged(this, life);
 			}
 		}
 	}
@@ -43,11 +45,11 @@ public class Enemy extends Sprite {
 		this.speed = speed;
 	}
 
-	public OnLifeChangedListener getLifeChangedListener() {
+	public OnEnemyStateChangedListener getLifeChangedListener() {
 		return lifeChangedListener;
 	}
 
-	public void setLifeChangedListener(OnLifeChangedListener lifeChangedListener) {
+	public void setLifeChangedListener(OnEnemyStateChangedListener lifeChangedListener) {
 		this.lifeChangedListener = lifeChangedListener;
 	}
 	
@@ -57,6 +59,10 @@ public class Enemy extends Sprite {
 	
 	public int getPathIndex(){
 		return this.pathIndex;
+	}
+
+	public int getDestroyValue() {
+		return destroyValue;
 	}
 	
 }

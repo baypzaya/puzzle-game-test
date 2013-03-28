@@ -9,7 +9,7 @@ import com.gmail.txyjssr.R;
 import com.gmail.txyjssr.game.data.Bullet;
 import com.gmail.txyjssr.game.data.Enemy;
 import com.gmail.txyjssr.game.data.GameData;
-import com.gmail.txyjssr.game.data.OnLifeChangedListener;
+import com.gmail.txyjssr.game.data.OnEnemyStateChangedListener;
 import com.gmail.txyjssr.game.data.OnShotListener;
 import com.gmail.txyjssr.game.data.Tower;
 import com.wiyun.engine.nodes.Director;
@@ -24,7 +24,7 @@ import com.wiyun.engine.utils.ResolutionIndependent;
 import com.wiyun.engine.utils.TargetSelector;
 import com.wiyun.engine.utils.ZwoptexManager;
 
-public class GameScene extends Scene implements OnLifeChangedListener, OnShotListener {
+public class GameScene extends Scene implements OnEnemyStateChangedListener, OnShotListener {
 
 	private GameData mGameData;
 
@@ -37,6 +37,9 @@ public class GameScene extends Scene implements OnLifeChangedListener, OnShotLis
 	private EnemiesLayer enemiesLayer;
 	private DefenseLayer defenseLayer;
 	private BulletsLayer bulletsLayer;
+	private GameStatusLayer gameStatusLayer;
+	
+	private TargetSelector shotTS ;
 
 	public GameScene() {
 
@@ -65,13 +68,19 @@ public class GameScene extends Scene implements OnLifeChangedListener, OnShotLis
 		bulletsLayer = new BulletsLayer();
 		addChild(bulletsLayer);
 		bulletsLayer.autoRelease();
-
-		schedule(new TargetSelector(this, "shotEnemy", new Object[] {}), 0.2f);
+		
+		gameStatusLayer = new GameStatusLayer();
+		gameStatusLayer.setVisible(false);
+		addChild(gameStatusLayer);
+		gameStatusLayer.autoRelease();
+		
+		shotTS = new TargetSelector(this, "shotEnemy", null);
+		schedule(shotTS, 0.2f);
 		setTouchEnabled(true);
+		
 	}
 
 	public void shotEnemy() {
-		Log.i("yujsh log", "shot");
 		Collection<Tower> towers = mGameData.getTowerMap().values();
 		for (Tower tower : towers) {
 			WYRect rect = WYRect.make(tower.getPositionX() - tower.scope / 2, tower.getPositionY() - tower.scope / 2,
@@ -107,16 +116,26 @@ public class GameScene extends Scene implements OnLifeChangedListener, OnShotLis
 	}
 
 	@Override
-	public void onChanged(Node target, long life) {
-		if (target instanceof Enemy) {
-			enemiesLayer.updateEnemyState((Enemy) target, life);
-		}
+	public void onLifeChanged(Enemy target, long life) {
+			enemiesLayer.updateEnemyState(target, life);
 	}
 
 	@Override
 	public void onShot(Enemy enemy, Bullet bullet) {
 		long life = enemy.getLife() - bullet.getPower();
 		enemy.setLife(life);
+	}
+
+	@Override
+	public void onCrossed(Enemy target) {
+		boolean isOver = mGameData.destroyGame(target.getDestroyValue());
+		if(isOver){
+			unschedule(shotTS);
+			Director.getInstance().pauseUI();
+			
+			gameStatusLayer.setStatus(GameData.STATUS_OVER);
+			gameStatusLayer.setVisible(true);
+		}
 	}
 
 }
