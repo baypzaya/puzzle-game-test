@@ -28,8 +28,6 @@ public class GameScene extends Scene implements OnLifeChangedListener, OnShotLis
 
 	private GameData mGameData;
 
-	float mTileWidth;
-	float mTileHeight;
 	int mTileXCount;
 	int mTileYCount;
 
@@ -49,14 +47,14 @@ public class GameScene extends Scene implements OnLifeChangedListener, OnShotLis
 		mTileYCount = GameData.TILE_COUNT_Y;
 
 		WYSize s = Director.getInstance().getWindowSize();
-		mTileWidth = s.width / mTileXCount;
-		mTileHeight = s.height / mTileYCount;
+		mGameData.mTileWidth = s.width / mTileXCount;
+		mGameData.mTileHeight = s.height / mTileYCount;
 
-		bgLayer = new GameBackGroundLayer(mTileWidth, mTileHeight, mTileXCount, mTileYCount);
+		bgLayer = new GameBackGroundLayer(mGameData.mTileWidth, mGameData.mTileHeight, mTileXCount, mTileYCount);
 		addChild(bgLayer);
 		bgLayer.autoRelease();
 
-		enemiesLayer = new EnemiesLayer(mTileWidth, mTileHeight, this);
+		enemiesLayer = new EnemiesLayer(mGameData.mTileWidth, mGameData.mTileHeight, this);
 		addChild(enemiesLayer);
 		enemiesLayer.autoRelease();
 
@@ -74,7 +72,7 @@ public class GameScene extends Scene implements OnLifeChangedListener, OnShotLis
 
 	public void shotEnemy() {
 		Log.i("yujsh log", "shot");
-		Collection<Tower> towers = mGameData.towerMap.values();
+		Collection<Tower> towers = mGameData.getTowerMap().values();
 		for (Tower tower : towers) {
 			WYRect rect = WYRect.make(tower.getPositionX() - tower.scope / 2, tower.getPositionY() - tower.scope / 2,
 					tower.scope, tower.scope);
@@ -94,8 +92,10 @@ public class GameScene extends Scene implements OnLifeChangedListener, OnShotLis
 
 	@Override
 	public boolean wyTouchesEnded(MotionEvent event) {
-		Tower tower = defenseLayer.showTower(currentPoint);
-		GameData.getInstance().addTower(tower.getPointer(), tower);
+		if (mGameData.canLocationTower(currentPoint)) {
+			Tower tower = defenseLayer.showTower(currentPoint);
+			GameData.getInstance().addTower(tower.getPointer(), tower);
+		}
 		return true;
 	}
 

@@ -4,10 +4,12 @@ import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.media.AudioManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 
 import com.gmail.txyjssr.game.GameScene;
+import com.gmail.txyjssr.game.data.GameData;
 import com.wiyun.engine.nodes.Director;
 import com.wiyun.engine.nodes.Director.IDirectorLifecycleListener;
 import com.wiyun.engine.nodes.Scene;
@@ -76,18 +78,23 @@ public class ProtectdeskActivity extends Activity implements IDirectorLifecycleL
     
 	@Override
 	public void onDirectorEnded() {
+		Log.i("yujsh log","onDirectorEnded");
+		GameData.getInstance().clear();
 	}
 
 	@Override
 	public void onDirectorPaused() {
+		Log.i("yujsh log","onDirectorPaused");
 	}
 
 	@Override
 	public void onDirectorResumed() {
+		Log.i("yujsh log","onDirectorResumed");
 	}
 
 	@Override
 	public void onDirectorScreenCaptured(String path) {
+		Log.i("yujsh log","onDirectorScreenCaptured");
 	}
 
 	@Override
