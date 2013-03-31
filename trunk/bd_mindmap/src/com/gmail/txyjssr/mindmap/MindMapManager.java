@@ -76,6 +76,7 @@ public class MindMapManager {
 
 		mindMap.mindMapId = tmm._id;
 		mindMap.nodeList = nodeDao.getAllNodesBy(tmm._id);
+		mindMap.name = tmm.name;
 		orderNodeList(mindMap.nodeList);
 		
 		updateRecentMindMap(mindMapId);

@@ -70,6 +70,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/layout_adview"
         android:layout_width="fill_parent"
         android:layout_height="50dip"
         android:layout_alignParentBottom="true"
@@ -87,7 +88,7 @@
         android:id="@+id/fl_pad"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/adView"
+        android:layout_above="@id/layout_adview"
         android:layout_below="@id/tools_bar"
         android:orientation="vertical" >
     </com.gmail.txyjssr.mindmap.MindMapView>
