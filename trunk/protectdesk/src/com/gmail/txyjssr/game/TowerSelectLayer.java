@@ -5,72 +5,60 @@ import android.view.MotionEvent;
 
 import com.gmail.txyjssr.R;
 import com.gmail.txyjssr.game.data.GameData;
-import com.wiyun.engine.nodes.ColorLayer;
+import com.gmail.txyjssr.game.data.OnSelectedTowerListener;
 import com.wiyun.engine.nodes.Director;
+import com.wiyun.engine.nodes.Menu;
+import com.wiyun.engine.nodes.MenuItemSprite;
 import com.wiyun.engine.nodes.Sprite;
-import com.wiyun.engine.types.WYColor3B;
 import com.wiyun.engine.types.WYPoint;
 import com.wiyun.engine.utils.TargetSelector;
 
-public class TowerSelectLayer extends ColorLayer {
+public class TowerSelectLayer extends Menu {
 	GameData mGameData = GameData.getInstance();
 	WYPoint currentPoint;
 	private float itemWidth;
 	private float itemHeight;
-	
-	public TowerSelectLayer(){
-		Sprite item = Sprite.make(R.drawable.tower);
-		itemWidth = item.getWidth()*0.3f;
-		itemHeight = item.getHeight()*0.3f;
-	}
-	
-	public void showSeleteTower(WYPoint point){
-		removeAllChildren(true);
+	private float contentWidth;
+	private OnSelectedTowerListener listener;
+
+	public TowerSelectLayer(OnSelectedTowerListener listener) {
+		this.listener = listener;
+		Sprite titem = Sprite.make(R.drawable.tower);
+		itemWidth = titem.getWidth() * 0.3f;
+		itemHeight = titem.getHeight() * 0.3f;
+
 		int[] towerTypes = mGameData.getCurrentUseableTower();
-		
-		for(int type : towerTypes){
-			switch(type){
-				case 1:break;
-				case 2:break;
-				case 3:break;
-				case 4:break;
+
+		for (int type : towerTypes) {
+			switch (type) {
+			case 1:
+				break;
+			case 2:
+				break;
+			case 3:
+				break;
+			case 4:
+				break;
 			}
-			Sprite item = Sprite.make(R.drawable.tower);
+			TargetSelector ts = new TargetSelector(this, "selectedTower(int)", new Object[] { type });
+			MenuItemSprite item = (MenuItemSprite.make(R.drawable.tower, 0, ts));
 			item.setScale(0.3f);
-			item.setAnchor(0, 0);
-			int childCount = getChildCount();
-			if(childCount > 0 ){
-				item.setPosition(childCount*itemWidth, 0);
-			}
+			item.setClickScale(0.5f);
 			addChild(item);
-			
+
 		}
-		float contentWidth = getChildCount()*itemWidth;
+		alignItemsHorizontally();
+		contentWidth = getChildCount() * itemWidth;
 		setContentSize(contentWidth, itemHeight);
+	}
+
+	public void showSeleteTower(WYPoint point) {		
 		WYPoint tpoint = mGameData.getDefenseLocation(point);
-		setPosition(tpoint.x - contentWidth/2,tpoint.y-itemHeight/2);
-		setTouchEnabled(true);
+		setPosition(tpoint);
 	}
 	
-	@Override
-	public boolean wyTouchesBegan(MotionEvent event) {
-		currentPoint = Director.getInstance().convertToGL(event.getX(), event.getY());
-		return true;
-	}
-
-	@Override
-	public boolean wyTouchesEnded(MotionEvent event) {
-		
-		return true;
-	}
-
-	@Override
-	public boolean wyTouchesMoved(MotionEvent event) {
-		currentPoint = Director.getInstance().convertToGL(event.getX(), event.getY());
-		return true;
-	}
-	
-	public void selectedTower(int type){
-		Log.i("yujsh log","selectType:"+type);
+	public void selectedTower(int type) {
+		Log.i("yujsh log", "selectType:" + type);
+		listener.onSelectedTower(type);
 	}
 }

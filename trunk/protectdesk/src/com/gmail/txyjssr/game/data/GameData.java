@@ -54,7 +54,7 @@ public class GameData {
 	public void addTower(int pointer, Tower tower) {
 		int lx = (int) (tower.spriteTower.getPositionX() / mTileWidth);
 		int ly = (int) (tower.spriteTower.getPositionY() / mTileHeight);
-		defenseLocationMap[ly][lx] = false;
+		defenseLocationMap[ly][lx] = true;
 		towerMap.put(pointer, tower);
 	}
 

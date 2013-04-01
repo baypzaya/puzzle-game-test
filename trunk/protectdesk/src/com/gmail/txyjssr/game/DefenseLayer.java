@@ -59,8 +59,8 @@ public class DefenseLayer extends Layer {
 	// return true;
 	// }
 
-	public Tower creatTower() {
-		Tower tower = new Tower(0);
+	public Tower creatTower(int type) {
+		Tower tower = new Tower(type);
 		return tower;
 	}
 
@@ -73,10 +73,10 @@ public class DefenseLayer extends Layer {
 		spritePoint.setPosition(point);
 	}
 
-	public Tower showTower(WYPoint point) {
+	public Tower showTower(int type, WYPoint point) {
 		WYPoint tpoint = mGameData.getDefenseLocation(point);
 		removeChild(spritePoint, true);
-		Tower tower = creatTower();
+		Tower tower = creatTower(type);
 		addChild(tower.spriteTower);
 		tower.spriteTower.setPosition(tpoint);
 		return tower;
