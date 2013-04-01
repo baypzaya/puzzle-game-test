@@ -5,11 +5,13 @@ import java.util.ArrayList;
 import com.gmail.txyjssr.R;
 import com.gmail.txyjssr.game.data.GameData;
 import com.wiyun.engine.nodes.Director;
+import com.wiyun.engine.nodes.Label;
 import com.wiyun.engine.nodes.Layer;
 import com.wiyun.engine.nodes.SpriteBatchNode;
 import com.wiyun.engine.nodes.SpriteEx;
 import com.wiyun.engine.opengl.Texture2D;
 import com.wiyun.engine.types.WYRect;
+import com.wiyun.engine.types.WYSize;
 import com.wiyun.engine.utils.ResolutionIndependent;
 import com.wiyun.engine.utils.ZwoptexManager;
 
@@ -24,7 +26,13 @@ public class GameBackGroundLayer extends Layer {
 
 	ArrayList<SpriteEx> m_bgs;
 	Texture2D texBackgroud;
-
+	
+	private Label moneyHintLabel;
+	private Label moneyNumberLabel;
+	
+	private Label enemyHintLabel;
+	private Label enemyNumberLabel;
+	
 	public GameBackGroundLayer(float tileWidth, float tileHeight, int xCount, int yCount) {
 		float texTileWidth = ResolutionIndependent.resolveDp(TILE_WIDTH);
 		float texTileHeight = ResolutionIndependent.resolveDp(TILE_HEIGHT);
@@ -53,5 +61,34 @@ public class GameBackGroundLayer extends Layer {
 				m_bgs.add(sprite);
 			}
 		}
+		
+		WYSize wySize = Director.getInstance().getWindowSize();
+		moneyHintLabel = Label.make("money:", 20);
+		moneyHintLabel.setAnchor(0,1);
+		moneyHintLabel.setPosition(20, wySize.height -10);
+		addChild(moneyHintLabel);
+		
+		moneyNumberLabel = Label.make("0", 20);
+		moneyNumberLabel.setAnchor(0,1);
+		moneyNumberLabel.setPosition(20+moneyHintLabel.getWidth(), wySize.height -10);
+		addChild(moneyNumberLabel);
+		
+		enemyNumberLabel = Label.make("0   ", 20);
+		enemyNumberLabel.setAnchor(1,1);
+		enemyNumberLabel.setPosition(wySize.width - 20, wySize.height -10);
+		addChild(enemyNumberLabel);
+		
+		enemyHintLabel = Label.make("ememies:", 20);
+		enemyHintLabel.setAnchor(1,1);
+		enemyHintLabel.setPosition(wySize.width - 20-enemyNumberLabel.getWidth(), wySize.height -10);
+		addChild(enemyHintLabel);		
+	}
+	
+	public void updateMoney(int money){
+		moneyNumberLabel.setText(""+money);
+	}
+	
+	public void updateEnemy(int enemy){
+		enemyNumberLabel.setText(""+enemy);
 	}
 }

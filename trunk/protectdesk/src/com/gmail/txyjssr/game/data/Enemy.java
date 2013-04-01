@@ -19,7 +19,6 @@ public class Enemy extends Sprite {
 	
 	public Enemy(Texture2D tex,WYRect rect) {
 		super(tex,rect);
-		setAnchorX(0);
 		life = 1000;
 		speed = 100;
 	}

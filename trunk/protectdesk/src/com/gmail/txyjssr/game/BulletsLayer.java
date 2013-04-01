@@ -23,7 +23,7 @@ public class BulletsLayer extends Layer {
 		spriteBullet.scale(0.2f);
 		addChild(spriteBullet);
 
-		MoveTo moveTo = MoveTo.make(0.2f, tower.getPositionX(), tower.getPositionY(), enemy.getPositionX(),
+		MoveTo moveTo = MoveTo.make(0.2f, tower.spriteTower.getPositionX(), tower.spriteTower.getPositionY(), enemy.getPositionX(),
 				enemy.getPositionY());
 		spriteBullet.runAction(moveTo);
 

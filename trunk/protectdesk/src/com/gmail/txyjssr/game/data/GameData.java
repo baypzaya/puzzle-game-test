@@ -29,6 +29,8 @@ public class GameData {
 
 	private Hashtable<Integer, Enemy> enemyMap = new Hashtable<Integer, Enemy>();
 	private Hashtable<Integer, Tower> towerMap = new Hashtable<Integer, Tower>();
+	
+	private int currentMoney;
 
 	public Hashtable<Integer, Enemy> getEnemyMap() {
 		return enemyMap;
@@ -50,8 +52,8 @@ public class GameData {
 	}
 
 	public void addTower(int pointer, Tower tower) {
-		int lx = (int) (tower.getPositionX() / mTileWidth);
-		int ly = (int) (tower.getPositionY() / mTileHeight);
+		int lx = (int) (tower.spriteTower.getPositionX() / mTileWidth);
+		int ly = (int) (tower.spriteTower.getPositionY() / mTileHeight);
 		defenseLocationMap[ly][lx] = false;
 		towerMap.put(pointer, tower);
 	}
@@ -88,6 +90,8 @@ public class GameData {
 					7, 4, 7, 4, 8, 4, 9 };
 			// defenseLocation();
 			currentGate = gate;
+			
+			currentMoney = 100;
 		}
 	}
 
@@ -130,5 +134,9 @@ public class GameData {
 	public boolean destroyGame(int destroyValue){
 		gameSafeValue = gameSafeValue - destroyValue;
 		return gameSafeValue <= 0;
+	}
+
+	public int[] getCurrentUseableTower() {
+		return new int[]{1,2,3,4};
 	}
 }
