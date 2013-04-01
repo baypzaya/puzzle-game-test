@@ -2,10 +2,8 @@ package com.gmail.txyjssr.game;
 
 import java.util.Collection;
 
-import android.util.Log;
 import android.view.MotionEvent;
 
-import com.gmail.txyjssr.R;
 import com.gmail.txyjssr.game.data.Bullet;
 import com.gmail.txyjssr.game.data.Enemy;
 import com.gmail.txyjssr.game.data.GameData;
@@ -13,16 +11,12 @@ import com.gmail.txyjssr.game.data.OnEnemyStateChangedListener;
 import com.gmail.txyjssr.game.data.OnShotListener;
 import com.gmail.txyjssr.game.data.Tower;
 import com.wiyun.engine.nodes.Director;
-import com.wiyun.engine.nodes.Node;
 import com.wiyun.engine.nodes.Scene;
-import com.wiyun.engine.opengl.Texture2D;
-import com.wiyun.engine.types.WYDimension;
+import com.wiyun.engine.types.WYColor3B;
 import com.wiyun.engine.types.WYPoint;
 import com.wiyun.engine.types.WYRect;
 import com.wiyun.engine.types.WYSize;
-import com.wiyun.engine.utils.ResolutionIndependent;
 import com.wiyun.engine.utils.TargetSelector;
-import com.wiyun.engine.utils.ZwoptexManager;
 
 public class GameScene extends Scene implements OnEnemyStateChangedListener, OnShotListener {
 
@@ -38,8 +32,9 @@ public class GameScene extends Scene implements OnEnemyStateChangedListener, OnS
 	private DefenseLayer defenseLayer;
 	private BulletsLayer bulletsLayer;
 	private GameStatusLayer gameStatusLayer;
-	
-	private TargetSelector shotTS ;
+	private TowerSelectLayer towerSelectLayer;
+
+	private TargetSelector shotTS;
 
 	public GameScene() {
 
@@ -68,23 +63,29 @@ public class GameScene extends Scene implements OnEnemyStateChangedListener, OnS
 		bulletsLayer = new BulletsLayer();
 		addChild(bulletsLayer);
 		bulletsLayer.autoRelease();
-		
+
 		gameStatusLayer = new GameStatusLayer();
 		gameStatusLayer.setVisible(false);
 		addChild(gameStatusLayer);
 		gameStatusLayer.autoRelease();
-		
+
+		towerSelectLayer = new TowerSelectLayer();
+		towerSelectLayer.setColor(WYColor3B.make(255, 255, 0));
+		towerSelectLayer.setVisible(false);
+		addChild(towerSelectLayer);
+		towerSelectLayer.autoRelease();
+
 		shotTS = new TargetSelector(this, "shotEnemy", null);
 		schedule(shotTS, 0.2f);
 		setTouchEnabled(true);
-		
+
 	}
 
 	public void shotEnemy() {
 		Collection<Tower> towers = mGameData.getTowerMap().values();
 		for (Tower tower : towers) {
-			WYRect rect = WYRect.make(tower.getPositionX() - tower.scope / 2, tower.getPositionY() - tower.scope / 2,
-					tower.scope, tower.scope);
+			WYRect rect = WYRect.make(tower.spriteTower.getPositionX() - tower.scope / 2,
+					tower.spriteTower.getPositionY() - tower.scope / 2, tower.scope, tower.scope);
 			Enemy enemy = mGameData.getEnemyByScope(rect);
 			if (enemy != null && tower.canShot()) {
 				bulletsLayer.addBullet(tower, enemy, this);
@@ -95,29 +96,36 @@ public class GameScene extends Scene implements OnEnemyStateChangedListener, OnS
 	@Override
 	public boolean wyTouchesBegan(MotionEvent event) {
 		currentPoint = Director.getInstance().convertToGL(event.getX(), event.getY());
-		defenseLayer.createSpritePoint(currentPoint);
+		// defenseLayer.createSpritePoint(currentPoint);
 		return true;
 	}
 
 	@Override
 	public boolean wyTouchesEnded(MotionEvent event) {
-		if (mGameData.canLocationTower(currentPoint)) {
-			Tower tower = defenseLayer.showTower(currentPoint);
-			GameData.getInstance().addTower(tower.getPointer(), tower);
+		if (towerSelectLayer.isVisible()) {
+			towerSelectLayer.setVisible(false);
+		} else {
+			towerSelectLayer.setVisible(true);
+			towerSelectLayer.showSeleteTower(currentPoint);
 		}
+		// if (mGameData.canLocationTower(currentPoint)&&haveEnoughMoney()) {
+		// Tower tower = defenseLayer.showTower(currentPoint);
+		// GameData.getInstance().addTower(tower.spriteTower.getPointer(),
+		// tower);
+		// }
 		return true;
 	}
 
 	@Override
 	public boolean wyTouchesMoved(MotionEvent event) {
 		currentPoint = Director.getInstance().convertToGL(event.getX(), event.getY());
-		defenseLayer.moveSpritePoint(currentPoint);
+		// defenseLayer.moveSpritePoint(currentPoint);
 		return true;
 	}
 
 	@Override
 	public void onLifeChanged(Enemy target, long life) {
-			enemiesLayer.updateEnemyState(target, life);
+		enemiesLayer.updateEnemyState(target, life);
 	}
 
 	@Override
@@ -129,13 +137,18 @@ public class GameScene extends Scene implements OnEnemyStateChangedListener, OnS
 	@Override
 	public void onCrossed(Enemy target) {
 		boolean isOver = mGameData.destroyGame(target.getDestroyValue());
-		if(isOver){
+		if (isOver) {
 			unschedule(shotTS);
 			Director.getInstance().pauseUI();
-			
+
 			gameStatusLayer.setStatus(GameData.STATUS_OVER);
 			gameStatusLayer.setVisible(true);
 		}
+	}
+
+	private boolean haveEnoughMoney() {
+		// next to do
+		return true;
 	}
 
 }

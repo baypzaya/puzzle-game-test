@@ -1,28 +1,34 @@
 package com.gmail.txyjssr.game;
 
+import android.util.Log;
+
 import com.gmail.txyjssr.R;
 import com.gmail.txyjssr.game.data.GameData;
 import com.gmail.txyjssr.game.data.Tower;
 import com.wiyun.engine.nodes.Layer;
+import com.wiyun.engine.nodes.MenuItemSprite;
 import com.wiyun.engine.nodes.Sprite;
 import com.wiyun.engine.opengl.Texture2D;
 import com.wiyun.engine.types.WYPoint;
+import com.wiyun.engine.utils.TargetSelector;
 
 public class DefenseLayer extends Layer {
-	Texture2D texTower;
+	
 	Texture2D texPoint;
 	GameData mGameData;
+	Layer selectTowerLayer;
 	
 
 	// WYPoint currentPointer;
 	Sprite spritePoint;
 
 	public DefenseLayer() {
-		texTower = Texture2D.makePNG(R.drawable.tower);
+		
 		texPoint = Texture2D.makePNG(R.drawable.r1);
 		spritePoint = Sprite.make(texPoint);
 		
 		mGameData = GameData.getInstance();
+		
 		// setTouchEnabled(true);
 	}
 
@@ -54,8 +60,7 @@ public class DefenseLayer extends Layer {
 	// }
 
 	public Tower creatTower() {
-		Tower tower = new Tower(texTower);
-		tower.scale(0.3f);
+		Tower tower = new Tower(0);
 		return tower;
 	}
 
@@ -72,8 +77,11 @@ public class DefenseLayer extends Layer {
 		WYPoint tpoint = mGameData.getDefenseLocation(point);
 		removeChild(spritePoint, true);
 		Tower tower = creatTower();
-		addChild(tower);
-		tower.setPosition(tpoint);
+		addChild(tower.spriteTower);
+		tower.spriteTower.setPosition(tpoint);
 		return tower;
 	}
+	
+	
+	
 }
