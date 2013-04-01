@@ -8,6 +8,7 @@ import com.gmail.txyjssr.game.data.Bullet;
 import com.gmail.txyjssr.game.data.Enemy;
 import com.gmail.txyjssr.game.data.GameData;
 import com.gmail.txyjssr.game.data.OnEnemyStateChangedListener;
+import com.gmail.txyjssr.game.data.OnSelectedTowerListener;
 import com.gmail.txyjssr.game.data.OnShotListener;
 import com.gmail.txyjssr.game.data.Tower;
 import com.wiyun.engine.nodes.Director;
@@ -18,7 +19,7 @@ import com.wiyun.engine.types.WYRect;
 import com.wiyun.engine.types.WYSize;
 import com.wiyun.engine.utils.TargetSelector;
 
-public class GameScene extends Scene implements OnEnemyStateChangedListener, OnShotListener {
+public class GameScene extends Scene implements OnEnemyStateChangedListener, OnShotListener, OnSelectedTowerListener {
 
 	private GameData mGameData;
 
@@ -69,8 +70,7 @@ public class GameScene extends Scene implements OnEnemyStateChangedListener, OnS
 		addChild(gameStatusLayer);
 		gameStatusLayer.autoRelease();
 
-		towerSelectLayer = new TowerSelectLayer();
-		towerSelectLayer.setColor(WYColor3B.make(255, 255, 0));
+		towerSelectLayer = new TowerSelectLayer(this);
 		towerSelectLayer.setVisible(false);
 		addChild(towerSelectLayer);
 		towerSelectLayer.autoRelease();
@@ -104,7 +104,7 @@ public class GameScene extends Scene implements OnEnemyStateChangedListener, OnS
 	public boolean wyTouchesEnded(MotionEvent event) {
 		if (towerSelectLayer.isVisible()) {
 			towerSelectLayer.setVisible(false);
-		} else {
+		} else if (mGameData.canLocationTower(currentPoint)) {
 			towerSelectLayer.setVisible(true);
 			towerSelectLayer.showSeleteTower(currentPoint);
 		}
@@ -147,8 +147,15 @@ public class GameScene extends Scene implements OnEnemyStateChangedListener, OnS
 	}
 
 	private boolean haveEnoughMoney() {
-		// next to do
 		return true;
+	}
+
+	@Override
+	public void onSelectedTower(int type) {
+		Tower tower = defenseLayer.showTower(type, currentPoint);
+		GameData.getInstance().addTower(tower.spriteTower.getPointer(), tower);
+
+		towerSelectLayer.setVisible(false);
 	}
 
 }
