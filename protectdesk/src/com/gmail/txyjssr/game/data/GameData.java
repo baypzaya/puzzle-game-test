@@ -14,7 +14,7 @@ public class GameData {
 
 	public static final int TILE_COUNT_X = 10;
 	public static final int TILE_COUNT_Y = 6;
-	
+
 	public static GameData sGameData;
 
 	private int gameSafeValue = 100;
@@ -29,8 +29,13 @@ public class GameData {
 
 	private Hashtable<Integer, Enemy> enemyMap = new Hashtable<Integer, Enemy>();
 	private Hashtable<Integer, Tower> towerMap = new Hashtable<Integer, Tower>();
-	
+
 	private int currentMoney;
+	private OnMoneyChangedListener onMoneyChangedListener;
+
+	public void setOnMoneyChangedListener(OnMoneyChangedListener onMoneyChangedListener) {
+		this.onMoneyChangedListener = onMoneyChangedListener;
+	}
 
 	public Hashtable<Integer, Enemy> getEnemyMap() {
 		return enemyMap;
@@ -90,7 +95,7 @@ public class GameData {
 					7, 4, 7, 4, 8, 4, 9 };
 			// defenseLocation();
 			currentGate = gate;
-			
+
 			currentMoney = 100;
 		}
 	}
@@ -130,13 +135,32 @@ public class GameData {
 		towerMap.clear();
 		GameData.sGameData = null;
 	}
-	
-	public boolean destroyGame(int destroyValue){
+
+	public boolean destroyGame(int destroyValue) {
 		gameSafeValue = gameSafeValue - destroyValue;
 		return gameSafeValue <= 0;
 	}
 
 	public int[] getCurrentUseableTower() {
-		return new int[]{1,2,3,4};
+		return new int[] { 1, 2, 3, 4 };
+	}
+
+	public int getMoney() {
+		return currentMoney;
+	}
+
+	public void addMoney(int addMoney) {
+		currentMoney += addMoney;
+		if (onMoneyChangedListener != null) {
+			onMoneyChangedListener.onMoneyChangedListener(currentMoney);
+		}
+	}
+
+	public void subMoney(int subMoney) {
+		currentMoney = currentMoney - subMoney;
+		currentMoney = currentMoney < 0 ? 0 : currentMoney;
+		if (onMoneyChangedListener != null) {
+			onMoneyChangedListener.onMoneyChangedListener(currentMoney);
+		}
 	}
 }

@@ -8,6 +8,7 @@ import com.gmail.txyjssr.game.data.Bullet;
 import com.gmail.txyjssr.game.data.Enemy;
 import com.gmail.txyjssr.game.data.GameData;
 import com.gmail.txyjssr.game.data.OnEnemyStateChangedListener;
+import com.gmail.txyjssr.game.data.OnMoneyChangedListener;
 import com.gmail.txyjssr.game.data.OnSelectedTowerListener;
 import com.gmail.txyjssr.game.data.OnShotListener;
 import com.gmail.txyjssr.game.data.Tower;
@@ -19,7 +20,7 @@ import com.wiyun.engine.types.WYRect;
 import com.wiyun.engine.types.WYSize;
 import com.wiyun.engine.utils.TargetSelector;
 
-public class GameScene extends Scene implements OnEnemyStateChangedListener, OnShotListener, OnSelectedTowerListener {
+public class GameScene extends Scene implements OnEnemyStateChangedListener, OnShotListener, OnSelectedTowerListener,OnMoneyChangedListener {
 
 	private GameData mGameData;
 
@@ -51,6 +52,7 @@ public class GameScene extends Scene implements OnEnemyStateChangedListener, OnS
 
 		bgLayer = new GameBackGroundLayer(mGameData.mTileWidth, mGameData.mTileHeight, mTileXCount, mTileYCount);
 		addChild(bgLayer);
+		bgLayer.updateMoney(mGameData.getMoney());
 		bgLayer.autoRelease();
 
 		enemiesLayer = new EnemiesLayer(mGameData.mTileWidth, mGameData.mTileHeight, this);
@@ -78,6 +80,9 @@ public class GameScene extends Scene implements OnEnemyStateChangedListener, OnS
 		shotTS = new TargetSelector(this, "shotEnemy", null);
 		schedule(shotTS, 0.2f);
 		setTouchEnabled(true);
+		
+		
+		mGameData.setOnMoneyChangedListener(this);
 
 	}
 
@@ -146,16 +151,20 @@ public class GameScene extends Scene implements OnEnemyStateChangedListener, OnS
 		}
 	}
 
-	private boolean haveEnoughMoney() {
-		return true;
-	}
-
 	@Override
 	public void onSelectedTower(int type) {
 		Tower tower = defenseLayer.showTower(type, currentPoint);
 		GameData.getInstance().addTower(tower.spriteTower.getPointer(), tower);
-
 		towerSelectLayer.setVisible(false);
+		mGameData.subMoney(tower.spend);
+	}
+
+	@Override
+	public void onMoneyChangedListener(int money) {
+		bgLayer.updateMoney(money);
+		if(towerSelectLayer.isVisible()){
+			towerSelectLayer.updateItemStatus(money);
+		}
 	}
 
 }
