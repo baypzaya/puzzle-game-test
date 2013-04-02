@@ -38,6 +38,7 @@ public class EnemiesLayer extends Layer implements Callback {
 	Path path;
 
 	private OnEnemyStateChangedListener listener;
+	private int[] currrentTimeEnemis;
 
 	public EnemiesLayer(float tileWidth, float tileHeight, OnEnemyStateChangedListener listener) {
 
@@ -56,7 +57,7 @@ public class EnemiesLayer extends Layer implements Callback {
 
 		mAnimDown = new Animation(1);
 		mAnimDown.addFrame(0.3f, frameAt(0, 2), frameAt(2, 2));
-		schedule(new TargetSelector(this, "addEnemies", new Object[] {}), 1);
+		schedule(new TargetSelector(this, "addEnemies(float)", new Object[] { 1 }), 1);
 
 	}
 
@@ -68,19 +69,23 @@ public class EnemiesLayer extends Layer implements Callback {
 		return enemy;
 	}
 
-	public void addEnemies() {
-		Enemy enemy = createEnemy();
-		addChild(enemy);
+	public void addEnemies(float delta) {
 
-		anim = (IntervalAction) Animate.make(mAnimDown, true).autoRelease();
-		enemy.runAction((Action) RepeatForever.make(anim).autoRelease());
-		enemy.setPathIndex(1);
-		IntervalAction moveTo = (IntervalAction) MoveTo.make(1, enemy.getPositionX(), enemy.getPositionY(),
-				path.getNextLocal(0).x, path.getNextLocal(0).y).autoRelease();
-		enemy.runAction(moveTo);
-		moveTo.setCallback(this);
-		enemy.setLifeChangedListener(listener);
-		GameData.getInstance().addEnemy(enemy.getPointer(), enemy);
+		if (GameData.getInstance().hasNextEnemy()) {
+			int type = GameData.getInstance().getNextEnemy();
+			Enemy enemy = createEnemy();
+			addChild(enemy);
+
+			anim = (IntervalAction) Animate.make(mAnimDown, true).autoRelease();
+			enemy.runAction((Action) RepeatForever.make(anim).autoRelease());
+			enemy.setPathIndex(1);
+			IntervalAction moveTo = (IntervalAction) MoveTo.make(1, enemy.getPositionX(), enemy.getPositionY(),
+					path.getNextLocal(0).x, path.getNextLocal(0).y).autoRelease();
+			enemy.runAction(moveTo);
+			moveTo.setCallback(this);
+			enemy.setLifeChangedListener(listener);
+			GameData.getInstance().addEnemy(enemy.getPointer(), enemy);
+		}
 	}
 
 	private WYRect frameAt(int x, int y) {
@@ -110,7 +115,7 @@ public class EnemiesLayer extends Layer implements Callback {
 				removeChild(node, true);
 				listener.onCrossed(enemy);
 			}
-		}else{
+		} else {
 			node.stopAllActions();
 			removeChild(node, true);
 		}

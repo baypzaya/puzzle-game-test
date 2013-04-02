@@ -11,6 +11,7 @@ import com.wiyun.engine.types.WYRect;
 public class GameData {
 	public static final int STATUS_OVER = 1;
 	public static final int STATUS_PAUSE = 2;
+	public static final int STATUS_SUCCESS = 3;
 
 	public static final int TILE_COUNT_X = 10;
 	public static final int TILE_COUNT_Y = 6;
@@ -31,10 +32,14 @@ public class GameData {
 	private Hashtable<Integer, Tower> towerMap = new Hashtable<Integer, Tower>();
 
 	private int currentMoney;
-	private OnMoneyChangedListener onMoneyChangedListener;
+	private OnGameStatusChangedListener onMoneyChangedListener;
 
-	public void setOnMoneyChangedListener(OnMoneyChangedListener onMoneyChangedListener) {
-		this.onMoneyChangedListener = onMoneyChangedListener;
+	private int[] enemies;
+	private int currentEnemyIndex = 0;
+	private boolean startNextTime = true;
+
+	public void setOnGameStatusChangedListener(OnGameStatusChangedListener onGameStatusChangedListener) {
+		this.onMoneyChangedListener = onGameStatusChangedListener;
 	}
 
 	public Hashtable<Integer, Enemy> getEnemyMap() {
@@ -76,6 +81,13 @@ public class GameData {
 
 	public void removeEnemy(int pointer) {
 		enemyMap.remove(pointer);
+		if(enemyMap.isEmpty()){
+			if(currentEnemyIndex >= enemies.length){
+				setGameStatus(STATUS_SUCCESS);
+			}else{
+				startNextTime();
+			}
+		}
 	}
 
 	public int[][] getCurrentMap() {
@@ -97,6 +109,11 @@ public class GameData {
 			currentGate = gate;
 
 			currentMoney = 100;
+
+			enemies = new int[] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+					1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+					1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+
 		}
 	}
 
@@ -136,9 +153,11 @@ public class GameData {
 		GameData.sGameData = null;
 	}
 
-	public boolean destroyGame(int destroyValue) {
+	public void destroyGame(int destroyValue) {
 		gameSafeValue = gameSafeValue - destroyValue;
-		return gameSafeValue <= 0;
+		if(gameSafeValue <= 0){
+			setGameStatus(STATUS_OVER);
+		}
 	}
 
 	public int[] getCurrentUseableTower() {
@@ -162,5 +181,34 @@ public class GameData {
 		if (onMoneyChangedListener != null) {
 			onMoneyChangedListener.onMoneyChangedListener(currentMoney);
 		}
+	}
+
+	public int getNextEnemy() {
+		if (currentEnemyIndex >= enemies.length) {
+			return -1;
+		}
+
+		int type = enemies[currentEnemyIndex];
+		currentEnemyIndex++;
+		return type;
+	}
+
+	public boolean hasNextEnemy() {
+		if (currentEnemyIndex >= enemies.length) {
+			return false;
+		}
+		boolean result = (currentEnemyIndex % 15) != 0 || startNextTime;
+		if (startNextTime) {
+			startNextTime = false;
+		}
+		return result;
+	}
+
+	public void startNextTime() {
+		startNextTime = true;
+	}
+	
+	public void setGameStatus(int status){
+		onMoneyChangedListener.onGameStatusChanged(status);
 	}
 }

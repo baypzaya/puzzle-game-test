@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.gmail.txyjssr.R;
 import com.gmail.txyjssr.game.data.GameData;
-import com.gmail.txyjssr.game.data.OnMoneyChangedListener;
+import com.gmail.txyjssr.game.data.OnGameStatusChangedListener;
 import com.gmail.txyjssr.game.data.OnSelectedTowerListener;
 import com.gmail.txyjssr.game.data.Tower;
 import com.wiyun.engine.nodes.Menu;
