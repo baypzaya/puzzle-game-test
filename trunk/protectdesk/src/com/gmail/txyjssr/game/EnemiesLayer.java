@@ -126,6 +126,7 @@ public class EnemiesLayer extends Layer implements Callback {
 			enemy.stopAllActions();
 			removeChild(enemy, true);
 			GameData.getInstance().removeEnemy(enemy.getPointer());
+			GameData.getInstance().addMoney(enemy.cost);
 			enemy = null;
 		} else {
 			Label label = Label.make("" + life);

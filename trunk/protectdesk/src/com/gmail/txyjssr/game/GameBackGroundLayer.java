@@ -2,18 +2,18 @@ package com.gmail.txyjssr.game;
 
 import java.util.ArrayList;
 
+import android.util.Log;
+
 import com.gmail.txyjssr.R;
 import com.gmail.txyjssr.game.data.GameData;
 import com.wiyun.engine.nodes.Director;
 import com.wiyun.engine.nodes.Label;
 import com.wiyun.engine.nodes.Layer;
-import com.wiyun.engine.nodes.SpriteBatchNode;
 import com.wiyun.engine.nodes.SpriteEx;
 import com.wiyun.engine.opengl.Texture2D;
 import com.wiyun.engine.types.WYRect;
 import com.wiyun.engine.types.WYSize;
 import com.wiyun.engine.utils.ResolutionIndependent;
-import com.wiyun.engine.utils.ZwoptexManager;
 
 public class GameBackGroundLayer extends Layer {
 	
@@ -85,6 +85,7 @@ public class GameBackGroundLayer extends Layer {
 	}
 	
 	public void updateMoney(int money){
+		Log.i("yujsh log","updateMoney:"+money);
 		moneyNumberLabel.setText(""+money);
 	}
 	

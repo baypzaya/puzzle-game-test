@@ -10,17 +10,20 @@ public class Enemy extends Sprite {
 	private OnEnemyStateChangedListener lifeChangedListener;
 	private int pathIndex = 0;
 	private int destroyValue = 10;
+	public int cost;
 
 	protected Enemy(Texture2D tex) {
 		super(tex);
 		life = 1000;
 		speed = 100;
+		cost = 10;
 	}
 	
 	public Enemy(Texture2D tex,WYRect rect) {
 		super(tex,rect);
 		life = 1000;
 		speed = 100;
+		cost = 10;
 	}
 
 	public long getLife() {
