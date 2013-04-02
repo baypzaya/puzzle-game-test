@@ -8,7 +8,7 @@ import com.gmail.txyjssr.game.data.Bullet;
 import com.gmail.txyjssr.game.data.Enemy;
 import com.gmail.txyjssr.game.data.GameData;
 import com.gmail.txyjssr.game.data.OnEnemyStateChangedListener;
-import com.gmail.txyjssr.game.data.OnMoneyChangedListener;
+import com.gmail.txyjssr.game.data.OnGameStatusChangedListener;
 import com.gmail.txyjssr.game.data.OnSelectedTowerListener;
 import com.gmail.txyjssr.game.data.OnShotListener;
 import com.gmail.txyjssr.game.data.Tower;
@@ -20,7 +20,8 @@ import com.wiyun.engine.types.WYRect;
 import com.wiyun.engine.types.WYSize;
 import com.wiyun.engine.utils.TargetSelector;
 
-public class GameScene extends Scene implements OnEnemyStateChangedListener, OnShotListener, OnSelectedTowerListener,OnMoneyChangedListener {
+public class GameScene extends Scene implements OnEnemyStateChangedListener, OnShotListener, OnSelectedTowerListener,
+		OnGameStatusChangedListener {
 
 	private GameData mGameData;
 
@@ -77,16 +78,15 @@ public class GameScene extends Scene implements OnEnemyStateChangedListener, OnS
 		addChild(towerSelectLayer);
 		towerSelectLayer.autoRelease();
 
-		shotTS = new TargetSelector(this, "shotEnemy", null);
+		shotTS = new TargetSelector(this, "shotEnemy(float)", new Object[] { 0.2f });
 		schedule(shotTS, 0.2f);
 		setTouchEnabled(true);
-		
-		
-		mGameData.setOnMoneyChangedListener(this);
+
+		mGameData.setOnGameStatusChangedListener(this);
 
 	}
 
-	public void shotEnemy() {
+	public void shotEnemy(float delta) {
 		Collection<Tower> towers = mGameData.getTowerMap().values();
 		for (Tower tower : towers) {
 			WYRect rect = WYRect.make(tower.spriteTower.getPositionX() - tower.scope / 2,
@@ -141,14 +141,14 @@ public class GameScene extends Scene implements OnEnemyStateChangedListener, OnS
 
 	@Override
 	public void onCrossed(Enemy target) {
-		boolean isOver = mGameData.destroyGame(target.getDestroyValue());
-		if (isOver) {
-			unschedule(shotTS);
-			Director.getInstance().pauseUI();
-
-			gameStatusLayer.setStatus(GameData.STATUS_OVER);
-			gameStatusLayer.setVisible(true);
-		}
+		 mGameData.destroyGame(target.getDestroyValue());
+//		if (isOver) {
+//			unschedule(shotTS);
+//			Director.getInstance().pauseUI();
+//
+//			gameStatusLayer.setStatus(GameData.STATUS_OVER);
+//			gameStatusLayer.setVisible(true);
+//		}
 	}
 
 	@Override
@@ -162,9 +162,16 @@ public class GameScene extends Scene implements OnEnemyStateChangedListener, OnS
 	@Override
 	public void onMoneyChangedListener(int money) {
 		bgLayer.updateMoney(money);
-		if(towerSelectLayer.isVisible()){
+		if (towerSelectLayer.isVisible()) {
 			towerSelectLayer.updateItemStatus(money);
 		}
+	}
+
+	@Override
+	public void onGameStatusChanged(int status) {
+		gameStatusLayer.setStatus(status);
+		gameStatusLayer.setVisible(true);
+
 	}
 
 }
