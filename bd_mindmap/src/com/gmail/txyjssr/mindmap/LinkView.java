@@ -71,4 +71,15 @@ public class LinkView extends View {
 		childY = y2;
 	}
 
+	public void setFocusColor() {
+		paint.setColor(getContext().getResources().getColor(R.color.line_color_red));
+		
+	}
+
+	public void setDefaultColor() {
+		paint.setColor(getContext().getResources().getColor(R.color.line_color_blue));
+		
+	}
+	
+
 }

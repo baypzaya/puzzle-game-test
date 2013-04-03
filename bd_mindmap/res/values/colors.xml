@@ -3,5 +3,5 @@
 
     <color name="bottom_pressed">#ff60aaff</color>
     <color name="line_color_blue">#ff21ab38</color>
-
+    <color name="line_color_red">#ffe60011</color>
 </resources>
