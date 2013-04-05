@@ -6,10 +6,6 @@ import java.util.List;
 public class MindMapManager {
 	MindMapDao mindMapDao = new MindMapDao();
 	NodeDao nodeDao = new NodeDao();
-
-	public MindMap createMindMap() {
-		return createMindMap();
-	}
 	
 	public MindMap createMindMap(String name) {
 		TabMindMap tabMindMap = new TabMindMap();
@@ -81,6 +77,11 @@ public class MindMapManager {
 		
 		updateRecentMindMap(mindMapId);
 		return mindMap;
+	}
+
+	public boolean isExist(MindMap mindMap) {
+		TabMindMap tmm = mindMapDao.getMindMapBy(mindMap.mindMapId);
+		return tmm!=null;
 	}
 
 }
