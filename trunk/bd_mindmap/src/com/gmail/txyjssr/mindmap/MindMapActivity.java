@@ -125,16 +125,15 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 
 	private void editNode() {
 		if (currentFocusedNode != null) {
-			DialogUtils.showInputDialog(this, getString(R.string.edit_node), currentFocusedNode.getTitle(),
-					new InputListener() {
+			DialogUtils.showInputDialog(this, getString(R.string.edit_node), currentFocusedNode.getTitle(), new InputListener() {
 
-						@Override
-						public void onInputCompleted(String inputStr) {
-							if (!TextUtils.isEmpty(inputStr)) {
-								editNode((Node) currentFocusedNode.getTag(), inputStr);
-							}
-						}
-					});
+				@Override
+				public void onInputCompleted(String inputStr) {
+					if (!TextUtils.isEmpty(inputStr)) {
+						editNode((Node) currentFocusedNode.getTag(), inputStr);
+					}
+				}
+			});
 
 		}
 
@@ -163,18 +162,17 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 																// ")";
 			Formatter ft = new Formatter().format(message, node.title);
 
-			DialogUtils.showHintDilog(this, ft.toString(), getString(R.string.delete), getString(R.string.cancel),
-					new DialogInterface.OnClickListener() {
+			DialogUtils.showHintDilog(this, ft.toString(), getString(R.string.delete), getString(R.string.cancel), new DialogInterface.OnClickListener() {
 
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							if (which == DialogInterface.BUTTON_POSITIVE) {
-								deleteNode(node);
-							}
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					if (which == DialogInterface.BUTTON_POSITIVE) {
+						deleteNode(node);
+					}
 
-						}
+				}
 
-					});
+			});
 
 		}
 
@@ -183,17 +181,16 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 	private void clearNodes() {
 		final Node rootNode = mindMap.getRootNode();
 		String message = getString(R.string.delete_all_nodes);
-		DialogUtils.showHintDilog(this, message, getString(R.string.delete_all), getString(R.string.cancel),
-				new DialogInterface.OnClickListener() {
+		DialogUtils.showHintDilog(this, message, getString(R.string.delete_all), getString(R.string.cancel), new DialogInterface.OnClickListener() {
 
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						if (which == DialogInterface.BUTTON_POSITIVE) {
-							deleteNode(rootNode);
-						}
-					}
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				if (which == DialogInterface.BUTTON_POSITIVE) {
+					deleteNode(rootNode);
+				}
+			}
 
-				});
+		});
 
 	}
 
@@ -213,6 +210,12 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 				long mindMapId = data.getLongExtra(MMManagerActivity.EXTRA_OPEN_MINDMAP_ID, -1);
 				if (mindMapId != -1 && mindMapId != mindMap.mindMapId) {
 					mindMap = mindMapManager.getMindMapBy(mindMapId);
+					createMindMapUI(mindMap);
+				}
+			} else {
+				boolean isExist = mindMapManager.isExist(mindMap);
+				if (!isExist) {
+					mindMap = mindMapManager.createMindMap(getString(R.string.new_mind_map));
 					createMindMapUI(mindMap);
 				}
 			}
@@ -250,10 +253,12 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 		Node node = (Node) etNode.getTag();
 		if (!node.isRootNode) {
 			LinkView lv = (LinkView) mindMapPad.findViewWithTag(node._id);
-			if (etNode.isFocused()) {
-				lv.setFocusColor();
-			} else {
-				lv.setDefaultColor();
+			if (lv != null) {
+				if (etNode.isFocused()) {
+					lv.setFocusColor();
+				} else {
+					lv.setDefaultColor();
+				}
 			}
 		}
 
@@ -278,12 +283,11 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 
 		NodeLayout nv = createNodeLayout(childNode);
 		mindMapPad.addView(nv);
-		
 
 		int addIndex = mindMap.getNodes().size() - 2;
 		LinkView lv = createLinkView(childNode);
 		mindMapPad.addView(lv, addIndex);
-		
+
 		nv.requestEditFocus();
 	}
 

@@ -7,20 +7,16 @@
 
     <ImageView
         android:id="@+id/iv_mm_icon"
-        android:layout_width="wrap_content"
+        android:layout_width="50dp"
         android:layout_height="fill_parent"
-        android:paddingLeft="10dip"
-        android:paddingRight="10dip"
         android:scaleType="centerInside"
         android:src="@drawable/mm_icon" />
 
     <ImageView
         android:id="@+id/iv_mm_delete"
-        android:layout_width="wrap_content"
+        android:layout_width="50dp"
         android:layout_height="fill_parent"
         android:background="@drawable/bottom_bar_item_selector"
-        android:paddingLeft="10dip"
-        android:paddingRight="10dip"
         android:scaleType="centerInside"
         android:src="@drawable/mm_delete"
         android:visibility="gone" />
