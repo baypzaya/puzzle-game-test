@@ -30,6 +30,12 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 	private EditTextNode currentFocusedNode;
 
 	private AdView adView;
+	
+	private CommondStack commondStack = new CommondStack();
+
+	private ImageView ivUndo;
+
+	private ImageView ivRedo;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -51,11 +57,15 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 		ImageView ivDelete = (ImageView) findViewById(R.id.iv_delete);
 		ImageView ivAdd = (ImageView) findViewById(R.id.iv_add);
 		ImageView ivEdit = (ImageView) findViewById(R.id.iv_edit);
+		ivUndo = (ImageView) findViewById(R.id.iv_undo);
+		ivRedo = (ImageView) findViewById(R.id.iv_redo);
 		ivRoot.setOnClickListener(this);
 		ivClear.setOnClickListener(this);
 		ivDelete.setOnClickListener(this);
 		ivAdd.setOnClickListener(this);
 		ivEdit.setOnClickListener(this);
+		ivUndo.setOnClickListener(this);
+		ivRedo.setOnClickListener(this);
 
 		mindMapPad = (MindMapView) findViewById(R.id.fl_pad);
 		mindMapPad.setOnClickListener(this);
@@ -67,6 +77,8 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 		}
 
 		createMindMapUI(mindMap);
+		
+		updateRedoAndUndoState();
 	}
 
 	private void createMindMapUI(MindMap mindMap) {
@@ -119,8 +131,25 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 			case R.id.iv_edit:
 				editNode();
 				break;
+			case R.id.iv_undo:
+				undo();
+				break;
+			case R.id.iv_redo:
+				redo();
+				break;
 			}
 		}
+	}
+
+	private void redo() {
+		commondStack.redo();
+		updateRedoAndUndoState();
+	}
+
+	private void undo() {
+		// TODO Auto-generated method stub
+		commondStack.undo();
+		updateRedoAndUndoState();
 	}
 
 	private void editNode() {
@@ -289,6 +318,20 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 		mindMapPad.addView(lv, addIndex);
 
 		nv.requestEditFocus();
+		
+		ICommond commond = new CommondAddNode(this, parentNode, nodeTitle, mindMap, mindMapPad,childNode);
+		commondStack.pushCommond(commond);
+		updateRedoAndUndoState();
+	}
+
+	private void updateRedoAndUndoState() {
+		boolean redoEnable = commondStack.canRedo();
+		boolean undoEnable = commondStack.canUndo();
+		
+		ivUndo.setEnabled(undoEnable);
+		ivRedo.setEnabled(redoEnable);
+		
+		
 	}
 
 	private void editNode(Node node, String nodeTile) {
