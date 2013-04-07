@@ -40,7 +40,7 @@ public class MindMapManager {
 
 		mindMap.mindMapId = tmm._id;
 		mindMap.name = tmm.name;
-		mindMap.addNode(nodeDao.getAllNodesBy(tmm._id));
+		mindMap.setNodeList(nodeDao.getAllNodesBy(tmm._id));
 		return mindMap;
 	}
 
@@ -56,7 +56,7 @@ public class MindMapManager {
 		}
 
 		mindMap.mindMapId = tmm._id;
-		mindMap.addNode(nodeDao.getAllNodesBy(tmm._id));
+		mindMap.setNodeList(nodeDao.getAllNodesBy(tmm._id));
 		mindMap.name = tmm.name;
 		
 		updateRecentMindMap(mindMapId);
