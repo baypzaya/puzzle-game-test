@@ -28,6 +28,30 @@
             android:singleLine="true"
             android:textColor="#ffffff"
             android:textSize="18dp" />
+        
+          <ImageView
+            android:id="@+id/iv_undo"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:background="@drawable/bottom_bar_item_selector"
+            android:scaleType="centerInside"
+            android:src="@drawable/undo_selector" />
+         <View
+            android:layout_width="1px"
+            android:layout_height="fill_parent"
+            android:background="@drawable/menu_divider" />
+
+        <ImageView
+            android:id="@+id/iv_redo"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:background="@drawable/bottom_bar_item_selector"
+            android:scaleType="centerInside"
+            android:src="@drawable/redo_selector" />
 
         <ImageView
             android:id="@+id/iv_root"
@@ -37,12 +61,14 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:scaleType="centerInside"
-            android:src="@drawable/node_root" />
+            android:src="@drawable/node_root" 
+            android:visibility="gone"/>
 
         <View
             android:layout_width="1px"
             android:layout_height="fill_parent"
-            android:background="@drawable/menu_divider" />
+            android:background="@drawable/menu_divider" 
+            android:visibility="gone"/>
 
         <ImageView
             android:id="@+id/iv_clear"
@@ -52,7 +78,8 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:scaleType="centerInside"
-            android:src="@drawable/node_clear" />
+            android:src="@drawable/node_clear" 
+            android:visibility="gone"/>
 
         <View
             android:layout_width="1px"
@@ -139,32 +166,7 @@
             android:background="@drawable/bottom_bar_item_selector"
             android:scaleType="centerInside"
             android:src="@drawable/node_add" />
-         <View
-            android:layout_width="1px"
-            android:layout_height="fill_parent"
-            android:background="@drawable/menu_divider" />
-
-        <ImageView
-            android:id="@+id/iv_undo"
-            android:layout_width="0dp"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
-            android:background="@drawable/bottom_bar_item_selector"
-            android:scaleType="centerInside"
-            android:src="@drawable/undo_selector" />
-         <View
-            android:layout_width="1px"
-            android:layout_height="fill_parent"
-            android:background="@drawable/menu_divider" />
-
-        <ImageView
-            android:id="@+id/iv_redo"
-            android:layout_width="0dp"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
-            android:background="@drawable/bottom_bar_item_selector"
-            android:scaleType="centerInside"
-            android:src="@drawable/redo_selector" />
+               
     </LinearLayout>
 
 </RelativeLayout>

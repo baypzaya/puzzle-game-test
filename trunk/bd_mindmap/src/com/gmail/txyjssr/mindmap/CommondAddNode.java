@@ -6,16 +6,12 @@ import android.view.View;
 
 public class CommondAddNode implements ICommond {
 	private MindMapActivity mmActivity;
-	private Node parentNode;
 	private Node childNode;
-	private String childTitle;
 	private MindMap mindMap;
 	private MindMapView mindMapPad;
 
-	public CommondAddNode(MindMapActivity mmActivity, Node parentNode, String childTitle, MindMap mindMap, MindMapView mindMapPad,Node chilNode) {
+	public CommondAddNode(MindMapActivity mmActivity,MindMap mindMap, MindMapView mindMapPad,Node chilNode) {
 		this.mmActivity = mmActivity;
-		this.parentNode = parentNode;
-		this.childTitle = childTitle;
 		this.mindMap = mindMap;
 		this.mindMapPad = mindMapPad;
 		this.childNode = chilNode;
@@ -23,20 +19,12 @@ public class CommondAddNode implements ICommond {
 
 	@Override
 	public void redo() {
-		childNode = new Node();
-		childNode.title = childTitle;
-		childNode.setParentNode(parentNode);
 		mindMap.addNode(childNode);
-
 		NodeLayout nv = createNodeLayout(childNode);
 		mindMapPad.addView(nv);
-
 		int addIndex = mindMap.getNodes().size() - 2;
 		LinkView lv = createLinkView(childNode);
 		mindMapPad.addView(lv, addIndex);
-
-		nv.requestEditFocus();
-
 	}
 
 	@Override

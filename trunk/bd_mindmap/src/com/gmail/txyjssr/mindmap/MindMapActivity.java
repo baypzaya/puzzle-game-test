@@ -1,5 +1,6 @@
 package com.gmail.txyjssr.mindmap;
 
+import java.util.ArrayList;
 import java.util.Formatter;
 import java.util.List;
 
@@ -18,7 +19,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.baidu.mobads.AdView;
-import com.baidu.mobads.AdViewListener;
 import com.gmail.txyjssr.mindmap.EditTextNode.OnMoveListener;
 
 public class MindMapActivity extends Activity implements OnClickListener, OnFocusChangeListener, OnMoveListener {
@@ -308,6 +308,7 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 		Node childNode = new Node();
 		childNode.title = nodeTitle;
 		childNode.setParentNode(parentNode);
+		mindMap.computeLocation(childNode);
 		mindMap.addNode(childNode);
 
 		NodeLayout nv = createNodeLayout(childNode);
@@ -316,10 +317,9 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 		int addIndex = mindMap.getNodes().size() - 2;
 		LinkView lv = createLinkView(childNode);
 		mindMapPad.addView(lv, addIndex);
-
 		nv.requestEditFocus();
 		
-		ICommond commond = new CommondAddNode(this, parentNode, nodeTitle, mindMap, mindMapPad,childNode);
+		ICommond commond = new CommondAddNode(this, mindMap, mindMapPad,childNode);
 		commondStack.pushCommond(commond);
 		updateRedoAndUndoState();
 	}
@@ -335,14 +335,18 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 	}
 
 	private void editNode(Node node, String nodeTile) {
-
-		if (!TextUtils.isEmpty(nodeTile.trim())) {
+		String oldTitle = node.title;
+		if (!TextUtils.isEmpty(nodeTile.trim()) && !oldTitle.equals(nodeTile)) {			
 			node.title = nodeTile;
 			mindMap.updateNodeTile(node);
 			NodeLayout nl = (NodeLayout) findViewById((int) node._id);
 			nl.setTitle(nodeTile);
 			TextView tvMindMapName = (TextView) findViewById(R.id.tv_mind_map_name);
 			tvMindMapName.setText(mindMap.name);
+			
+			ICommond commond = new CommondEditNode(this, mindMap, node, nodeTile, oldTitle);
+			commondStack.pushCommond(commond);
+			updateRedoAndUndoState();
 		}
 	}
 
@@ -354,24 +358,19 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 			View linkView = mindMapPad.findViewWithTag(n._id);
 			mindMapPad.removeView(linkView);
 		}
+		
+		ICommond commond = new CommondDeleteNode(this, mindMap, mindMapPad, node, nodeList);
+		commondStack.pushCommond(commond);
+		updateRedoAndUndoState();
 	}
 
 	private NodeLayout createNodeLayout(Node node) {
-		NodeLayout nv = new NodeLayout(this);
-		nv.setId((int) node._id);
-		nv.setTitle(node.title);
-		nv.setLocation(node.x, node.y);
-
-		nv.setNode(node);
-		nv.setOnFocusChangeListener(this);
-		nv.setOnMoveListener(this);
+		NodeLayout nv = new NodeLayout(this,node);
 		return nv;
 	}
 
 	private LinkView createLinkView(Node node) {
-		LinkView lv = new LinkView(this);
-		lv.setLink(node.parentNode.x, node.parentNode.y, node.x, node.y);
-		lv.setTag(node._id);
+		LinkView lv = new LinkView(this,node);
 		return lv;
 	}
 

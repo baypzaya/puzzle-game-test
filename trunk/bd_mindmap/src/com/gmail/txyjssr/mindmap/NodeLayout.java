@@ -42,6 +42,18 @@ public class NodeLayout extends LinearLayout implements INode, OnClickListener {
 		initView();
 	}
 
+	public NodeLayout(MindMapActivity mmActivity, Node node) {
+		this(mmActivity);
+		
+		this.setId((int) node._id);
+		this.setTitle(node.title);
+		this.setLocation(node.x, node.y);
+
+		this.setNode(node);
+		this.setOnFocusChangeListener(mmActivity);
+		this.setOnMoveListener(mmActivity);
+	}
+
 	private void initView() {
 		etn = (EditTextNode) findViewById(R.id.etn_node);
 		ivAdd = (ImageView) findViewById(R.id.iv_add);

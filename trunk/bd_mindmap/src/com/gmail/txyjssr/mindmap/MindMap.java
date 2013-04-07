@@ -1,6 +1,7 @@
 package com.gmail.txyjssr.mindmap;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
 
 import android.util.Log;
@@ -18,12 +19,16 @@ public class MindMap {
 	}
 
 	public void addNode(Node node) {
-
 		if (nodeList == null) {
 			nodeList = new ArrayList<Node>();
 		}
 		node.mindMapId = mindMapId;
+		long id = nodeDao.insert(node);
+		node._id = id;
+		nodeList.add(node);
+	}
 
+	public void computeLocation(Node node) {
 		if (node.parentNode != null) {
 			int childCount = node.parentNode.getChildCount();
 			double result = log2(childCount);
@@ -76,10 +81,6 @@ public class MindMap {
 			node.x = node.parentNode.x + Math.round(x);
 			node.y = node.parentNode.y + Math.round(y);
 		}
-
-		long id = nodeDao.insert(node);
-		node._id = id;
-		nodeList.add(node);
 	}
 
 	private float transformDP2PX(float value) {
@@ -98,7 +99,7 @@ public class MindMap {
 	public List<Node> removeNode(Node node) {
 		List<Node> listNode = getAllTreeNodes(node);
 		if (!node.isRootNode) {
-			listNode.add(node);
+			listNode.add(0, node);
 			node.parentNode.nodeChildren.remove(node);
 		} else {
 			node.nodeChildren.clear();
@@ -140,5 +141,36 @@ public class MindMap {
 			}
 		}
 		return null;
+	}
+
+	public void addNode(List<Node> nodes) {
+		if (this.nodeList == null) {
+			this.nodeList = new ArrayList<Node>();
+		}
+
+		orderNodeList(nodes);
+		this.nodeList.addAll(nodes);
+		for (Node node : nodes) {
+			nodeDao.insert(node,true);
+		}
+	}
+
+	private void orderNodeList(List<Node> nodeList) {
+		Hashtable<Long, Node> ht = new Hashtable<Long, Node>();
+		for (Node node : nodeList) {
+
+			if (!ht.containsKey(node._id)) {
+				ht.put(node._id, node);
+			}
+
+			if (node.parentNode != null) {
+				continue;
+			}
+
+			if (ht.containsKey(node.parentNodeId)) {
+				Node parentNode = ht.get(node.parentNodeId);
+				node.setParentNode(parentNode);
+			}
+		}
 	}
 }

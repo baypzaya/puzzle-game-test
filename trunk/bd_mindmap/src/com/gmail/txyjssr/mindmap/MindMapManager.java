@@ -40,27 +40,12 @@ public class MindMapManager {
 
 		mindMap.mindMapId = tmm._id;
 		mindMap.name = tmm.name;
-		mindMap.nodeList = nodeDao.getAllNodesBy(tmm._id);
-		orderNodeList(mindMap.nodeList);
+		mindMap.addNode(nodeDao.getAllNodesBy(tmm._id));
 		return mindMap;
 	}
 
 	private void updateRecentMindMap(long mindMapId) {
 		mindMapDao.updateRecentMindMap(mindMapId);
-	}
-
-	private void orderNodeList(List<Node> nodeList) {
-		Hashtable<Long, Node> ht = new Hashtable<Long, Node>();
-		for (Node node : nodeList) {
-			if(!ht.containsKey(node._id)){
-				ht.put(node._id, node);
-			}
-			
-			if(ht.containsKey(node.parentNodeId)){
-				Node parentNode = ht.get(node.parentNodeId);
-				node.setParentNode(parentNode);
-			}
-		}
 	}
 
 	public MindMap getMindMapBy(long mindMapId) {
@@ -71,9 +56,8 @@ public class MindMapManager {
 		}
 
 		mindMap.mindMapId = tmm._id;
-		mindMap.nodeList = nodeDao.getAllNodesBy(tmm._id);
+		mindMap.addNode(nodeDao.getAllNodesBy(tmm._id));
 		mindMap.name = tmm.name;
-		orderNodeList(mindMap.nodeList);
 		
 		updateRecentMindMap(mindMapId);
 		return mindMap;

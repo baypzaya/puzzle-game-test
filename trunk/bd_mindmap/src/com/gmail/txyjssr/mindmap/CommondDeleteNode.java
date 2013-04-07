@@ -1,0 +1,47 @@
+package com.gmail.txyjssr.mindmap;
+
+import java.util.List;
+
+import android.view.View;
+
+public class CommondDeleteNode implements ICommond {
+	private MindMapActivity mmActivity;
+	private Node deleteNode;
+	private List<Node> deleteNodeList;
+	private MindMap mindMap;
+	private MindMapView mindMapPad;
+	
+	public CommondDeleteNode(MindMapActivity mmActivity,MindMap mindMap, MindMapView mindMapPad,Node deleteNode,List<Node> deleteNodeList) {
+		this.mmActivity = mmActivity;
+		this.mindMap = mindMap;
+		this.mindMapPad = mindMapPad;
+		this.deleteNode = deleteNode;
+		this.deleteNodeList = deleteNodeList;
+	}
+	
+
+	@Override
+	public void redo() {
+		List<Node> nodeList = mindMap.removeNode(deleteNode);
+		for (Node n : nodeList) {
+			View nodeView = mindMapPad.findViewById((int) n._id);
+			mindMapPad.removeView(nodeView);
+			View linkView = mindMapPad.findViewWithTag(n._id);
+			mindMapPad.removeView(linkView);
+		}
+	}
+
+	@Override
+	public void undo() {
+		mindMap.addNode(deleteNodeList);
+		for (Node childNode : deleteNodeList) {
+			NodeLayout nv = new NodeLayout(mmActivity,childNode);
+			mindMapPad.addView(nv);
+
+			int addIndex = mindMap.getNodes().size() - 2;
+			LinkView lv = new LinkView(mmActivity,childNode);
+			mindMapPad.addView(lv, addIndex);
+		}
+	}
+
+}
