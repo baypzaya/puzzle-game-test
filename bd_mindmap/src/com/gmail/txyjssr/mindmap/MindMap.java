@@ -27,6 +27,15 @@ public class MindMap {
 		node._id = id;
 		nodeList.add(node);
 	}
+	
+	public void addNode(Node node,boolean isContainId) {
+		if (nodeList == null) {
+			nodeList = new ArrayList<Node>();
+		}
+		node.mindMapId = mindMapId;
+		nodeDao.insert(node,isContainId);
+		nodeList.add(node);
+	}
 
 	public void computeLocation(Node node) {
 		if (node.parentNode != null) {
@@ -143,25 +152,12 @@ public class MindMap {
 		return null;
 	}
 
-	public void addNode(List<Node> nodes) {
-		if (this.nodeList == null) {
-			this.nodeList = new ArrayList<Node>();
-		}
-
-		orderNodeList(nodes);
-		this.nodeList.addAll(nodes);
-		for (Node node : nodes) {
-			nodeDao.insert(node, true);
-		}
-	}
-
 	public void setNodeList(List<Node> nodes) {
-
 		this.nodeList = nodes;
 		orderNodeList(nodes);
 	}
 
-	private void orderNodeList(List<Node> nodeList) {
+	public void orderNodeList(List<Node> nodeList) {
 		Hashtable<Long, Node> ht = new Hashtable<Long, Node>();
 		for (Node node : nodeList) {
 
