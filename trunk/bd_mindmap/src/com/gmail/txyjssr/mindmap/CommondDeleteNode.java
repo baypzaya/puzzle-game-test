@@ -17,6 +17,7 @@ public class CommondDeleteNode implements ICommond {
 		this.mindMapPad = mindMapPad;
 		this.deleteNode = deleteNode;
 		this.deleteNodeList = deleteNodeList;
+		mindMap.orderNodeList(this.deleteNodeList);
 	}
 	
 
@@ -33,8 +34,9 @@ public class CommondDeleteNode implements ICommond {
 
 	@Override
 	public void undo() {
-		mindMap.addNode(deleteNodeList);
+		
 		for (Node childNode : deleteNodeList) {
+			mindMap.addNode(childNode,true);
 			NodeLayout nv = new NodeLayout(mmActivity,childNode);
 			mindMapPad.addView(nv);
 
