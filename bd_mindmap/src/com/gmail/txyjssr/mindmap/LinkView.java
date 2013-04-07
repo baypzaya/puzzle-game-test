@@ -32,6 +32,12 @@ public class LinkView extends View {
         paint.setPathEffect(effect);
 	}
 
+	public LinkView(MindMapActivity mindMapActivity, Node node) {
+		this(mindMapActivity);
+		this.setLink(node.parentNode.x, node.parentNode.y, node.x, node.y);
+		this.setTag(node._id);
+	}
+
 	@Override
 	protected void onDraw(Canvas canvas) {
 		canvas.drawColor(Color.TRANSPARENT);

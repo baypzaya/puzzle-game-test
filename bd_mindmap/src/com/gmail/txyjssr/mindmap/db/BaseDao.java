@@ -7,7 +7,7 @@ import java.util.List;
 import android.content.ContentValues;
 import android.database.Cursor;
 
-public class BaseDao{
+public class BaseDao {
 	public static final String COLUMN_ID = "_id";
 	protected DBManager mDBManager = DBManager.getInstance();
 
@@ -30,9 +30,13 @@ public class BaseDao{
 	}
 
 	public long insert(Object o) {
+		return insert(o, false);
+	}
+
+	public long insert(Object o, boolean isContainId) {
 		Class tClass = o.getClass();
 		String tableName = tClass.getSimpleName();
-		ContentValues values = DatabaseUtils.transformObject(o);
+		ContentValues values = DatabaseUtils.transformObject(o,isContainId);
 		long id = mDBManager.insert(tableName, values);
 		return id;
 	}
@@ -46,15 +50,4 @@ public class BaseDao{
 		int count = mDBManager.update(tableName, values, whereClause, whereArgs);
 		return count;
 	}
-
-//	public List queryAll(Class tClass){
-//		List list = new ArrayList();
-//		String tableName = tClass.getName();
-//		Cursor c = mDBManager.qury(tableName, null, null, null, null, "_id");
-//		if(c!=null&&c.moveToFirst()){
-//			do{
-//				Object
-//			}
-//		}
-//	}
 }

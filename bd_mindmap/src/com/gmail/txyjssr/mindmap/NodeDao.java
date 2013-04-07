@@ -59,7 +59,7 @@ public class NodeDao extends BaseDao {
 			selection = COLUMN_PARENTNODEID + " = ?";
 			selectionArgs = new String[] { "" + id };
 		}
-		Cursor c = mDBManager.qury(TABLE_NAME, null, selection, selectionArgs, null, null);
+		Cursor c = mDBManager.qury(TABLE_NAME, null, selection, selectionArgs, null, COLUMN_ID);
 
 		List<Node> nodeList = new ArrayList<Node>();
 		if (c != null && c.moveToFirst()) {

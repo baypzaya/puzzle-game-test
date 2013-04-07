@@ -9,13 +9,18 @@ import android.content.ContentValues;
 public class DatabaseUtils {
 
 	public static ContentValues transformObject(Object o) {
+		return transformObject(o, false);
+	}
+
+	public static ContentValues transformObject(Object o, boolean isContainId) {
 		ContentValues values = new ContentValues();
 		try {
 			Class c = o.getClass();
 			Field[] fields = c.getFields();
 			for (Field field : fields) {
 				String key = field.getName();
-				if("_id".equals(key)){
+
+				if (!isContainId && "_id".equals(key)) {
 					continue;
 				}
 				String fieldType = field.getType().getName();
@@ -29,9 +34,9 @@ public class DatabaseUtils {
 				if (isIntegerType(fieldType)) {
 					values.put(key, (Integer) field.get(o));
 				}
-				
-				//long
-				if(isLongType(fieldType)){
+
+				// long
+				if (isLongType(fieldType)) {
 					values.put(key, (Long) field.get(o));
 				}
 
@@ -131,9 +136,9 @@ public class DatabaseUtils {
 			if (isIntegerType(fieldType)) {
 				columType = "INTEGER";
 			}
-			
-			//long
-			if(isLongType(fieldType)){
+
+			// long
+			if (isLongType(fieldType)) {
 				columType = "INTEGER";
 			}
 
@@ -181,7 +186,7 @@ public class DatabaseUtils {
 	private static boolean isIntegerType(String fieldType) {
 		return fieldType.equals("int") || fieldType.equals("java.lang.Integer");
 	}
-	
+
 	private static boolean isLongType(String fieldType) {
 		return fieldType.equals("long") || fieldType.equals("java.lang.Long");
 	}
