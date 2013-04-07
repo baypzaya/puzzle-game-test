@@ -30,12 +30,14 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 	private EditTextNode currentFocusedNode;
 
 	private AdView adView;
-	
+
 	private CommondStack commondStack = new CommondStack();
 
 	private ImageView ivUndo;
 
 	private ImageView ivRedo;
+
+	private Point oldPoint;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +79,7 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 		}
 
 		createMindMapUI(mindMap);
-		
+
 		updateRedoAndUndoState();
 	}
 
@@ -103,6 +105,9 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 			NodeLayout nl = (NodeLayout) mindMapPad.findViewById((int) rootNode._id);
 			nl.requestEditFocus();
 		}
+		
+		commondStack.clear();
+		updateRedoAndUndoState();
 	}
 
 	@Override
@@ -147,22 +152,22 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 	}
 
 	private void undo() {
-		// TODO Auto-generated method stub
 		commondStack.undo();
 		updateRedoAndUndoState();
 	}
 
 	private void editNode() {
 		if (currentFocusedNode != null) {
-			DialogUtils.showInputDialog(this, getString(R.string.edit_node), currentFocusedNode.getTitle(), new InputListener() {
+			DialogUtils.showInputDialog(this, getString(R.string.edit_node), currentFocusedNode.getTitle(),
+					new InputListener() {
 
-				@Override
-				public void onInputCompleted(String inputStr) {
-					if (!TextUtils.isEmpty(inputStr)) {
-						editNode((Node) currentFocusedNode.getTag(), inputStr);
-					}
-				}
-			});
+						@Override
+						public void onInputCompleted(String inputStr) {
+							if (!TextUtils.isEmpty(inputStr)) {
+								editNode((Node) currentFocusedNode.getTag(), inputStr);
+							}
+						}
+					});
 
 		}
 
@@ -191,17 +196,18 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 																// ")";
 			Formatter ft = new Formatter().format(message, node.title);
 
-			DialogUtils.showHintDilog(this, ft.toString(), getString(R.string.delete), getString(R.string.cancel), new DialogInterface.OnClickListener() {
+			DialogUtils.showHintDilog(this, ft.toString(), getString(R.string.delete), getString(R.string.cancel),
+					new DialogInterface.OnClickListener() {
 
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					if (which == DialogInterface.BUTTON_POSITIVE) {
-						deleteNode(node);
-					}
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							if (which == DialogInterface.BUTTON_POSITIVE) {
+								deleteNode(node);
+							}
 
-				}
+						}
 
-			});
+					});
 
 		}
 
@@ -210,16 +216,17 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 	private void clearNodes() {
 		final Node rootNode = mindMap.getRootNode();
 		String message = getString(R.string.delete_all_nodes);
-		DialogUtils.showHintDilog(this, message, getString(R.string.delete_all), getString(R.string.cancel), new DialogInterface.OnClickListener() {
+		DialogUtils.showHintDilog(this, message, getString(R.string.delete_all), getString(R.string.cancel),
+				new DialogInterface.OnClickListener() {
 
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				if (which == DialogInterface.BUTTON_POSITIVE) {
-					deleteNode(rootNode);
-				}
-			}
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						if (which == DialogInterface.BUTTON_POSITIVE) {
+							deleteNode(rootNode);
+						}
+					}
 
-		});
+				});
 
 	}
 
@@ -318,8 +325,8 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 		LinkView lv = createLinkView(childNode);
 		mindMapPad.addView(lv, addIndex);
 		nv.requestEditFocus();
-		
-		ICommond commond = new CommondAddNode(this, mindMap, mindMapPad,childNode);
+
+		ICommond commond = new CommondAddNode(this, mindMap, mindMapPad, childNode);
 		commondStack.pushCommond(commond);
 		updateRedoAndUndoState();
 	}
@@ -327,23 +334,22 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 	private void updateRedoAndUndoState() {
 		boolean redoEnable = commondStack.canRedo();
 		boolean undoEnable = commondStack.canUndo();
-		
+
 		ivUndo.setEnabled(undoEnable);
 		ivRedo.setEnabled(redoEnable);
-		
-		
+
 	}
 
 	private void editNode(Node node, String nodeTile) {
 		String oldTitle = node.title;
-		if (!TextUtils.isEmpty(nodeTile.trim()) && !oldTitle.equals(nodeTile)) {			
+		if (!TextUtils.isEmpty(nodeTile.trim()) && !oldTitle.equals(nodeTile)) {
 			node.title = nodeTile;
 			mindMap.updateNodeTile(node);
 			NodeLayout nl = (NodeLayout) findViewById((int) node._id);
 			nl.setTitle(nodeTile);
 			TextView tvMindMapName = (TextView) findViewById(R.id.tv_mind_map_name);
 			tvMindMapName.setText(mindMap.name);
-			
+
 			ICommond commond = new CommondEditNode(this, mindMap, node, nodeTile, oldTitle);
 			commondStack.pushCommond(commond);
 			updateRedoAndUndoState();
@@ -358,19 +364,19 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 			View linkView = mindMapPad.findViewWithTag(n._id);
 			mindMapPad.removeView(linkView);
 		}
-		
+
 		ICommond commond = new CommondDeleteNode(this, mindMap, mindMapPad, node, nodeList);
 		commondStack.pushCommond(commond);
 		updateRedoAndUndoState();
 	}
 
 	private NodeLayout createNodeLayout(Node node) {
-		NodeLayout nv = new NodeLayout(this,node);
+		NodeLayout nv = new NodeLayout(this, node);
 		return nv;
 	}
 
 	private LinkView createLinkView(Node node) {
-		LinkView lv = new LinkView(this,node);
+		LinkView lv = new LinkView(this, node);
 		return lv;
 	}
 
@@ -380,7 +386,16 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 	}
 
 	@Override
+	public void startMove(EditTextNode editTextNode) {
+		oldPoint = new Point();
+		oldPoint.x = editTextNode.getPointX();
+		oldPoint.y = editTextNode.getPointY();
+
+	}
+
+	@Override
 	public void onMove(EditTextNode etn) {
+
 		Node node = (Node) etn.getTag();
 		LinkView lv = (LinkView) mindMapPad.findViewWithTag(node._id);
 		if (lv != null) {
@@ -404,6 +419,16 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 		node.x = etn.getPointX();
 		node.y = etn.getPointY();
 		mindMap.updateNodeLocation(node);
+		
+		Point newPoint = new Point();
+		newPoint.x = node.x;
+		newPoint.y = node.y;
+		
+		ICommond commont = new CommondMoveNode(this, mindMap, mindMapPad, node, newPoint,oldPoint);
+		commondStack.pushCommond(commont);
+		updateRedoAndUndoState();
+		
+		oldPoint = null;
 	}
 
 }

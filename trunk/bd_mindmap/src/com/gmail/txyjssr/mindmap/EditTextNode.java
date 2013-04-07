@@ -55,6 +55,7 @@ public class EditTextNode extends TextView implements INode {
 			float ty = event.getY();
 			if (currentModel == 0 && (Math.abs(tx - motionX) > 20 || Math.abs(ty - motionY) > 20)) {
 					currentModel = moveTouch;
+					mMoveListener.startMove(this);
 			}
 			
 			if(currentModel == moveTouch){
@@ -127,6 +128,7 @@ public class EditTextNode extends TextView implements INode {
 	
 	public interface OnMoveListener{
 		public void onMove(EditTextNode etn);
+		public void startMove(EditTextNode editTextNode);
 		public void endMove(EditTextNode etn);
 	}
 

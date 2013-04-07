@@ -151,8 +151,14 @@ public class MindMap {
 		orderNodeList(nodes);
 		this.nodeList.addAll(nodes);
 		for (Node node : nodes) {
-			nodeDao.insert(node,true);
+			nodeDao.insert(node, true);
 		}
+	}
+
+	public void setNodeList(List<Node> nodes) {
+
+		this.nodeList = nodes;
+		orderNodeList(nodes);
 	}
 
 	private void orderNodeList(List<Node> nodeList) {
