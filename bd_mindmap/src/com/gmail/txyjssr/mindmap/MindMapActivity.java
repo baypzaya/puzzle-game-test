@@ -89,7 +89,7 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 		mindMapPad.removeAllViews();
 		List<Node> nodeList = mindMap.getNodes();
 		for (Node node : nodeList) {
-			NodeLayout nl = createNodeLayout(node);
+			EditTextNode nl = createNodeLayout(node);
 			mindMapPad.addView(nl);
 			if (!node.isRootNode) {
 				LinkView lv = createLinkView(node);
@@ -102,8 +102,8 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 		mindMapPad.scrollTo((int) rootNode.x, (int) rootNode.y);
 
 		if (nodeList.size() == 1) {
-			NodeLayout nl = (NodeLayout) mindMapPad.findViewById((int) rootNode._id);
-			nl.requestEditFocus();
+			EditTextNode nl = (EditTextNode) mindMapPad.findViewById((int) rootNode._id);
+			nl.requestFocus();
 		}
 		
 		commondStack.clear();
@@ -318,13 +318,13 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 		mindMap.computeLocation(childNode);
 		mindMap.addNode(childNode);
 
-		NodeLayout nv = createNodeLayout(childNode);
+		EditTextNode nv = createNodeLayout(childNode);
 		mindMapPad.addView(nv);
 
 		int addIndex = mindMap.getNodes().size() - 2;
 		LinkView lv = createLinkView(childNode);
 		mindMapPad.addView(lv, addIndex);
-		nv.requestEditFocus();
+		nv.requestFocus();
 
 		ICommond commond = new CommondAddNode(this, mindMap, mindMapPad, childNode);
 		commondStack.pushCommond(commond);
@@ -345,7 +345,7 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 		if (!TextUtils.isEmpty(nodeTile.trim()) && !oldTitle.equals(nodeTile)) {
 			node.title = nodeTile;
 			mindMap.updateNodeTile(node);
-			NodeLayout nl = (NodeLayout) findViewById((int) node._id);
+			EditTextNode nl = (EditTextNode) findViewById((int) node._id);
 			nl.setTitle(nodeTile);
 			TextView tvMindMapName = (TextView) findViewById(R.id.tv_mind_map_name);
 			tvMindMapName.setText(mindMap.name);
@@ -370,8 +370,9 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 		updateRedoAndUndoState();
 	}
 
-	private NodeLayout createNodeLayout(Node node) {
-		NodeLayout nv = new NodeLayout(this, node);
+	private EditTextNode createNodeLayout(Node node) {
+		EditTextNode nv = new EditTextNode(this);
+		nv.setNode(node);
 		return nv;
 	}
 
