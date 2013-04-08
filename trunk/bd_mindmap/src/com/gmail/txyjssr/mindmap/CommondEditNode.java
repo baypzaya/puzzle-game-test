@@ -21,7 +21,7 @@ public class CommondEditNode implements ICommond {
 	public void redo() {
 		editNode.title = newTitle;
 		mindMap.updateNodeTile(editNode);
-		NodeLayout nl = (NodeLayout) mmActivity.findViewById((int) editNode._id);
+		EditTextNode nl = (EditTextNode) mmActivity.findViewById((int) editNode._id);
 		nl.setTitle(newTitle);
 		TextView tvMindMapName = (TextView)mmActivity.findViewById(R.id.tv_mind_map_name);
 		tvMindMapName.setText(mindMap.name);
@@ -31,7 +31,7 @@ public class CommondEditNode implements ICommond {
 	public void undo() {
 		editNode.title = oldTitle;
 		mindMap.updateNodeTile(editNode);
-		NodeLayout nl = (NodeLayout) mmActivity.findViewById((int) editNode._id);
+		EditTextNode nl = (EditTextNode) mmActivity.findViewById((int) editNode._id);
 		nl.setTitle(oldTitle);
 		TextView tvMindMapName = (TextView)mmActivity.findViewById(R.id.tv_mind_map_name);
 		tvMindMapName.setText(mindMap.name);

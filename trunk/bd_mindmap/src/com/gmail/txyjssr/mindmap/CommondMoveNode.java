@@ -45,9 +45,9 @@ public class CommondMoveNode implements ICommond {
 			}
 		}
 
-		NodeLayout nl = (NodeLayout) mmActivity.findViewById((int) moveNode._id);
+		EditTextNode nl = (EditTextNode) mmActivity.findViewById((int) moveNode._id);
 		nl.setLocation(point.x, point.y);
-		mindMapPad.scroll(nl.getEditNode());
+		mindMapPad.scroll(nl);
 		
 		mindMapPad.requestLayout();
 

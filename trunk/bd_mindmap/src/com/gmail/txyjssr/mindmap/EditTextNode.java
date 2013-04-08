@@ -5,6 +5,7 @@ import android.text.InputType;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.TextView;
 
 public class EditTextNode extends TextView implements INode {
@@ -29,10 +30,16 @@ public class EditTextNode extends TextView implements INode {
 		this.mMoveListener = onMoveListener;
 	}
 
-	public EditTextNode(Context context, AttributeSet attrs) {
-		super(context, attrs);
+	public EditTextNode(MindMapActivity mmActivity) {
+		super(mmActivity);
+		
+		setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+		
 		lastInputType = getInputType();
 		setInputType(InputType.TYPE_NULL);
+		
+		this.setOnFocusChangeListener(mmActivity);
+		this.setOnMoveListener(mmActivity);
 	}
 
 	private float motionX;
@@ -130,6 +137,20 @@ public class EditTextNode extends TextView implements INode {
 		public void onMove(EditTextNode etn);
 		public void startMove(EditTextNode editTextNode);
 		public void endMove(EditTextNode etn);
+	}
+
+	public void setNode(Node node) {
+		this.setId((int) node._id);
+		this.setTitle(node.title);
+		this.setLocation(node.x, node.y);
+		
+		setTag(node);
+		
+		if(node.isRootNode){
+			setBackgroundResource(R.drawable.root_node_status_selector);
+		}else{
+			setBackgroundResource(R.drawable.node_status_selector);
+		}
 	}
 
 }

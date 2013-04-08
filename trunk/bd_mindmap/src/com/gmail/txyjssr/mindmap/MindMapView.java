@@ -49,8 +49,8 @@ public class MindMapView extends FrameLayout {
 				width = (int) (child.getMeasuredWidth() * currentScale / 2);
 				height = (int) (child.getMeasuredHeight() * currentScale / 2);
 				child.layout(centerX - width, centerY - height, centerX + width, centerY + height);
-				if(child instanceof NodeLayout){
-					EditTextNode tv = ((NodeLayout)child).getEditNode();
+				if(child instanceof EditTextNode){
+					EditTextNode tv = (EditTextNode)child;
 					if(tv.isFocused()){
 						scroll(tv);
 					}

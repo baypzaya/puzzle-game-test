@@ -20,7 +20,7 @@ public class CommondAddNode implements ICommond {
 	@Override
 	public void redo() {
 		mindMap.addNode(childNode);
-		NodeLayout nv = createNodeLayout(childNode);
+		EditTextNode nv = createNodeLayout(childNode);
 		mindMapPad.addView(nv);
 		int addIndex = mindMap.getNodes().size() - 2;
 		LinkView lv = createLinkView(childNode);
@@ -38,8 +38,8 @@ public class CommondAddNode implements ICommond {
 		}
 	}
 
-	private NodeLayout createNodeLayout(Node node) {
-		NodeLayout nv = new NodeLayout(mmActivity);
+	private EditTextNode createNodeLayout(Node node) {
+		EditTextNode nv = new EditTextNode(mmActivity);
 		nv.setId((int) node._id);
 		nv.setTitle(node.title);
 		nv.setLocation(node.x, node.y);
