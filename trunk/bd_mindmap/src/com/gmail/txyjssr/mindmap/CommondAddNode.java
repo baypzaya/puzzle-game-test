@@ -51,9 +51,7 @@ public class CommondAddNode implements ICommond {
 	}
 
 	private LinkView createLinkView(Node node) {
-		LinkView lv = new LinkView(mmActivity);
-		lv.setLink(node.parentNode.x, node.parentNode.y, node.x, node.y);
-		lv.setTag(node._id);
+		LinkView lv = new LinkView(mmActivity,node);
 		return lv;
 	}
 

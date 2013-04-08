@@ -21,6 +21,8 @@ public class MindMapView extends AbsoluteLayout {
 	private int lastTouchMode = TOUCH_MODE_NONE;
 	
 	private boolean isMoveToCenter = false;
+	
+	private EditTextNode moveToNode;
 
 	public MindMapView(Context context) {
 		super(context);
@@ -138,19 +140,28 @@ public class MindMapView extends AbsoluteLayout {
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 		if(!isMoveToCenter){
-			moveToCenter();
+			if(moveToNode!=null){
+				moveToNodeLocationTocenter(moveToNode);
+			}
 			isMoveToCenter = true;
 		}
 	}
-
-	public void moveToNodeLocation(float x, float y) {
-		scrollTo((int) x, (int) y);
-	}
 	
-	public void moveToCenter(){
-		int width = getMeasuredWidth();
-		int height = getMeasuredHeight();
-		scrollTo(-width/2, -height/2);
+	public void requestMoveToNode(EditTextNode etn){
+		isMoveToCenter = false;
+		moveToNode = etn;
+	}
+
+	public void moveToNodeLocationTocenter(EditTextNode etn) {
+		float nodeX = etn.getPointX();
+		float nodeY = etn.getPointY();
+		
+		int nodeCenterX = (int) (nodeX+etn.getMeasuredWidth()/2);
+		int nodeCenterY = (int) (nodeY+etn.getMeasuredHeight()/2);
+		
+		int padWidth = this.getMeasuredWidth();
+		int padHeight = this.getMeasuredHeight();
+		scrollTo(nodeCenterX-padWidth/2,nodeCenterY-padHeight/2);
 	}
 
 	public void scroll(EditTextNode currentFocusedNode) {

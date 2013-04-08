@@ -3,5 +3,24 @@
 
     <color name="bottom_pressed">#ff60aaff</color>
     <color name="line_color_blue">#ff21ab38</color>
-    <color name="line_color_red">#ffe60011</color>
+    <color name="line_color_red">#ff21ab38</color>
+    
+    <color name="node_pad_red">#ffced2</color>
+    <color name="node_strock_red">#e60011</color>
+    
+    <color name="node_pad_green">#b1f913</color>
+    <color name="node_strock_green">#638c0b</color>
+    
+    <color name="node_pad_yellow">#fff45c</color>
+    <color name="node_strock_yellow">#b6aa00</color>
+    
+    <color name="node_pad_purpel">#eed0ff</color>
+    <color name="node_strock_purpel">#8629bd</color>
+    
+  	<color name="node_pad_blue">#7ecef4</color>
+    <color name="node_strock_blue">#313af5</color>
+    
+    <color name="node_pad_orange">#f6bc8e</color>
+    <color name="node_strock_orange">#eb6100</color>
+    
 </resources>

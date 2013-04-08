@@ -96,8 +96,8 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 			if (!node.isRootNode) {
 				LinkView lv = createLinkView(node);
 				mindMapPad.addView(lv, 0);
-			} else {
-				nl.setBackgroundResource(R.drawable.root_node_status_selector);
+			}else{
+				mindMapPad.requestMoveToNode(nl);
 			}
 		}
 		Node rootNode = mindMap.getRootNode();
@@ -110,15 +110,6 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 		
 		commondStack.clear();
 		updateRedoAndUndoState();
-		
-//		Runnable r = new Runnable() {
-//			@Override
-//			public void run() {
-//				mindMapPad.moveToCenter();
-//			}
-//		};
-//		
-//		mHandler.postDelayed(r, 10);
 	}
 
 	@Override
@@ -243,7 +234,7 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 
 	private void moveToRootNode() {
 		Node rootNode = mindMap.getRootNode();
-		mindMapPad.moveToNodeLocation(rootNode.x, rootNode.y);
+		mindMapPad.moveToNodeLocationTocenter((EditTextNode)findViewById((int)rootNode._id));
 	}
 
 	@Override
@@ -277,12 +268,10 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 			if (etNode.isFocused()) {
 				currentFocusedNode = etNode;
 				mindMapPad.scroll(currentFocusedNode);
-				updateLineFocusState(etNode);
 				mindMapPad.bringChildToFront(etNode);
 			} else {
 				InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 				imm.hideSoftInputFromWindow(etNode.getWindowToken(), 0);
-				updateLineFocusState(etNode);
 				currentFocusedNode = null;
 			}
 		} else {
@@ -297,33 +286,8 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 
 	}
 
-	private void updateLineFocusState(EditTextNode etNode) {
-		Node node = (Node) etNode.getTag();
-		if (!node.isRootNode) {
-			LinkView lv = (LinkView) mindMapPad.findViewWithTag(node._id);
-			if (lv != null) {
-				if (etNode.isFocused()) {
-					lv.setFocusColor();
-				} else {
-					lv.setDefaultColor();
-				}
-			}
-		}
-
-	}
-
-	// private void updateNodeTitle(Node node) {
-	//
-	// }
-
 	private void addNode(Node parentNode, String nodeTitle) {
-
-		// if (parentNode.nodeChildren.size() >= 20) {
-		// Toast.makeText(this, "the node already had 20 nodes",
-		// Toast.LENGTH_LONG).show();
-		// return;
-		// }
-
+		
 		Node childNode = new Node();
 		childNode.title = nodeTitle;
 		childNode.setParentNode(parentNode);
@@ -408,21 +372,6 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 
 	@Override
 	public void onMove(EditTextNode etn) {
-
-		Node node = (Node) etn.getTag();
-		LinkView lv = (LinkView) mindMapPad.findViewWithTag(node._id);
-		if (lv != null) {
-			lv.childX = etn.getPointX();
-			lv.childY = etn.getPointY();
-		}
-		List<Node> childrenNodes = node.nodeChildren;
-		for (Node n : childrenNodes) {
-			LinkView tlv = (LinkView) mindMapPad.findViewWithTag(n._id);
-			if (tlv != null) {
-				tlv.parentX = etn.getPointX();
-				tlv.parentY = etn.getPointY();
-			}
-		}
 		mindMapPad.scroll(etn);
 	}
 
