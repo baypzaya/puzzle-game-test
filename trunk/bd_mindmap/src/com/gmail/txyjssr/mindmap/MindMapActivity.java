@@ -11,12 +11,16 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.Log;
+import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.baidu.mobads.AdView;
 import com.gmail.txyjssr.mindmap.EditTextNode.OnMoveListener;
@@ -38,6 +42,7 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 	private ImageView ivRedo;
 
 	private Point oldPoint;
+	private boolean isPreBack = false;
 	
 	private Handler mHandler = new Handler();
 
@@ -392,5 +397,24 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 		
 		oldPoint = null;
 	}
+	
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if(keyCode == KeyEvent.KEYCODE_BACK && !isPreBack){
+			Toast.makeText(this, R.string.pre_back, Toast.LENGTH_LONG).show();
+			isPreBack = true;
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
+	}
+
+	@Override
+	public boolean dispatchTouchEvent(MotionEvent ev) {
+		isPreBack = false;
+		return super.dispatchTouchEvent(ev);
+	}
+	
+	
 
 }

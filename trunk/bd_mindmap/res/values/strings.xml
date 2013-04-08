@@ -14,4 +14,5 @@
 	<string name="delete_all_nodes">您确定要删除全部节点吗？</string>
 	<string name="delete_all">删除全部</string>
 	<string name="delete_node">如果删除该节点，其所有子节点也将全部被删除。\n您确定要删除节点(%1$s)吗？</string>
+	<string name="pre_back">请再点击一次返回键，退出思维导图工具</string>
 </resources>
