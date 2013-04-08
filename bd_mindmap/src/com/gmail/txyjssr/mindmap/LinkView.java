@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Path;
 import android.graphics.PathEffect;
+import android.util.Log;
 import android.view.View;
 import android.widget.AbsoluteLayout.LayoutParams;
 
@@ -42,6 +43,30 @@ public class LinkView extends View {
 		this.setTag(node._id);
 		parentEtn = (EditTextNode) mindMapActivity.findViewById((int)node.parentNode._id);
 		childEtn = (EditTextNode) mindMapActivity.findViewById((int)node._id);
+		
+		int layerNum = node.getLayerNum();
+		Log.i("yujsh log","node.title:"+node.title);
+		Log.i("yujsh log","node.layerNum:"+layerNum);
+		switch (layerNum) {
+		case 5:
+			paint.setColor(getContext().getResources().getColor(R.color.node_strock_red));
+			break;
+		case 1:
+			paint.setColor(getContext().getResources().getColor(R.color.node_strock_green));
+			break;
+		case 2:
+			paint.setColor(getContext().getResources().getColor(R.color.node_strock_orange));
+			break;
+		case 4:
+			paint.setColor(getContext().getResources().getColor(R.color.node_strock_blue));
+			break;
+		case 3:
+			paint.setColor(getContext().getResources().getColor(R.color.node_strock_purpel));
+			break;
+		default:
+			paint.setColor(getContext().getResources().getColor(R.color.node_strock_yellow));
+			break;
+		}
 	}
 
 	@Override
@@ -83,7 +108,7 @@ public class LinkView extends View {
 		setMeasuredDimension(width, height);
 	}
 
-	public void setLink(float x, float y, float x2, float y2) {
+	private void setLink(float x, float y, float x2, float y2) {
 		parentX = x;
 		parentY = y;
 		childX = x2;
@@ -92,15 +117,4 @@ public class LinkView extends View {
 		int ly = (int) (y < y2 ? y : y2);
 		setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, lx, ly));
 	}
-
-	public void setFocusColor() {
-		paint.setColor(getContext().getResources().getColor(R.color.line_color_red));
-
-	}
-
-	public void setDefaultColor() {
-		paint.setColor(getContext().getResources().getColor(R.color.line_color_blue));
-
-	}
-
 }

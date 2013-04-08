@@ -41,5 +41,12 @@ public class Node extends BaseData{
 	public int getChildCount() {
 		return nodeChildren.size();
 	}
-
+	
+	public int getLayerNum(){
+		int i = 1;
+		if(!isRootNode){
+			i+=parentNode.getLayerNum();
+		}
+		return i;
+	}
 }

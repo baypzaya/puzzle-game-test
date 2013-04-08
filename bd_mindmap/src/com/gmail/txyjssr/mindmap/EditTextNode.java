@@ -1,6 +1,5 @@
 package com.gmail.txyjssr.mindmap;
 
-import android.text.InputType;
 import android.view.MotionEvent;
 import android.widget.AbsoluteLayout.LayoutParams;
 import android.widget.TextView;
@@ -86,7 +85,7 @@ public class EditTextNode extends TextView implements INode {
 
 	@Override
 	public String getTitle() {
-		return getEditableText().toString();
+		return getText().toString();
 	}
 
 	@Override
@@ -121,10 +120,26 @@ public class EditTextNode extends TextView implements INode {
 
 		setTag(node);
 
-		if (node.isRootNode) {
-			setBackgroundResource(R.drawable.root_node_status_selector);
-		} else {
-			setBackgroundResource(R.drawable.node_status_selector);
+		int layerNum = node.getLayerNum();
+		switch (layerNum) {
+		case 5:
+			setBackgroundResource(R.drawable.node_status_red_selector);
+			break;
+		case 1:
+			setBackgroundResource(R.drawable.node_status_green_selector);
+			break;
+		case 2:
+			setBackgroundResource(R.drawable.node_status_orange_selector);
+			break;
+		case 4:
+			setBackgroundResource(R.drawable.node_status_blue_selector);
+			break;
+		case 3:
+			setBackgroundResource(R.drawable.node_status_purpel_selector);
+			break;
+		default:
+			setBackgroundResource(R.drawable.node_status_yellow_selector);
+			break;
 		}
 
 	}
