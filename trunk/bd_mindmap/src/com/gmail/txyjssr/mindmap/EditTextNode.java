@@ -1,30 +1,14 @@
 package com.gmail.txyjssr.mindmap;
 
-import android.content.Context;
 import android.text.InputType;
-import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
-import android.view.ViewGroup.LayoutParams;
+import android.widget.AbsoluteLayout.LayoutParams;
 import android.widget.TextView;
 
 public class EditTextNode extends TextView implements INode {
 	private float x;
 	private float y;
 	private OnMoveListener mMoveListener;
-	
-	private int lastInputType = InputType.TYPE_NULL;
-
-	// public EditTextNode(Context context, Node node) {
-	// super(context);
-	// LayoutParams layout = new LayoutParams(LayoutParams.WRAP_CONTENT,
-	// LayoutParams.WRAP_CONTENT);
-	// setLayoutParams(layout);
-	// setId((int)node._id);
-	// this.x = node.x;
-	// this.y = node.y;
-	// setTitle(node.title);
-	// }
 
 	public void setOnMoveListener(OnMoveListener onMoveListener) {
 		this.mMoveListener = onMoveListener;
@@ -32,12 +16,8 @@ public class EditTextNode extends TextView implements INode {
 
 	public EditTextNode(MindMapActivity mmActivity) {
 		super(mmActivity);
-		
-		setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-		
-		lastInputType = getInputType();
-		setInputType(InputType.TYPE_NULL);
-		
+		setFocusable(true);
+		setFocusableInTouchMode(true);
 		this.setOnFocusChangeListener(mmActivity);
 		this.setOnMoveListener(mmActivity);
 	}
@@ -61,39 +41,42 @@ public class EditTextNode extends TextView implements INode {
 			float tx = event.getX();
 			float ty = event.getY();
 			if (currentModel == 0 && (Math.abs(tx - motionX) > 20 || Math.abs(ty - motionY) > 20)) {
-					currentModel = moveTouch;
+				currentModel = moveTouch;
+				if (mMoveListener != null) {
 					mMoveListener.startMove(this);
+				}
+
 			}
-			
-			if(currentModel == moveTouch){
-				x = x+tx - motionX;
-				y = y+ty - motionY;
-				if(mMoveListener!=null){
+
+			if (currentModel == moveTouch) {
+				x = x + tx - motionX;
+				y = y + ty - motionY;
+				LayoutParams p = (LayoutParams) getLayoutParams();
+				p.x = (int) x;
+				p.y = (int) y;
+				if (mMoveListener != null) {
 					mMoveListener.onMove(this);
 				}
 				requestLayout();
 			}
 			break;
-		case MotionEvent.ACTION_UP:	
-			if(currentModel == moveTouch){
-				if(mMoveListener!=null){
+		case MotionEvent.ACTION_UP:
+			if (currentModel == moveTouch) {
+				if (mMoveListener != null) {
 					mMoveListener.endMove(this);
 				}
-			}else{
+			} else {
 				long downTime = event.getDownTime();
 				long eventTime = event.getEventTime();
-				if(eventTime-downTime<500){
+				if (eventTime - downTime < 500) {
 					requestFocus();
 				}
 			}
 			break;
 		}
-//		if(currentModel == 0){
-//			return super.onTouchEvent(event);
-//		}else{
-			return true;
-//		}
-		
+
+		return true;
+
 	}
 
 	@Override
@@ -110,6 +93,7 @@ public class EditTextNode extends TextView implements INode {
 	public void setLocation(float x, float y) {
 		this.x = x;
 		this.y = y;
+		setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, (int) x, (int) y));
 	}
 
 	@Override
@@ -122,20 +106,11 @@ public class EditTextNode extends TextView implements INode {
 		return y;
 	}
 
-//	public void setEditEnable(boolean b) {
-//		if (b) {
-//			setInputType(lastInputType);
-//			setKeyListener(TextKeyListener.getInstance());
-//		} else {
-//			setKeyListener(null);
-//			setInputType(InputType.TYPE_NULL);
-//		}
-
-//	}
-	
-	public interface OnMoveListener{
+	public interface OnMoveListener {
 		public void onMove(EditTextNode etn);
+
 		public void startMove(EditTextNode editTextNode);
+
 		public void endMove(EditTextNode etn);
 	}
 
@@ -143,14 +118,14 @@ public class EditTextNode extends TextView implements INode {
 		this.setId((int) node._id);
 		this.setTitle(node.title);
 		this.setLocation(node.x, node.y);
-		
+
 		setTag(node);
-		
-		if(node.isRootNode){
+
+		if (node.isRootNode) {
 			setBackgroundResource(R.drawable.root_node_status_selector);
-		}else{
+		} else {
 			setBackgroundResource(R.drawable.node_status_selector);
 		}
-	}
 
+	}
 }

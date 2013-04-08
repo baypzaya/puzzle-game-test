@@ -5,9 +5,10 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AbsoluteLayout;
 import android.widget.FrameLayout;
 
-public class MindMapView extends FrameLayout {
+public class MindMapView extends AbsoluteLayout {
 	private final int TOUCH_MODE_NONE = 0;
 	private final int TOUCH_MODE_SINGLE = 1;
 	private final int TOUCH_MODE_DOUBLE = 2;
@@ -18,6 +19,8 @@ public class MindMapView extends FrameLayout {
 
 	private float currentScale = 1f;
 	private int lastTouchMode = TOUCH_MODE_NONE;
+	
+	private boolean isMoveToCenter = false;
 
 	public MindMapView(Context context) {
 		super(context);
@@ -30,45 +33,47 @@ public class MindMapView extends FrameLayout {
 	public MindMapView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 	}
-
-	@Override
-	protected void onLayout(boolean changed, int l, int t, int r, int b) {
-		int childCount = getChildCount();
-		for (int i = 0; i < childCount; i++) {
-			final View child = getChildAt(i);
-
-			int centerX = 0;
-			int centerY = 0;
-			int width = 0;
-			int height = 0;
-
-			if (child instanceof INode) {
-				INode nodeView = (INode) child;
-				centerX = (r - l) / 2 + (int) (nodeView.getPointX() * currentScale);
-				centerY = (b - t) / 2 + (int) (nodeView.getPointY() * currentScale);
-				width = (int) (child.getMeasuredWidth() * currentScale / 2);
-				height = (int) (child.getMeasuredHeight() * currentScale / 2);
-				child.layout(centerX - width, centerY - height, centerX + width, centerY + height);
-				if(child instanceof EditTextNode){
-					EditTextNode tv = (EditTextNode)child;
-					if(tv.isFocused()){
-						scroll(tv);
-					}
-				}
-			} else if (child instanceof LinkView) {
-				LinkView linkView = (LinkView) child;
-				int childCenterX = (int) ((linkView.parentX + linkView.childX) / 2 * currentScale);
-				int childCenterY = (int) ((linkView.parentY + linkView.childY) / 2 * currentScale);
-				centerX = (r - l) / 2 + childCenterX;
-				centerY = (b - t) / 2 + childCenterY;
-				width = (int) (linkView.getMeasuredWidth() * currentScale / 2);
-				height = (int) (linkView.getMeasuredHeight() * currentScale / 2);
-			}
-
-			child.layout(centerX - width, centerY - height, centerX + width, centerY + height);
-		}
-
-	}
+	
+//	@Override
+//	protected void onLayout(boolean changed, int l, int t, int r, int b) {
+//		int childCount = getChildCount();
+//		for (int i = 0; i < childCount; i++) {
+//			final View child = getChildAt(i);
+//
+//			int centerX = 0;
+//			int centerY = 0;
+//			int width = 0;
+//			int height = 0;
+//
+//			if (child instanceof INode) {
+//				INode nodeView = (INode) child;
+//				centerX = (r - l) / 2 + (int) (nodeView.getPointX() * currentScale);
+//				centerY = (b - t) / 2 + (int) (nodeView.getPointY() * currentScale);
+//				width = (int) (child.getMeasuredWidth() * currentScale / 2);
+//				height = (int) (child.getMeasuredHeight() * currentScale / 2);
+//				child.layout(centerX - width, centerY - height, centerX + width, centerY + height);
+//				if(child instanceof EditTextNode){
+//					EditTextNode tv = (EditTextNode)child;
+//					if(tv.isFocused()){
+//						scroll(tv);
+//					}
+//				}
+//			} else if (child instanceof LinkView) {
+//				LinkView linkView = (LinkView) child;
+//				int childCenterX = (int) ((linkView.parentX + linkView.childX) / 2 * currentScale);
+//				int childCenterY = (int) ((linkView.parentY + linkView.childY) / 2 * currentScale);
+//				centerX = (r - l) / 2 + childCenterX;
+//				centerY = (b - t) / 2 + childCenterY;
+//				width = (int) (linkView.getMeasuredWidth() * currentScale / 2);
+//				height = (int) (linkView.getMeasuredHeight() * currentScale / 2);
+//			}
+//
+//			child.layout(centerX - width, centerY - height, centerX + width, centerY + height);
+//		}
+//
+//	}
+	
+	
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
@@ -129,8 +134,23 @@ public class MindMapView extends FrameLayout {
 		}
 	}
 
+	@Override
+	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+		if(!isMoveToCenter){
+			moveToCenter();
+			isMoveToCenter = true;
+		}
+	}
+
 	public void moveToNodeLocation(float x, float y) {
 		scrollTo((int) x, (int) y);
+	}
+	
+	public void moveToCenter(){
+		int width = getMeasuredWidth();
+		int height = getMeasuredHeight();
+		scrollTo(-width/2, -height/2);
 	}
 
 	public void scroll(EditTextNode currentFocusedNode) {
@@ -138,10 +158,10 @@ public class MindMapView extends FrameLayout {
 		float nodeX = currentFocusedNode.getPointX();
 		float nodeY = currentFocusedNode.getPointY();
 
-		int top = (int) (nodeY - currentFocusedNode.getMeasuredHeight() / 2);
-		int bottom = (int) (nodeY + currentFocusedNode.getMeasuredHeight() / 2);
-		int left = (int) (nodeX - currentFocusedNode.getMeasuredWidth() / 2);
-		int right = (int) (nodeX + currentFocusedNode.getMeasuredWidth() / 2);
+		int top = (int) nodeY;
+		int bottom = (int) (nodeY + currentFocusedNode.getMeasuredHeight());
+		int left = (int) (nodeX);
+		int right = (int) (nodeX + currentFocusedNode.getMeasuredWidth());
 
 		int cscrollX = this.getScrollX();
 		int cscrollY = this.getScrollY();
@@ -151,16 +171,16 @@ public class MindMapView extends FrameLayout {
 		int nscrollX = 0;
 		int nscrollY = 0;
 
-		if (top < cscrollY - padHeight / 2) {
-			nscrollY = top - (cscrollY - padHeight / 2);
-		} else if (bottom > cscrollY + padHeight / 2) {
-			nscrollY = bottom - (cscrollY + padHeight / 2);
+		if (top < cscrollY) {
+			nscrollY = top - cscrollY;
+		} else if (bottom > cscrollY + padHeight) {
+			nscrollY = bottom - (cscrollY + padHeight);
 		}
 
-		if (left < cscrollX - padWidth / 2) {
-			nscrollX = left - (cscrollX - padWidth / 2);
-		} else if (right > cscrollX+ padWidth / 2) {
-			nscrollX = right - (cscrollX + padWidth / 2);
+		if (left < cscrollX) {
+			nscrollX = left - cscrollX;
+		} else if (right > cscrollX+ padWidth) {
+			nscrollX = right - (cscrollX + padWidth);
 		}
 
 		if (nscrollX != 0 || nscrollY != 0) {

@@ -1,6 +1,5 @@
 package com.gmail.txyjssr.mindmap;
 
-import java.util.ArrayList;
 import java.util.Formatter;
 import java.util.List;
 
@@ -9,6 +8,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.View;
@@ -38,6 +38,8 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 	private ImageView ivRedo;
 
 	private Point oldPoint;
+	
+	private Handler mHandler = new Handler();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -108,6 +110,15 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 		
 		commondStack.clear();
 		updateRedoAndUndoState();
+		
+//		Runnable r = new Runnable() {
+//			@Override
+//			public void run() {
+//				mindMapPad.moveToCenter();
+//			}
+//		};
+//		
+//		mHandler.postDelayed(r, 10);
 	}
 
 	@Override
@@ -267,6 +278,7 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 				currentFocusedNode = etNode;
 				mindMapPad.scroll(currentFocusedNode);
 				updateLineFocusState(etNode);
+				mindMapPad.bringChildToFront(etNode);
 			} else {
 				InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 				imm.hideSoftInputFromWindow(etNode.getWindowToken(), 0);
@@ -391,7 +403,7 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 		oldPoint = new Point();
 		oldPoint.x = editTextNode.getPointX();
 		oldPoint.y = editTextNode.getPointY();
-
+		mindMapPad.bringChildToFront(editTextNode);
 	}
 
 	@Override
