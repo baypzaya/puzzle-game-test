@@ -402,7 +402,7 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if(keyCode == KeyEvent.KEYCODE_BACK && !isPreBack){
-			Toast.makeText(this, R.string.pre_back, Toast.LENGTH_LONG).show();
+			Toast.makeText(this, R.string.pre_back, Toast.LENGTH_SHORT).show();
 			isPreBack = true;
 			return true;
 		}
