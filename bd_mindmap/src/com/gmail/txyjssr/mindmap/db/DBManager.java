@@ -46,10 +46,15 @@ public class DBManager {
 		int count = db.update(table, values, whereClause, whereArgs);
 		return count;
 	}
+	
+	public void excuteSQL(String sql){
+		db.execSQL(sql);
+	}
 
 	public void closeDataBase() {
 		if (db != null && db.isOpen()) {
 			db.close();
 		}
 	}
+	
 }
