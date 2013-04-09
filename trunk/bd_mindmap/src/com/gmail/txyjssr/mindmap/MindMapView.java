@@ -135,10 +135,10 @@ public class MindMapView extends AbsoluteLayout {
 			return true;
 		}
 	}
-
+	
 	@Override
-	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+	protected void onLayout(boolean changed, int l, int t, int r, int b) {
+		super.onLayout(changed, l, t, r, b);
 		if(!isMoveToCenter){
 			if(moveToNode!=null){
 				moveToNodeLocationTocenter(moveToNode);
@@ -153,15 +153,23 @@ public class MindMapView extends AbsoluteLayout {
 	}
 
 	public void moveToNodeLocationTocenter(EditTextNode etn) {
-		float nodeX = etn.getPointX();
-		float nodeY = etn.getPointY();
+		int[] nodeLocation = new int[2];
+		etn.getLocationInWindow(nodeLocation);
+		int nodeX = nodeLocation[0];
+		int nodeY = nodeLocation[1];
 		
 		int nodeCenterX = (int) (nodeX+etn.getMeasuredWidth()/2);
 		int nodeCenterY = (int) (nodeY+etn.getMeasuredHeight()/2);
 		
+		int[] padLocation = new int[2];
+		getLocationInWindow(padLocation);
+		int padX = padLocation[0];
+		int padY = padLocation[1];
 		int padWidth = this.getMeasuredWidth();
 		int padHeight = this.getMeasuredHeight();
-		scrollTo(nodeCenterX-padWidth/2,nodeCenterY-padHeight/2);
+		int padCenterX = padX+padWidth/2;
+		int padCenterY = padY+padHeight/2;
+		scrollBy(nodeCenterX-padCenterX,nodeCenterY-padCenterY);
 	}
 
 	public void scroll(EditTextNode currentFocusedNode) {
@@ -178,7 +186,7 @@ public class MindMapView extends AbsoluteLayout {
 		int cscrollY = this.getScrollY();
 		int padWidth = this.getMeasuredWidth();
 		int padHeight = this.getMeasuredHeight();
-
+		
 		int nscrollX = 0;
 		int nscrollY = 0;
 

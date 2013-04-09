@@ -45,8 +45,6 @@ public class LinkView extends View {
 		childEtn = (EditTextNode) mindMapActivity.findViewById((int)node._id);
 		
 		int layerNum = node.getLayerNum();
-		Log.i("yujsh log","node.title:"+node.title);
-		Log.i("yujsh log","node.layerNum:"+layerNum);
 		switch (layerNum) {
 		case 5:
 			paint.setColor(getContext().getResources().getColor(R.color.node_strock_red));
