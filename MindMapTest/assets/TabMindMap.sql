@@ -1,0 +1,7 @@
+DROP TABLE IF EXISTS "TabMindMap";
+CREATE TABLE TabMindMap (_id INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL ,name VARCHAR ,isCurrent BOOL );
+INSERT INTO "TabMindMap" VALUES(1,'思维导图',0);
+INSERT INTO "TabMindMap" VALUES(2,'逛街',0);
+INSERT INTO "TabMindMap" VALUES(3,'旅游',0);
+INSERT INTO "TabMindMap" VALUES(4,'工作计划',1);
+INSERT INTO "TabMindMap" VALUES(5,'特色天',0);
