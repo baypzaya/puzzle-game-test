@@ -1,16 +1,23 @@
 package com.gmail.txyjssr.mindmap.test;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.test.InstrumentationTestCase;
+import android.test.suitebuilder.annotation.Suppress;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.ImageView;
 
-import com.gmail.txyjssr.mindmap.EditTextNode;
 import com.gmail.txyjssr.mindmap.MindMap;
 import com.gmail.txyjssr.mindmap.MindMapActivity;
 import com.gmail.txyjssr.mindmap.Node;
-import com.gmail.txyjssr.mindmap.NodeLayout;
 import com.gmail.txyjssr.mindmap.R;
+import com.gmail.txyjssr.mindmap.db.DBManager;
 import com.gmail.txyjssr.mindmap.test.utils.ReflectUtils;
 
 public class MMATest extends InstrumentationTestCase {
@@ -34,13 +41,33 @@ public class MMATest extends InstrumentationTestCase {
 		ivDelete = (ImageView) mmActivity.findViewById(R.id.iv_delete);
 		ivAdd = (ImageView) mmActivity.findViewById(R.id.iv_add);
 		ivEdit = (ImageView) mmActivity.findViewById(R.id.iv_edit);
+
+	}
+
+	public void testIntertInfo() {
+
+		String[] insertTables = { "TabMindMap.sql", "Node.sql" };
+		AssetManager am = getInstrumentation().getContext().getAssets();
+		try {
+			for (String tabName : insertTables) {
+				InputStream mmIS = am.open(tabName);
+				BufferedReader mmBR = new BufferedReader(new InputStreamReader(mmIS));
+				String readLine = "";
+				while (!TextUtils.isEmpty(readLine = mmBR.readLine())) {
+					DBManager.getInstance().excuteSQL(readLine);
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	protected void tearDown() throws Exception {
-//		mmActivity.finish();
+		// mmActivity.finish();
 		super.tearDown();
 	}
 
+	@Suppress
 	public void testAddNode() {
 		final MindMap mindMap = (MindMap) ReflectUtils.getField(mmActivity, "mindMap");
 		final int lNodeCount = mindMap.nodeList.size();
@@ -49,13 +76,13 @@ public class MMATest extends InstrumentationTestCase {
 		for (int i = 0; i < 5; i++) {
 			addNode(rootNode, "child_" + rootNode.title);
 		}
-		
-		for(Node node:rootNode.nodeChildren){
+
+		for (Node node : rootNode.nodeChildren) {
 			for (int i = 0; i < 5; i++) {
 				addNode(node, "child_" + node.title);
 			}
-			
-			for(Node tnode:node.nodeChildren){
+
+			for (Node tnode : node.nodeChildren) {
 				for (int i = 0; i < 4; i++) {
 					addNode(tnode, "child_" + node.title);
 				}
@@ -69,8 +96,8 @@ public class MMATest extends InstrumentationTestCase {
 	}
 
 	private void addNode(Node node, String nodeName) {
-		Runnable r = ReflectUtils.getPostRunnable(mmActivity, "addNode(Node,String)", new Object[] { node, nodeName});
-//		mmActivity.runOnUiThread(r);
+		Runnable r = ReflectUtils.getPostRunnable(mmActivity, "addNode(Node,String)", new Object[] { node, nodeName });
+		// mmActivity.runOnUiThread(r);
 		r.run();
 	}
 
