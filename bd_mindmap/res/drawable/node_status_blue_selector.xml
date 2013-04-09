@@ -6,7 +6,7 @@
                 <solid android:color="@color/node_pad_blue"/>
                 <stroke  
                     android:width="3dp"  
-                    android:color="@color/bottom_pressed" />  
+                    android:color="@color/node_strock_blue" />  
                  <corners  
                     android:topRightRadius="0dp"  
                     android:bottomLeftRadius="0dp"  
