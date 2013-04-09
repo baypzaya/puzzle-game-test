@@ -18,38 +18,38 @@ public class MyAdViewListener implements AdViewListener {
 
 	@Override
 	public void onVideoStart() {
-		Log.i("yujsh log","onVideoStart");
+//		Log.i("yujsh log","onVideoStart");
 	}
 
 	@Override
 	public void onVideoFinish() {
-		Log.i("yujsh log","onVideoFinish");
+//		Log.i("yujsh log","onVideoFinish");
 	}
 
 	@Override
 	public void onAdSwitch() {
-		Log.i("yujsh log","onAdSwitch");
+//		Log.i("yujsh log","onAdSwitch");
 	}
 
 	@Override
 	public void onAdShow(JSONObject arg0) {
-		Log.i("yujsh log","onAdShow");
+//		Log.i("yujsh log","onAdShow");
 	}
 
 	@Override
 	public void onAdReady(AdView arg0) {
-		Log.i("yujsh log","onAdReady");
+//		Log.i("yujsh log","onAdReady");
 	}
 
 	@Override
 	public void onAdFailed(String arg0) {
-		Log.i("yujsh log","onAdFailed");
+//		Log.i("yujsh log","onAdFailed");
 //		adView.setVisibility(View.GONE);
 
 	}
 
 	@Override
 	public void onAdClick(JSONObject arg0) {
-		Log.i("yujsh log","onAdClick");
+//		Log.i("yujsh log","onAdClick");
 	}
 }

@@ -57,6 +57,7 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 		DisplayMetrics dm = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(dm);
 		EngineApplication.sDensity = dm.scaledDensity;
+		
 
 		ImageView ivMindMapMore = (ImageView) findViewById(R.id.iv_mind_map_more);
 		ivMindMapMore.setOnClickListener(this);
@@ -86,8 +87,7 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 		}
 
 		createMindMapUI(mindMap);
-
-		updateRedoAndUndoState();
+		updateRedoAndUndoState();		
 	}
 
 	private void createMindMapUI(MindMap mindMap) {
@@ -106,7 +106,6 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 			}
 		}
 		Node rootNode = mindMap.getRootNode();
-		mindMapPad.scrollTo((int) rootNode.x, (int) rootNode.y);
 
 		if (nodeList.size() == 1) {
 			EditTextNode nl = (EditTextNode) mindMapPad.findViewById((int) rootNode._id);
