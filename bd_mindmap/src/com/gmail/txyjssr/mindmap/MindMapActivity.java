@@ -165,6 +165,8 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 						public void onInputCompleted(String inputStr) {
 							if (!TextUtils.isEmpty(inputStr)) {
 								editNode((Node) currentFocusedNode.getTag(), inputStr);
+							}else{
+								Toast.makeText(MindMapActivity.this, R.string.hint_node_name_empty, Toast.LENGTH_SHORT).show();
 							}
 						}
 					});
@@ -181,6 +183,8 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 				public void onInputCompleted(String inputStr) {
 					if (!TextUtils.isEmpty(inputStr)) {
 						addNode((Node) currentFocusedNode.getTag(), inputStr);
+					}else{
+						Toast.makeText(MindMapActivity.this, R.string.hint_node_name_empty, Toast.LENGTH_SHORT).show();
 					}
 				}
 			});
