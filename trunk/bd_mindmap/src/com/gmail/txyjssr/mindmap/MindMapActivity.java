@@ -4,20 +4,17 @@ import java.util.Formatter;
 import java.util.List;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,8 +40,6 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 
 	private Point oldPoint;
 	private boolean isPreBack = false;
-	
-	private Handler mHandler = new Handler();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +52,6 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 		DisplayMetrics dm = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(dm);
 		EngineApplication.sDensity = dm.scaledDensity;
-		
 
 		ImageView ivMindMapMore = (ImageView) findViewById(R.id.iv_mind_map_more);
 		ivMindMapMore.setOnClickListener(this);
@@ -87,7 +81,7 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 		}
 
 		createMindMapUI(mindMap);
-		updateRedoAndUndoState();		
+		updateRedoAndUndoState();
 	}
 
 	private void createMindMapUI(MindMap mindMap) {
@@ -101,7 +95,7 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 			if (!node.isRootNode) {
 				LinkView lv = createLinkView(node);
 				mindMapPad.addView(lv, 0);
-			}else{
+			} else {
 				mindMapPad.requestMoveToNode(nl);
 			}
 		}
@@ -111,7 +105,7 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 			EditTextNode nl = (EditTextNode) mindMapPad.findViewById((int) rootNode._id);
 			nl.requestFocus();
 		}
-		
+
 		commondStack.clear();
 		updateRedoAndUndoState();
 	}
@@ -238,7 +232,7 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 
 	private void moveToRootNode() {
 		Node rootNode = mindMap.getRootNode();
-		mindMapPad.moveToNodeLocationTocenter((EditTextNode)findViewById((int)rootNode._id));
+		mindMapPad.moveToNodeLocationTocenter((EditTextNode) findViewById((int) rootNode._id));
 	}
 
 	@Override
@@ -274,8 +268,9 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 				mindMapPad.scroll(currentFocusedNode);
 				mindMapPad.bringChildToFront(etNode);
 			} else {
-				InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-				imm.hideSoftInputFromWindow(etNode.getWindowToken(), 0);
+				// InputMethodManager imm = (InputMethodManager)
+				// getSystemService(Context.INPUT_METHOD_SERVICE);
+				// imm.hideSoftInputFromWindow(etNode.getWindowToken(), 0);
 				currentFocusedNode = null;
 			}
 		} else {
@@ -291,7 +286,7 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 	}
 
 	private void addNode(Node parentNode, String nodeTitle) {
-		
+
 		Node childNode = new Node();
 		childNode.title = nodeTitle;
 		childNode.setParentNode(parentNode);
@@ -385,22 +380,21 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 		node.x = etn.getPointX();
 		node.y = etn.getPointY();
 		mindMap.updateNodeLocation(node);
-		
+
 		Point newPoint = new Point();
 		newPoint.x = node.x;
 		newPoint.y = node.y;
-		
-		ICommond commont = new CommondMoveNode(this, mindMap, mindMapPad, node, newPoint,oldPoint);
+
+		ICommond commont = new CommondMoveNode(this, mindMap, mindMapPad, node, newPoint, oldPoint);
 		commondStack.pushCommond(commont);
 		updateRedoAndUndoState();
-		
+
 		oldPoint = null;
 	}
-	
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if(keyCode == KeyEvent.KEYCODE_BACK && !isPreBack){
+		if (keyCode == KeyEvent.KEYCODE_BACK && !isPreBack) {
 			Toast.makeText(this, R.string.pre_back, Toast.LENGTH_SHORT).show();
 			isPreBack = true;
 			return true;
@@ -413,7 +407,5 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 		isPreBack = false;
 		return super.dispatchTouchEvent(ev);
 	}
-	
-	
 
 }

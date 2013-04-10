@@ -3,16 +3,11 @@
     <selector  xmlns:android="http://schemas.android.com/apk/res/android">  
         <item android:state_focused="true" >  
             <shape>  
-                <solid android:color="@color/node_pad_blue"/>
+                <solid android:color="#ffffff"/>
                 <stroke  
                     android:width="3dp"  
                     android:color="@color/node_strock_blue" />  
-                 <corners  
-                    android:topRightRadius="0dp"  
-                    android:bottomLeftRadius="0dp"  
-                    android:topLeftRadius="0dp"  
-                    android:bottomRightRadius="0dp"  
-                />
+                <corners android:radius="0dp"/>
                 <padding  
                     android:left="10dp"  
                     android:top="10dp"  
