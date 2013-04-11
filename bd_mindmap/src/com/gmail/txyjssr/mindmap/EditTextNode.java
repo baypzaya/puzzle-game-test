@@ -143,4 +143,13 @@ public class EditTextNode extends TextView implements INode {
 		}
 
 	}
+	
+	public boolean containPoint(int x, int y) {
+		int top = getTop();
+		int bottom = getBottom();
+		int left = getLeft();
+		int right = getRight();
+
+		return left < x && x < right && top < y && y < bottom;
+	}
 }

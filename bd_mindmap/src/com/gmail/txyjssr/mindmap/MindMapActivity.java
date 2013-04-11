@@ -7,7 +7,6 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.KeyEvent;
@@ -15,11 +14,14 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.AbsoluteLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.baidu.mobads.AdView;
+import com.baidu.mobstat.StatService;
 import com.gmail.txyjssr.mindmap.EditTextNode.OnMoveListener;
 
 public class MindMapActivity extends Activity implements OnClickListener, OnFocusChangeListener, OnMoveListener {
@@ -29,7 +31,8 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 	private MindMapManager mindMapManager;
 	private MindMap mindMap;
 	private EditTextNode currentFocusedNode;
-
+	private EditTextNode currentMergeNode;
+	private ImageView focusImageView;
 	private AdView adView;
 
 	private CommondStack commondStack = new CommondStack();
@@ -45,9 +48,11 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.mind_map_activity);
-
+		//baidu code start
+		StatService.setOn(this,StatService.EXCEPTION_LOG);
 		adView = (AdView) findViewById(R.id.adView);
 		adView.setListener(new MyAdViewListener(adView));
+		//baidu code end
 
 		DisplayMetrics dm = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(dm);
@@ -75,6 +80,10 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 		mindMapPad.setOnClickListener(this);
 		mindMapManager = new MindMapManager();
 
+		focusImageView = new ImageView(this);
+		focusImageView.setBackgroundResource(R.drawable.focuse_backgrounp);
+		focusImageView.setVisibility(View.GONE);
+
 		mindMap = mindMapManager.getRecentMindMap();
 		if (mindMap == null) {
 			mindMap = mindMapManager.createMindMap(getString(R.string.new_mind_map));
@@ -83,11 +92,27 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 		createMindMapUI(mindMap);
 		updateRedoAndUndoState();
 	}
+	
+	public void onResume() {
+		super.onResume();
+		
+		//baidu code start
+		StatService.onResume(this);
+		//baidu code end
+	}
+	
+	public void onPause() {
+		super.onPause();
+		//baidu code start
+		StatService.onPause(this);
+		//baidu code end
+	}
 
 	private void createMindMapUI(MindMap mindMap) {
 		TextView tvName = (TextView) findViewById(R.id.tv_mind_map_name);
 		tvName.setText(mindMap.name);
 		mindMapPad.removeAllViews();
+		mindMapPad.addView(focusImageView);
 		List<Node> nodeList = mindMap.getNodes();
 		for (Node node : nodeList) {
 			EditTextNode nl = createNodeLayout(node);
@@ -165,8 +190,9 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 						public void onInputCompleted(String inputStr) {
 							if (!TextUtils.isEmpty(inputStr)) {
 								editNode((Node) currentFocusedNode.getTag(), inputStr);
-							}else{
-								Toast.makeText(MindMapActivity.this, R.string.hint_node_name_empty, Toast.LENGTH_SHORT).show();
+							} else {
+								Toast.makeText(MindMapActivity.this, R.string.hint_node_name_empty, Toast.LENGTH_SHORT)
+										.show();
 							}
 						}
 					});
@@ -183,7 +209,7 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 				public void onInputCompleted(String inputStr) {
 					if (!TextUtils.isEmpty(inputStr)) {
 						addNode((Node) currentFocusedNode.getTag(), inputStr);
-					}else{
+					} else {
 						Toast.makeText(MindMapActivity.this, R.string.hint_node_name_empty, Toast.LENGTH_SHORT).show();
 					}
 				}
@@ -195,9 +221,7 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 	private void deleteNode() {
 		if (currentFocusedNode != null) {
 			final Node node = (Node) currentFocusedNode.getTag();
-			String message = getString(R.string.delete_node);// "delete node(" +
-																// node.title +
-																// ")";
+			String message = getString(R.string.delete_node);
 			Formatter ft = new Formatter().format(message, node.title);
 
 			DialogUtils.showHintDilog(this, ft.toString(), getString(R.string.delete), getString(R.string.cancel),
@@ -271,6 +295,7 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 				currentFocusedNode = etNode;
 				mindMapPad.scroll(currentFocusedNode);
 				mindMapPad.bringChildToFront(etNode);
+
 			} else {
 				// InputMethodManager imm = (InputMethodManager)
 				// getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -376,24 +401,84 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 	@Override
 	public void onMove(EditTextNode etn) {
 		mindMapPad.scroll(etn);
+		int x = (int) (etn.getPointX() + etn.getMeasuredWidth() / 2);
+		int y = (int) (etn.getPointY() + etn.getMeasuredHeight() / 2);
+		int childCount = mindMapPad.getChildCount();
+		Node node = (Node) etn.getTag();
+		boolean isMerge = false;
+		for (int i = childCount - 1; i > 0; i--) {
+			View child = mindMapPad.getChildAt(i);
+			if (child instanceof EditTextNode) {
+				EditTextNode etnC = (EditTextNode) child;
+				if (node._id == etnC.getId() || node.parentNodeId == etnC.getId()) {
+					continue;
+				}
+
+				if (etnC.containPoint(x, y)) {
+					focusImageView.setVisibility(View.VISIBLE);
+					isMerge = true;
+					if (currentMergeNode == null || currentMergeNode.getId() != etnC.getId()) {
+						currentMergeNode = etnC;
+						int widthC = etnC.getMeasuredWidth();
+						int heightC = etnC.getMeasuredHeight();
+						int xC = (int) (etnC.getPointX() + widthC / 2);
+						int yC = (int) (etnC.getPointY() + heightC / 2);
+						int widthF = widthC;
+						int heightF = heightC + heightC / 2;
+						int xF = (int) xC - widthF / 2;
+						int yF = (int) yC - heightF / 2;
+						LayoutParams p = new AbsoluteLayout.LayoutParams(widthF, heightF, xF, yF);
+						focusImageView.setLayoutParams(p);
+						focusImageView.requestLayout();
+						break;
+					}
+				}
+			}
+		}
+
+		if (!isMerge) {
+			focusImageView.setVisibility(View.GONE);
+			currentMergeNode = null;
+		}
+
 	}
 
 	@Override
 	public void endMove(EditTextNode etn) {
-		Node node = (Node) etn.getTag();
-		node.x = etn.getPointX();
-		node.y = etn.getPointY();
-		mindMap.updateNodeLocation(node);
+		if (currentMergeNode == null) {
+			Node node = (Node) etn.getTag();
+			node.x = etn.getPointX();
+			node.y = etn.getPointY();
+			mindMap.updateNodeLocation(node);
 
-		Point newPoint = new Point();
-		newPoint.x = node.x;
-		newPoint.y = node.y;
+			Point newPoint = new Point();
+			newPoint.x = node.x;
+			newPoint.y = node.y;
 
-		ICommond commont = new CommondMoveNode(this, mindMap, mindMapPad, node, newPoint, oldPoint);
-		commondStack.pushCommond(commont);
-		updateRedoAndUndoState();
-
-		oldPoint = null;
+			ICommond commont = new CommondMoveNode(this, mindMap, mindMapPad, node, newPoint, oldPoint);
+			commondStack.pushCommond(commont);
+			updateRedoAndUndoState();
+			oldPoint = null;
+		}else{
+			Node parentNode = (Node)currentMergeNode.getTag();
+			Node childNode = (Node)etn.getTag();
+			
+			childNode.parentNode.nodeChildren.remove(childNode);
+			childNode.setParentNode(parentNode);
+			
+			mindMap.computeLocation(childNode);
+			mindMap.updateNodeLocation(childNode);
+			
+			etn.setLocation(childNode.x, childNode.y);
+			
+			LinkView lv = (LinkView)mindMapPad.findViewWithTag(childNode._id);
+			lv.parentEtn = currentMergeNode;
+			
+			etn.requestLayout();
+			
+			focusImageView.setVisibility(View.GONE);
+			currentMergeNode = null;
+		}
 	}
 
 	@Override
@@ -408,7 +493,9 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 
 	@Override
 	public boolean dispatchTouchEvent(MotionEvent ev) {
-		isPreBack = false;
+		if (isPreBack) {
+			isPreBack = false;
+		}
 		return super.dispatchTouchEvent(ev);
 	}
 
