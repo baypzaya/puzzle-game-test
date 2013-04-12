@@ -1,5 +1,6 @@
 package com.gmail.txyjssr.mindmap;
 
+import android.graphics.Color;
 import android.view.MotionEvent;
 import android.widget.AbsoluteLayout.LayoutParams;
 import android.widget.TextView;
@@ -117,9 +118,11 @@ public class EditTextNode extends TextView implements INode {
 		this.setId((int) node._id);
 		this.setTitle(node.title);
 		this.setLocation(node.x, node.y);
-
 		setTag(node);
-
+		updateEditTextNodeColor(node);
+	}
+	
+	private void updateEditTextNodeColor(Node node){
 		int layerNum = node.getLayerNum();
 		switch (layerNum) {
 		case 5:
@@ -141,9 +144,14 @@ public class EditTextNode extends TextView implements INode {
 			setBackgroundResource(R.drawable.node_status_yellow_selector);
 			break;
 		}
-
 	}
 	
+	@Override
+	protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+		updateEditTextNodeColor((Node)getTag());
+		super.onLayout(changed, left, top, right, bottom);
+	}
+
 	public boolean containPoint(int x, int y) {
 		int top = getTop();
 		int bottom = getBottom();

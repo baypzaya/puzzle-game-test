@@ -42,8 +42,11 @@ public class LinkView extends View {
 		this(mindMapActivity);
 		this.setTag(node._id);
 		parentEtn = (EditTextNode) mindMapActivity.findViewById((int)node.parentNode._id);
-		childEtn = (EditTextNode) mindMapActivity.findViewById((int)node._id);
-		
+		childEtn = (EditTextNode) mindMapActivity.findViewById((int)node._id);		
+		updateLinkColor(node);
+	}
+	
+	private void updateLinkColor(Node node){
 		int layerNum = node.getLayerNum();
 		switch (layerNum) {
 		case 5:
@@ -65,6 +68,12 @@ public class LinkView extends View {
 			paint.setColor(getContext().getResources().getColor(R.color.node_strock_yellow));
 			break;
 		}
+	}
+	
+	@Override
+	protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+		updateLinkColor((Node)childEtn.getTag());
+		super.onLayout(changed, left, top, right, bottom);
 	}
 
 	@Override

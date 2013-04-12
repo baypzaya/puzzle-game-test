@@ -85,16 +85,14 @@ public class MindMap {
 				angle = 1 / 12f * Math.PI + angle;
 			}
 
-			double x = Math.cos(angle) * transformDP2PX(DISTANCE_dEFAULT);
-			double y = Math.sin(angle) * transformDP2PX(DISTANCE_dEFAULT);
+			double x = Math.cos(angle) * EngineApplication.transformDP2PX(DISTANCE_dEFAULT);
+			double y = Math.sin(angle) * EngineApplication.transformDP2PX(DISTANCE_dEFAULT);
 			node.x = node.parentNode.x + Math.round(x);
 			node.y = node.parentNode.y + Math.round(y);
 		}
 	}
 
-	private float transformDP2PX(float value) {
-		return value * EngineApplication.sDensity;
-	}
+	
 
 	public boolean hasNode() {
 		return nodeList != null && nodeList.size() > 0;

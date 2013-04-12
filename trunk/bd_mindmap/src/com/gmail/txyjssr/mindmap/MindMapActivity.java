@@ -32,7 +32,7 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 	private MindMap mindMap;
 	private EditTextNode currentFocusedNode;
 	private EditTextNode currentMergeNode;
-	private ImageView focusImageView;
+	private View focusImageView;
 	private AdView adView;
 
 	private CommondStack commondStack = new CommondStack();
@@ -48,11 +48,11 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.mind_map_activity);
-		//baidu code start
-		StatService.setOn(this,StatService.EXCEPTION_LOG);
+		// baidu code start
+		// StatService.setOn(this,StatService.EXCEPTION_LOG);
 		adView = (AdView) findViewById(R.id.adView);
 		adView.setListener(new MyAdViewListener(adView));
-		//baidu code end
+		// baidu code end
 
 		DisplayMetrics dm = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(dm);
@@ -80,8 +80,8 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 		mindMapPad.setOnClickListener(this);
 		mindMapManager = new MindMapManager();
 
-		focusImageView = new ImageView(this);
-		focusImageView.setBackgroundResource(R.drawable.focuse_backgrounp);
+		focusImageView = new View(this);
+		focusImageView.setBackgroundResource(R.drawable.focuse_bg);
 		focusImageView.setVisibility(View.GONE);
 
 		mindMap = mindMapManager.getRecentMindMap();
@@ -92,21 +92,21 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 		createMindMapUI(mindMap);
 		updateRedoAndUndoState();
 	}
-	
-	public void onResume() {
-		super.onResume();
-		
-		//baidu code start
-		StatService.onResume(this);
-		//baidu code end
-	}
-	
-	public void onPause() {
-		super.onPause();
-		//baidu code start
-		StatService.onPause(this);
-		//baidu code end
-	}
+
+	// public void onResume() {
+	// super.onResume();
+	//
+	// //baidu code start
+	// StatService.onResume(this);
+	// //baidu code end
+	// }
+	//
+	// public void onPause() {
+	// super.onPause();
+	// //baidu code start
+	// StatService.onPause(this);
+	// //baidu code end
+	// }
 
 	private void createMindMapUI(MindMap mindMap) {
 		TextView tvName = (TextView) findViewById(R.id.tv_mind_map_name);
@@ -403,34 +403,37 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 		mindMapPad.scroll(etn);
 		int x = (int) (etn.getPointX() + etn.getMeasuredWidth() / 2);
 		int y = (int) (etn.getPointY() + etn.getMeasuredHeight() / 2);
-		int childCount = mindMapPad.getChildCount();
 		Node node = (Node) etn.getTag();
 		boolean isMerge = false;
-		for (int i = childCount - 1; i > 0; i--) {
-			View child = mindMapPad.getChildAt(i);
-			if (child instanceof EditTextNode) {
-				EditTextNode etnC = (EditTextNode) child;
-				if (node._id == etnC.getId() || node.parentNodeId == etnC.getId()) {
-					continue;
-				}
+		if (!node.isRootNode) {
+			int childCount = mindMapPad.getChildCount();
+			for (int i = childCount - 1; i > 0; i--) {
+				View child = mindMapPad.getChildAt(i);
+				if (child instanceof EditTextNode) {
+					EditTextNode etnC = (EditTextNode) child;
+					if (node._id == etnC.getId() || node.parentNodeId == etnC.getId()) {
+						continue;
+					}
 
-				if (etnC.containPoint(x, y)) {
-					focusImageView.setVisibility(View.VISIBLE);
-					isMerge = true;
-					if (currentMergeNode == null || currentMergeNode.getId() != etnC.getId()) {
-						currentMergeNode = etnC;
-						int widthC = etnC.getMeasuredWidth();
-						int heightC = etnC.getMeasuredHeight();
-						int xC = (int) (etnC.getPointX() + widthC / 2);
-						int yC = (int) (etnC.getPointY() + heightC / 2);
-						int widthF = widthC;
-						int heightF = heightC + heightC / 2;
-						int xF = (int) xC - widthF / 2;
-						int yF = (int) yC - heightF / 2;
-						LayoutParams p = new AbsoluteLayout.LayoutParams(widthF, heightF, xF, yF);
-						focusImageView.setLayoutParams(p);
-						focusImageView.requestLayout();
-						break;
+					if (etnC.containPoint(x, y)) {
+						focusImageView.setVisibility(View.VISIBLE);
+						isMerge = true;
+						if (currentMergeNode == null || currentMergeNode.getId() != etnC.getId()) {
+							currentMergeNode = etnC;
+							int widthC = etnC.getMeasuredWidth();
+							int heightC = etnC.getMeasuredHeight();
+							int xC = (int) (etnC.getPointX() + widthC / 2);
+							int yC = (int) (etnC.getPointY() + heightC / 2);
+							int margin = (int)EngineApplication.transformDP2PX(17);
+							int widthF = widthC + margin;
+							int heightF = heightC + margin;
+							int xF = (int) xC - widthF / 2;
+							int yF = (int) yC - heightF / 2;
+							LayoutParams p = new AbsoluteLayout.LayoutParams(widthF, heightF, xF, yF);
+							focusImageView.setLayoutParams(p);
+							focusImageView.requestLayout();
+							break;
+						}
 					}
 				}
 			}
@@ -459,25 +462,39 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 			commondStack.pushCommond(commont);
 			updateRedoAndUndoState();
 			oldPoint = null;
-		}else{
-			Node parentNode = (Node)currentMergeNode.getTag();
-			Node childNode = (Node)etn.getTag();
-			
-			childNode.parentNode.nodeChildren.remove(childNode);
-			childNode.setParentNode(parentNode);
-			
+		} else {
+			Node newParentNode = (Node) currentMergeNode.getTag();
+			Node childNode = (Node) etn.getTag();
+
+			Node oldParentNode = childNode.parentNode;
+			oldParentNode.nodeChildren.remove(childNode);
+			childNode.setParentNode(newParentNode);
+
+			Point oldPoint = new Point();
+			oldPoint.x = childNode.x;
+			oldPoint.y = childNode.y;
+
 			mindMap.computeLocation(childNode);
 			mindMap.updateNodeLocation(childNode);
-			
-			etn.setLocation(childNode.x, childNode.y);
-			
-			LinkView lv = (LinkView)mindMapPad.findViewWithTag(childNode._id);
+
+			Point newPoint = new Point();
+			newPoint.x = childNode.x;
+			newPoint.y = childNode.y;
+
+			etn.setNode(childNode);
+
+			LinkView lv = (LinkView) mindMapPad.findViewWithTag(childNode._id);
 			lv.parentEtn = currentMergeNode;
 			
-			etn.requestLayout();
-			
+			mindMapPad.scroll(etn);
+
 			focusImageView.setVisibility(View.GONE);
 			currentMergeNode = null;
+
+			ICommond commont = new CommondMergeNode(mindMap, mindMapPad, oldParentNode, newParentNode, childNode,
+					oldPoint, newPoint);
+			commondStack.pushCommond(commont);
+			updateRedoAndUndoState();
 		}
 	}
 
