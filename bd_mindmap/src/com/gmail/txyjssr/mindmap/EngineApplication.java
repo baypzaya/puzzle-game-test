@@ -23,5 +23,9 @@ public class EngineApplication extends Application {
 	public static Handler getsEngineCoreHandlerInstance() {
 		return sHandler;
 	}
+	
+	public static float transformDP2PX(float value) {
+		return value * EngineApplication.sDensity;
+	}
 
 }

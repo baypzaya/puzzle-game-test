@@ -6,8 +6,10 @@
                 <solid android:color="#ffffff"/>
                 <stroke  
                     android:width="4dp"  
-                    android:color="@color/node_strock_orange" />  
-                <corners android:radius="0dp"/>
+                    android:color="@color/node_strock_orange" 
+					android:dashWidth="3dp"
+                    android:dashGap="3dp"/>  
+               	<corners android:radius="5dp"/>
                 <padding  
                     android:left="10dp"  
                     android:top="10dp"  
