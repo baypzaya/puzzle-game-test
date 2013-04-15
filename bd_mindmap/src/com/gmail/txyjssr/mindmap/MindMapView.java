@@ -7,6 +7,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AbsoluteLayout;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 public class MindMapView extends AbsoluteLayout {
 	private final int TOUCH_MODE_NONE = 0;
@@ -101,9 +102,23 @@ public class MindMapView extends AbsoluteLayout {
 				}
 
 				if (lastTouchMode == TOUCH_MODE_SINGLE) {
-					scrollBy((int) (downX - moveX), (int) (downY - moveY));
-					downX = moveX;
-					downY = moveY;
+					int scrollX = getScrollX()+(int) (downX - moveX);
+					int scrollY = getScrollY()+(int) (downY- moveY);
+					
+					
+					if(-520 < scrollX && scrollX < 520){
+						scrollBy((int) (downX - moveX),0);
+						downX = moveX;
+					}else{
+						Toast.makeText(getContext(), "x bound", 10).show();
+					}
+					
+					if(-960 < scrollY && scrollY < 960){
+						scrollBy(0,(int) (downY- moveY));
+						downY = moveY;
+					}else{
+						Toast.makeText(getContext(), "y bound", 10).show();
+					}
 				}
 			} else if (event.getPointerCount() == 2) {
 				// lastTouchMode = TOUCH_MODE_DOUBLE;
@@ -152,7 +167,7 @@ public class MindMapView extends AbsoluteLayout {
 		moveToNode = etn;
 	}
 
-	public void moveToNodeLocationTocenter(EditTextNode etn) {
+	private void moveToNodeLocationTocenter(EditTextNode etn) {
 		int[] nodeLocation = new int[2];
 		etn.getLocationInWindow(nodeLocation);
 		int nodeX = nodeLocation[0];

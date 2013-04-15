@@ -1,17 +1,27 @@
 package com.gmail.txyjssr.mindmap;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Formatter;
 import java.util.List;
 
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.MeasureSpec;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup.LayoutParams;
@@ -21,7 +31,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.baidu.mobads.AdView;
-import com.baidu.mobstat.StatService;
 import com.gmail.txyjssr.mindmap.EditTextNode.OnMoveListener;
 
 public class MindMapActivity extends Activity implements OnClickListener, OnFocusChangeListener, OnMoveListener {
@@ -66,6 +75,7 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 		ImageView ivDelete = (ImageView) findViewById(R.id.iv_delete);
 		ImageView ivAdd = (ImageView) findViewById(R.id.iv_add);
 		ImageView ivEdit = (ImageView) findViewById(R.id.iv_edit);
+		ImageView ivSend = (ImageView) findViewById(R.id.iv_send);
 		ivUndo = (ImageView) findViewById(R.id.iv_undo);
 		ivRedo = (ImageView) findViewById(R.id.iv_redo);
 		ivRoot.setOnClickListener(this);
@@ -73,6 +83,7 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 		ivDelete.setOnClickListener(this);
 		ivAdd.setOnClickListener(this);
 		ivEdit.setOnClickListener(this);
+		ivSend.setOnClickListener(this);
 		ivUndo.setOnClickListener(this);
 		ivRedo.setOnClickListener(this);
 
@@ -161,6 +172,9 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 			case R.id.iv_edit:
 				editNode();
 				break;
+			case R.id.iv_send:
+				sendMindMap();
+				break;
 			case R.id.iv_undo:
 				undo();
 				break;
@@ -169,6 +183,89 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 				break;
 			}
 		}
+	}
+
+	private void sendMindMap() {
+		MindMap tempMindMap = mindMapManager.getMindMapBy(mindMap.mindMapId);
+		MindMapView tempMMView = new MindMapView(this);
+		
+		Node nodeTop = tempMindMap.getTopNode();
+		Node nodeBottom = tempMindMap.getBottomNode();
+		Node nodeLeft = tempMindMap.getLeftNode();
+		Node nodeRight = tempMindMap.getRightNode();
+		
+		float mindMapTop = nodeTop.y;
+		float mindMapBottom = nodeBottom.y;
+		float mindMapLeft = nodeLeft.x;
+		float mindMapRight = nodeRight.x;
+		
+		int width = (int)mindMapRight - (int)mindMapLeft;
+		int height = (int)mindMapBottom - (int)mindMapTop;
+		
+		if(width <= 800){
+			mindMapLeft = nodeLeft.x - (840-width)/2;
+			width = 840;
+		}else{
+			width = (int)(mindMapRight - mindMapLeft+40);
+			mindMapLeft = nodeLeft.x - 20;
+		}
+		
+		if(height <= 800){
+			mindMapTop = nodeTop.y - (840-height)/2;
+			height = 840;
+		}else{
+			width = (int)mindMapBottom - (int)mindMapTop+40;
+			mindMapTop = nodeTop.y - 20;
+		}
+		
+		List<Node> nodeList = tempMindMap.getNodes();
+		for (Node node : nodeList) {
+			node.x = node.x - mindMapLeft;
+			node.y = node.y - mindMapTop;
+			EditTextNode nl = createNodeLayout(node);
+			tempMMView.addView(nl);
+			
+			if (!node.isRootNode) {
+				LinkView lv = new LinkView(tempMMView, node);
+				tempMMView.addView(lv, 0);
+			}
+		}
+		
+		tempMMView.measure(MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
+				MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
+		
+		for (Node node : nodeList) {
+			if (!node.isRootNode) {
+				LinkView lv = new LinkView(tempMMView, node);
+				tempMMView.addView(lv, 0);
+			}
+		}
+		tempMMView.measure(MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
+				MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
+		int nodeWidth = tempMMView.findViewById((int)nodeRight._id).getMeasuredWidth();
+		int nodeHeight = tempMMView.findViewById((int)nodeBottom._id).getMeasuredHeight();
+		tempMMView.layout(0, 0, width+nodeWidth, height+nodeHeight);
+		Bitmap bitmap = BitmapUtils.convertViewToBitmap(tempMMView,width+nodeWidth,height+nodeHeight);
+		String path = Environment.getExternalStorageDirectory().getAbsolutePath()+"/test.jpeg";
+		File file = new File(path);		
+		try {
+			if(!file.exists()){
+				file.createNewFile();
+			}
+			OutputStream os = new FileOutputStream(file);
+			bitmap.compress(CompressFormat.JPEG, 100, os);
+			os.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		Uri uri = Uri.fromFile(file);
+		Intent intent = new Intent();
+		intent.setAction(android.content.Intent.ACTION_VIEW);
+		intent.setDataAndType(uri,"image/jpeg");
+		startActivity(intent);
 	}
 
 	private void redo() {
@@ -260,7 +357,7 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 
 	private void moveToRootNode() {
 		Node rootNode = mindMap.getRootNode();
-		mindMapPad.moveToNodeLocationTocenter((EditTextNode) findViewById((int) rootNode._id));
+		mindMapPad.requestMoveToNode((EditTextNode) findViewById((int) rootNode._id));
 	}
 
 	@Override
@@ -381,7 +478,7 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 	}
 
 	private LinkView createLinkView(Node node) {
-		LinkView lv = new LinkView(this, node);
+		LinkView lv = new LinkView(mindMapPad, node);
 		return lv;
 	}
 

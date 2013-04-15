@@ -42,7 +42,7 @@ public class CommondDeleteNode implements ICommond {
 			mindMapPad.addView(nv);
 
 			int addIndex = mindMap.getNodes().size() - 2;
-			LinkView lv = new LinkView(mmActivity,childNode);
+			LinkView lv = new LinkView(mindMapPad,childNode);
 			mindMapPad.addView(lv, addIndex);
 		}
 	}
