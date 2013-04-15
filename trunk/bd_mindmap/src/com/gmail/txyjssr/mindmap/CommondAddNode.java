@@ -51,7 +51,7 @@ public class CommondAddNode implements ICommond {
 	}
 
 	private LinkView createLinkView(Node node) {
-		LinkView lv = new LinkView(mmActivity,node);
+		LinkView lv = new LinkView(mindMapPad,node);
 		return lv;
 	}
 

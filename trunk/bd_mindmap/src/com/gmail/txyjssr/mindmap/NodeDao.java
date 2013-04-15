@@ -104,21 +104,77 @@ public class NodeDao extends BaseDao {
 
 	public void deleteNodesBy(List<Node> listNode) {
 		if (listNode != null && listNode.size() > 0) {
-			
+
 			StringBuffer sb = new StringBuffer("(");
 			for (Node n : listNode) {
 				sb.append(n._id).append(",");
 			}
-			sb.deleteCharAt(sb.length()-1).append(")");
-			String whereClause = COLUMN_ID + " in "+sb.toString();
-//			String[] whereArgs = new String[] {};
+			sb.deleteCharAt(sb.length() - 1).append(")");
+			String whereClause = COLUMN_ID + " in " + sb.toString();
+			// String[] whereArgs = new String[] {};
 			mDBManager.delete(TABLE_NAME, whereClause, null);
 		}
 	}
 
 	public void deleteNodesBy(long mindMapId) {
 		String whereClause = COLUMN_MINDMAPID + " = ?";
-		String[] whereArgs = new String[] {""+mindMapId};
+		String[] whereArgs = new String[] { "" + mindMapId };
 		mDBManager.delete(TABLE_NAME, whereClause, whereArgs);
+	}
+
+	public Node getMaxNodeY(long mindMapId) {
+
+		String whereClause = COLUMN_MINDMAPID + " = ?";
+		String[] whereArgs = new String[] { "" + mindMapId };
+		Cursor cursor = mDBManager.qury(TABLE_NAME, null, whereClause, whereArgs, null, COLUMN_Y + " desc");
+
+		if (cursor != null && cursor.moveToFirst()) {
+			Node node = transformNodeBy(cursor);
+			return node;
+		} else {
+			return null;
+		}
+	}
+
+	public Node getMinNodeY(long mindMapId) {
+
+		String whereClause = COLUMN_MINDMAPID + " = ?";
+		String[] whereArgs = new String[] { "" + mindMapId };
+		Cursor cursor = mDBManager.qury(TABLE_NAME, null, whereClause, whereArgs, null, COLUMN_Y);
+
+		if (cursor != null && cursor.moveToFirst()) {
+			Node node = transformNodeBy(cursor);
+			return node;
+		} else {
+			return null;
+		}
+	}
+
+	public Node getMaxNodeX(long mindMapId) {
+
+		String whereClause = COLUMN_MINDMAPID + " = ?";
+		String[] whereArgs = new String[] { "" + mindMapId };
+		Cursor cursor = mDBManager.qury(TABLE_NAME, null, whereClause, whereArgs, null, COLUMN_X+" desc");
+
+		if (cursor != null && cursor.moveToFirst()) {
+			Node node = transformNodeBy(cursor);
+			return node;
+		} else {
+			return null;
+		}
+	}
+
+	public Node getMinNodeX(long mindMapId) {
+
+		String whereClause = COLUMN_MINDMAPID + " = ?";
+		String[] whereArgs = new String[] { "" + mindMapId };
+		Cursor cursor = mDBManager.qury(TABLE_NAME, null, whereClause, whereArgs, null, COLUMN_X);
+
+		if (cursor != null && cursor.moveToFirst()) {
+			Node node = transformNodeBy(cursor);
+			return node;
+		} else {
+			return null;
+		}
 	}
 }

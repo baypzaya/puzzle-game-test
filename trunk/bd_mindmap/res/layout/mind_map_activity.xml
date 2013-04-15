@@ -126,7 +126,8 @@
         android:layout_height="match_parent"
         android:layout_above="@id/layout_adview"
         android:layout_below="@id/tools_bar"
-        android:orientation="vertical" >
+        android:background="#ffffff"
+        >
     </com.gmail.txyjssr.mindmap.MindMapView>
 
     <LinearLayout
@@ -138,6 +139,19 @@
         android:background="@drawable/activity_title_bar"
         android:orientation="horizontal"
         android:visibility="gone" >
+         <ImageView
+            android:id="@+id/iv_send"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:background="@drawable/bottom_bar_item_selector"
+            android:scaleType="centerInside"
+            android:src="@drawable/mm_send" />
+
+        <View
+            android:layout_width="1px"
+            android:layout_height="fill_parent"
+            android:background="@drawable/menu_divider" />
 
         <ImageView
             android:id="@+id/iv_edit"

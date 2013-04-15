@@ -38,11 +38,11 @@ public class LinkView extends View {
 
 	}
 
-	public LinkView(MindMapActivity mindMapActivity, Node node) {
-		this(mindMapActivity);
+	public LinkView(MindMapView mindMapPad, Node node) {
+		this(mindMapPad.getContext());
 		this.setTag(node._id);
-		parentEtn = (EditTextNode) mindMapActivity.findViewById((int)node.parentNode._id);
-		childEtn = (EditTextNode) mindMapActivity.findViewById((int)node._id);		
+		parentEtn = (EditTextNode) mindMapPad.findViewById((int)node.parentNode._id);
+		childEtn = (EditTextNode) mindMapPad.findViewById((int)node._id);		
 		updateLinkColor(node);
 	}
 	
@@ -109,6 +109,7 @@ public class LinkView extends View {
 		
 		int cWidth = childEtn.getMeasuredWidth();
 		int cHeight = childEtn.getMeasuredHeight();
+		
 		setLink(parentEtn.getPointX()+pWidth/2,parentEtn.getPointY()+pHeight/2,childEtn.getPointX()+cWidth/2,childEtn.getPointY()+cHeight/2);
 		int width = (int) Math.abs((childEtn.getPointX()+cWidth/2) - (parentEtn.getPointX()+pWidth/2)) + strokeWidth;
 		int height = (int) Math.abs((childEtn.getPointY()+cHeight/2) - (parentEtn.getPointY()+pHeight/2)) + strokeWidth;
@@ -122,6 +123,8 @@ public class LinkView extends View {
 		childY = y2;
 		int lx = (int) (x < x2 ? x : x2);
 		int ly = (int) (y < y2 ? y : y2);
+		
+		
 		setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, lx, ly));
 	}
 }

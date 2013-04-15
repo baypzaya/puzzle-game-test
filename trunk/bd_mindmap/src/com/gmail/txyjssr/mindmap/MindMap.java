@@ -173,4 +173,20 @@ public class MindMap {
 			}
 		}
 	}
+
+	public Node getTopNode() {
+		return nodeDao.getMinNodeY(mindMapId);
+	}
+
+	public Node getBottomNode() {
+		return nodeDao.getMaxNodeY(mindMapId);
+	}
+
+	public Node getLeftNode() {
+		return nodeDao.getMinNodeX(mindMapId);
+	}
+
+	public Node getRightNode() {
+		return nodeDao.getMaxNodeX(mindMapId);
+	}
 }
