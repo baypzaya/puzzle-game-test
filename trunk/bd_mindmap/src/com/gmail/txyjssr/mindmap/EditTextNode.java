@@ -56,7 +56,6 @@ public class EditTextNode extends TextView implements INode {
 			if (currentModel == moveTouch) {
 				x = x + tx - motionX;
 				y = y + ty - motionY;
-				Log.i("yujsh log","x:"+tx+" y:"+ty);
 				LayoutParams p = (LayoutParams) getLayoutParams();
 				p.x = (int) x;
 				p.y = (int) y;

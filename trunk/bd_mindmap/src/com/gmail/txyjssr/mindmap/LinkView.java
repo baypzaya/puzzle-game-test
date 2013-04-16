@@ -41,7 +41,6 @@ public class LinkView extends View {
 	public LinkView(MindMapView mindMapPad, Node node) {
 		this(mindMapPad.getContext());
 		this.setTag(node._id);
-		Log.i("yujsh log", "node title:"+node.title);
 		parentEtn = (EditTextNode) mindMapPad.findViewById((int)node.parentNode._id);
 		childEtn = (EditTextNode) mindMapPad.findViewById((int)node._id);		
 		updateLinkColor(node);

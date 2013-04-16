@@ -157,16 +157,18 @@ public class MindMap {
 
 	public void orderNodeList(List<Node> nodeList) {
 		Hashtable<Long, Node> ht = new Hashtable<Long, Node>();
+		
 		for (Node node : nodeList) {
 
 			if (!ht.containsKey(node._id)) {
 				ht.put(node._id, node);
 			}
-
+		}
+		
+		for (Node node : nodeList) {
 			if (node.parentNode != null) {
 				continue;
 			}
-
 			if (ht.containsKey(node.parentNodeId)) {
 				Node parentNode = ht.get(node.parentNodeId);
 				node.setParentNode(parentNode);
