@@ -128,13 +128,18 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 		for (Node node : nodeList) {
 			EditTextNode nl = createNodeLayout(node);
 			mindMapPad.addView(nl);
-			if (!node.isRootNode) {
-				LinkView lv = createLinkView(node);
-				mindMapPad.addView(lv, 0);
-			} else {
+			if (node.isRootNode) {
 				mindMapPad.requestMoveToNode(nl);
 			}
 		}
+		
+		for (Node node : nodeList) {
+			if (!node.isRootNode) {
+				LinkView lv = createLinkView(node);
+				mindMapPad.addView(lv, 0);
+			}
+		}
+		
 		Node rootNode = mindMap.getRootNode();
 
 		if (nodeList.size() == 1) {

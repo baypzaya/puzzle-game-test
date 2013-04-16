@@ -40,10 +40,11 @@ public class CommondDeleteNode implements ICommond {
 			EditTextNode nv = new EditTextNode(mmActivity);
 			nv.setNode(childNode);
 			mindMapPad.addView(nv);
-
-			int addIndex = mindMap.getNodes().size() - 2;
+		}
+		
+		for (Node childNode : deleteNodeList) {
 			LinkView lv = new LinkView(mindMapPad,childNode);
-			mindMapPad.addView(lv, addIndex);
+			mindMapPad.addView(lv, 0);
 		}
 	}
 
