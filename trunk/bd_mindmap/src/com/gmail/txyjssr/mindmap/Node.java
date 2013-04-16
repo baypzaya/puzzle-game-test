@@ -44,7 +44,7 @@ public class Node extends BaseData{
 	
 	public int getLayerNum(){
 		int i = 1;
-		if(!isRootNode){
+		if(parentNode!=null){
 			i+=parentNode.getLayerNum();
 		}
 		return i;

@@ -41,6 +41,7 @@ public class LinkView extends View {
 	public LinkView(MindMapView mindMapPad, Node node) {
 		this(mindMapPad.getContext());
 		this.setTag(node._id);
+		Log.i("yujsh log", "node title:"+node.title);
 		parentEtn = (EditTextNode) mindMapPad.findViewById((int)node.parentNode._id);
 		childEtn = (EditTextNode) mindMapPad.findViewById((int)node._id);		
 		updateLinkColor(node);
@@ -92,14 +93,12 @@ public class LinkView extends View {
 
 	private void drawLineByPath(Canvas canvas, float startX, float startY, float stopX, float stopY, Paint paint) {
 		float controlX = (startX + stopX) / 2;
+//		float controlY = (startY + stopY) / 2;
 		Path path = new Path();
 		path.moveTo(startX, startY);
 		path.cubicTo(controlX, startY, controlX, stopY, stopX, stopY);
 		canvas.drawPath(path, paint);
-		// canvas.drawLine(mPoints[C_START].x,mPoints[C_START].y,
-		// mPoints[C_CONTROL_1].x, mPoints[C_CONTROL_1].y, paint);
-		// canvas.drawLine(mPoints[C_END].x, mPoints[C_END].y,
-		// mPoints[C_CONTROL_2].x, mPoints[C_CONTROL_2].y, paint);
+//		 canvas.drawLine(startX,startY,stopX,stopY, paint);
 	}
 
 	@Override

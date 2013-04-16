@@ -102,23 +102,9 @@ public class MindMapView extends AbsoluteLayout {
 				}
 
 				if (lastTouchMode == TOUCH_MODE_SINGLE) {
-					int scrollX = getScrollX()+(int) (downX - moveX);
-					int scrollY = getScrollY()+(int) (downY- moveY);
-					
-					
-					if(-520 < scrollX && scrollX < 520){
-						scrollBy((int) (downX - moveX),0);
-						downX = moveX;
-					}else{
-						Toast.makeText(getContext(), "x bound", 10).show();
-					}
-					
-					if(-960 < scrollY && scrollY < 960){
-						scrollBy(0,(int) (downY- moveY));
-						downY = moveY;
-					}else{
-						Toast.makeText(getContext(), "y bound", 10).show();
-					}
+					scrollBy((int) (downX - moveX), (int) (downY - moveY));
+					downX = moveX;
+					downY = moveY;
 				}
 			} else if (event.getPointerCount() == 2) {
 				// lastTouchMode = TOUCH_MODE_DOUBLE;
