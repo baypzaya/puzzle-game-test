@@ -186,80 +186,9 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 	}
 
 	private void sendMindMap() {
-		MindMap tempMindMap = mindMapManager.getMindMapBy(mindMap.mindMapId);
-		MindMapView tempMMView = new MindMapView(this);
 		
-		Node nodeTop = tempMindMap.getTopNode();
-		Node nodeBottom = tempMindMap.getBottomNode();
-		Node nodeLeft = tempMindMap.getLeftNode();
-		Node nodeRight = tempMindMap.getRightNode();
-		
-		float mindMapTop = nodeTop.y;
-		float mindMapBottom = nodeBottom.y;
-		float mindMapLeft = nodeLeft.x;
-		float mindMapRight = nodeRight.x;
-		
-		int width = (int)mindMapRight - (int)mindMapLeft;
-		int height = (int)mindMapBottom - (int)mindMapTop;
-		
-		if(width <= 800){
-			mindMapLeft = nodeLeft.x - (840-width)/2;
-			width = 840;
-		}else{
-			width = (int)(mindMapRight - mindMapLeft+40);
-			mindMapLeft = nodeLeft.x - 20;
-		}
-		
-		if(height <= 800){
-			mindMapTop = nodeTop.y - (840-height)/2;
-			height = 840;
-		}else{
-			width = (int)mindMapBottom - (int)mindMapTop+40;
-			mindMapTop = nodeTop.y - 20;
-		}
-		
-		List<Node> nodeList = tempMindMap.getNodes();
-		for (Node node : nodeList) {
-			node.x = node.x - mindMapLeft;
-			node.y = node.y - mindMapTop;
-			EditTextNode nl = createNodeLayout(node);
-			tempMMView.addView(nl);
-			
-			if (!node.isRootNode) {
-				LinkView lv = new LinkView(tempMMView, node);
-				tempMMView.addView(lv, 0);
-			}
-		}
-		
-		tempMMView.measure(MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
-				MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
-		
-		for (Node node : nodeList) {
-			if (!node.isRootNode) {
-				LinkView lv = new LinkView(tempMMView, node);
-				tempMMView.addView(lv, 0);
-			}
-		}
-		tempMMView.measure(MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
-				MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
-		int nodeWidth = tempMMView.findViewById((int)nodeRight._id).getMeasuredWidth();
-		int nodeHeight = tempMMView.findViewById((int)nodeBottom._id).getMeasuredHeight();
-		tempMMView.layout(0, 0, width+nodeWidth, height+nodeHeight);
-		Bitmap bitmap = BitmapUtils.convertViewToBitmap(tempMMView,width+nodeWidth,height+nodeHeight);
-		String path = Environment.getExternalStorageDirectory().getAbsolutePath()+"/test.jpeg";
-		File file = new File(path);		
-		try {
-			if(!file.exists()){
-				file.createNewFile();
-			}
-			OutputStream os = new FileOutputStream(file);
-			bitmap.compress(CompressFormat.JPEG, 100, os);
-			os.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		String path = BitmapUtils.createMindMap(this, mindMap.mindMapId);
+		File file = new File(path);
 		
 		Uri uri = Uri.fromFile(file);
 		Intent intent = new Intent();
