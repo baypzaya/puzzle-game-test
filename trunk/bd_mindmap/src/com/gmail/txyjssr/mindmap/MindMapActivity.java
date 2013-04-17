@@ -13,12 +13,15 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
+import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.AbsoluteLayout;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,6 +52,8 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 
 	private List<Node> notMoveToParentNodes = new ArrayList<Node>();
 
+	private DropDownList dropDownList;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -57,7 +62,7 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 //		 StatService.setOn(this,StatService.EXCEPTION_LOG);
 		adView = (AdView) findViewById(R.id.adView);
 		adView.setListener(new MyAdViewListener(adView));
-		// baidu code end
+		// baidu code endo
 
 		DisplayMetrics dm = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(dm);
@@ -82,6 +87,10 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 		ivSend.setOnClickListener(this);
 		ivUndo.setOnClickListener(this);
 		ivRedo.setOnClickListener(this);
+		
+		dropDownList = new DropDownList(this);
+		BaseAdapter adapter = new MyArrayAdapter();
+		dropDownList.setAdapter(adapter);
 
 		mindMapPad = (MindMapView) findViewById(R.id.fl_pad);
 		mindMapPad.setOnClickListener(this);
@@ -153,12 +162,15 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 	public void onClick(View v) {
 		if (v instanceof MindMapView) {
 			findViewById(R.id.et_focus).requestFocus();
+			StatService.onEvent(this, "click_empty", "show ads by click");
 		} else {
 			int id = v.getId();
 			switch (id) {
 			case R.id.iv_mind_map_more:
-				Intent intent = new Intent(this, MMManagerActivity.class);
-				startActivityForResult(intent, REQUST_CODE_MANAGE_MINDMAP);
+				dropDownList.show(v);
+//				Intent intent = new Intent(this, MMManagerActivity.class);
+//				startActivityForResult(intent, REQUST_CODE_MANAGE_MINDMAP);
+//				StatService.onEvent(this, "click_more_mindmap", "enter mindmapManager");
 				break;
 			case R.id.iv_root:
 				moveToRootNode();
@@ -177,6 +189,7 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 				break;
 			case R.id.iv_send:
 				sendMindMap();
+				StatService.onEvent(this, "click_send", "create image");
 				break;
 			case R.id.iv_undo:
 				undo();
@@ -550,6 +563,38 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 			isPreBack = false;
 		}
 		return super.dispatchTouchEvent(ev);
+	}
+	
+	private class MyArrayAdapter extends BaseAdapter {
+		String[] items = {"管理","根节点","清空节点","导出图片"};
+
+		@Override
+		public int getCount() {
+			return items.length;
+		}
+
+		@Override
+		public Object getItem(int position) {
+			return items[position];
+		}
+
+		@Override
+		public long getItemId(int position) {
+			return position;
+		}
+
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			if(convertView==null){
+				LayoutInflater li = LayoutInflater.from(MindMapActivity.this);
+				convertView = li.inflate(R.layout.drop_down_item, null);
+			}
+			String item = items[position];
+			TextView textItem = (TextView) convertView.findViewById(R.id.text_item);
+			textItem.setText(item);
+			return convertView;
+		}
+		
 	}
 
 }
