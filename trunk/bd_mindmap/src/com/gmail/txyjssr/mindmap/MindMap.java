@@ -191,4 +191,11 @@ public class MindMap {
 	public Node getRightNode() {
 		return nodeDao.getMaxNodeX(mindMapId);
 	}
+
+	public List<Node> getNotMoveToParent(Node node) {
+		List<Node> childTreeNodes = getAllTreeNodes(node);
+		childTreeNodes.add(node);
+		childTreeNodes.add(node.parentNode);
+		return childTreeNodes;
+	}
 }
