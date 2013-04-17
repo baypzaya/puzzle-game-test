@@ -5,6 +5,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.MeasureSpec;
 import android.widget.AbsoluteLayout;
 import android.widget.FrameLayout;
 import android.widget.Toast;
@@ -174,7 +175,8 @@ public class MindMapView extends AbsoluteLayout {
 	}
 
 	public void scroll(EditTextNode currentFocusedNode) {
-
+		currentFocusedNode.measure(MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
+				MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
 		float nodeX = currentFocusedNode.getPointX();
 		float nodeY = currentFocusedNode.getPointY();
 

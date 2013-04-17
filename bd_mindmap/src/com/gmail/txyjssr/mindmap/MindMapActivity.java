@@ -1,27 +1,20 @@
 package com.gmail.txyjssr.mindmap;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Formatter;
 import java.util.List;
 
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Bitmap.CompressFormat;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.MeasureSpec;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup.LayoutParams;
@@ -31,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.baidu.mobads.AdView;
+import com.baidu.mobstat.StatService;
 import com.gmail.txyjssr.mindmap.EditTextNode.OnMoveListener;
 
 public class MindMapActivity extends Activity implements OnClickListener, OnFocusChangeListener, OnMoveListener {
@@ -53,12 +47,14 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 	private Point oldPoint;
 	private boolean isPreBack = false;
 
+	private List<Node> notMoveToParentNodes = new ArrayList<Node>();
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.mind_map_activity);
 		// baidu code start
-		// StatService.setOn(this,StatService.EXCEPTION_LOG);
+//		 StatService.setOn(this,StatService.EXCEPTION_LOG);
 		adView = (AdView) findViewById(R.id.adView);
 		adView.setListener(new MyAdViewListener(adView));
 		// baidu code end
@@ -104,20 +100,22 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 		updateRedoAndUndoState();
 	}
 
-	// public void onResume() {
-	// super.onResume();
-	//
-	// //baidu code start
-	// StatService.onResume(this);
-	// //baidu code end
-	// }
-	//
-	// public void onPause() {
-	// super.onPause();
-	// //baidu code start
-	// StatService.onPause(this);
-	// //baidu code end
-	// }
+	public void onResume() {
+		super.onResume();
+		if (isPreBack) {
+			isPreBack = false;
+		}
+		// baidu code start
+		StatService.onResume(this);
+		// baidu code end
+	}
+
+	public void onPause() {
+		super.onPause();
+		// baidu code start
+		StatService.onPause(this);
+		// baidu code end
+	}
 
 	private void createMindMapUI(MindMap mindMap) {
 		TextView tvName = (TextView) findViewById(R.id.tv_mind_map_name);
@@ -132,14 +130,14 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 				mindMapPad.requestMoveToNode(nl);
 			}
 		}
-		
+
 		for (Node node : nodeList) {
 			if (!node.isRootNode) {
 				LinkView lv = createLinkView(node);
 				mindMapPad.addView(lv, 0);
 			}
 		}
-		
+
 		Node rootNode = mindMap.getRootNode();
 
 		if (nodeList.size() == 1) {
@@ -191,14 +189,14 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 	}
 
 	private void sendMindMap() {
-		
+
 		String path = BitmapUtils.createMindMap(this, mindMap.mindMapId);
 		File file = new File(path);
-		
+
 		Uri uri = Uri.fromFile(file);
 		Intent intent = new Intent();
 		intent.setAction(android.content.Intent.ACTION_VIEW);
-		intent.setDataAndType(uri,"image/jpeg");
+		intent.setDataAndType(uri, "image/jpeg");
 		startActivity(intent);
 	}
 
@@ -427,6 +425,11 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 		oldPoint.x = editTextNode.getPointX();
 		oldPoint.y = editTextNode.getPointY();
 		mindMapPad.bringChildToFront(editTextNode);
+
+		Node moveNode = (Node) editTextNode.getTag();
+		if (!moveNode.isRootNode) {
+			notMoveToParentNodes = mindMap.getNotMoveToParent(moveNode);
+		}
 	}
 
 	@Override
@@ -437,12 +440,13 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 		Node node = (Node) etn.getTag();
 		boolean isMerge = false;
 		if (!node.isRootNode) {
+
 			int childCount = mindMapPad.getChildCount();
 			for (int i = childCount - 1; i > 0; i--) {
 				View child = mindMapPad.getChildAt(i);
 				if (child instanceof EditTextNode) {
 					EditTextNode etnC = (EditTextNode) child;
-					if (node._id == etnC.getId() || node.parentNodeId == etnC.getId()) {
+					if (notMoveToParentNodes.contains((Node) etnC.getTag())) {
 						continue;
 					}
 
@@ -455,7 +459,7 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 							int heightC = etnC.getMeasuredHeight();
 							int xC = (int) (etnC.getPointX() + widthC / 2);
 							int yC = (int) (etnC.getPointY() + heightC / 2);
-							int margin = (int)EngineApplication.transformDP2PX(17);
+							int margin = (int) EngineApplication.transformDP2PX(17);
 							int widthF = widthC + margin;
 							int heightF = heightC + margin;
 							int xF = (int) xC - widthF / 2;
@@ -516,11 +520,12 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 
 			LinkView lv = (LinkView) mindMapPad.findViewWithTag(childNode._id);
 			lv.parentEtn = currentMergeNode;
-			
+
 			mindMapPad.scroll(etn);
 
 			focusImageView.setVisibility(View.GONE);
 			currentMergeNode = null;
+			notMoveToParentNodes.clear();
 
 			ICommond commont = new CommondMergeNode(mindMap, mindMapPad, oldParentNode, newParentNode, childNode,
 					oldPoint, newPoint);
