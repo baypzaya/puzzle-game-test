@@ -183,7 +183,7 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 	public void onClick(View v) {
 		if (v instanceof MindMapView) {
 			findViewById(R.id.et_focus).requestFocus();
-			StatService.onEvent(this, "click_empty", "show ads by click");
+			StatService.onEvent(this, "click_empty", "show ads by click",1);
 		} else {
 			int id = v.getId();
 			switch (id) {
