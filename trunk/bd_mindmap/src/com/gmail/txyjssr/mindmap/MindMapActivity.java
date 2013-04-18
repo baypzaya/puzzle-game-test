@@ -1,26 +1,39 @@
 package com.gmail.txyjssr.mindmap;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Formatter;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.MeasureSpec;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.AbsoluteLayout;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -32,6 +45,7 @@ import com.gmail.txyjssr.mindmap.EditTextNode.OnMoveListener;
 
 public class MindMapActivity extends Activity implements OnClickListener, OnFocusChangeListener, OnMoveListener {
 	private static final int REQUST_CODE_MANAGE_MINDMAP = 1;
+	private static final int MSG_CREATE_IMAGE = 1;
 
 	private MindMapView mindMapPad;
 	private MindMapManager mindMapManager;
@@ -40,26 +54,38 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 	private EditTextNode currentMergeNode;
 	private View focusImageView;
 	private AdView adView;
+	private ImageView ivUndo;
+	private ImageView ivRedo;
+	private DropDownList dropDownList;
 
 	private CommondStack commondStack = new CommondStack();
+	private Handler mHandler = new Handler() {
 
-	private ImageView ivUndo;
-
-	private ImageView ivRedo;
+		@Override
+		public void handleMessage(Message msg) {
+			int what = msg.what;
+			switch (what) {
+			case MSG_CREATE_IMAGE:
+				String path = (String) msg.obj;
+				processCreatedImage(path);
+				break;
+			}
+		}
+	};
 
 	private Point oldPoint;
 	private boolean isPreBack = false;
+	private boolean isCancelCreateImage = false;
 
 	private List<Node> notMoveToParentNodes = new ArrayList<Node>();
-
-	private DropDownList dropDownList;
+	private ProgressDialog progressDialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.mind_map_activity);
 		// baidu code start
-//		 StatService.setOn(this,StatService.EXCEPTION_LOG);
+		// StatService.setOn(this,StatService.EXCEPTION_LOG);
 		adView = (AdView) findViewById(R.id.adView);
 		adView.setListener(new MyAdViewListener(adView));
 		// baidu code endo
@@ -71,26 +97,21 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 		ImageView ivMindMapMore = (ImageView) findViewById(R.id.iv_mind_map_more);
 		ivMindMapMore.setOnClickListener(this);
 
-		ImageView ivRoot = (ImageView) findViewById(R.id.iv_root);
-		ImageView ivClear = (ImageView) findViewById(R.id.iv_clear);
 		ImageView ivDelete = (ImageView) findViewById(R.id.iv_delete);
 		ImageView ivAdd = (ImageView) findViewById(R.id.iv_add);
 		ImageView ivEdit = (ImageView) findViewById(R.id.iv_edit);
-		ImageView ivSend = (ImageView) findViewById(R.id.iv_send);
 		ivUndo = (ImageView) findViewById(R.id.iv_undo);
 		ivRedo = (ImageView) findViewById(R.id.iv_redo);
-		ivRoot.setOnClickListener(this);
-		ivClear.setOnClickListener(this);
 		ivDelete.setOnClickListener(this);
 		ivAdd.setOnClickListener(this);
 		ivEdit.setOnClickListener(this);
-		ivSend.setOnClickListener(this);
 		ivUndo.setOnClickListener(this);
 		ivRedo.setOnClickListener(this);
-		
+
 		dropDownList = new DropDownList(this);
-		BaseAdapter adapter = new MyArrayAdapter();
+		MyArrayAdapter adapter = new MyArrayAdapter();
 		dropDownList.setAdapter(adapter);
+		dropDownList.setOnItemClickListener(adapter);
 
 		mindMapPad = (MindMapView) findViewById(R.id.fl_pad);
 		mindMapPad.setOnClickListener(this);
@@ -168,15 +189,6 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 			switch (id) {
 			case R.id.iv_mind_map_more:
 				dropDownList.show(v);
-//				Intent intent = new Intent(this, MMManagerActivity.class);
-//				startActivityForResult(intent, REQUST_CODE_MANAGE_MINDMAP);
-//				StatService.onEvent(this, "click_more_mindmap", "enter mindmapManager");
-				break;
-			case R.id.iv_root:
-				moveToRootNode();
-				break;
-			case R.id.iv_clear:
-				clearNodes();
 				break;
 			case R.id.iv_delete:
 				deleteNode();
@@ -186,10 +198,6 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 				break;
 			case R.id.iv_edit:
 				editNode();
-				break;
-			case R.id.iv_send:
-				sendMindMap();
-				StatService.onEvent(this, "click_send", "create image");
 				break;
 			case R.id.iv_undo:
 				undo();
@@ -201,16 +209,38 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 		}
 	}
 
-	private void sendMindMap() {
+	private void createMindMapImage() {
+		isCancelCreateImage = false;
+		if (progressDialog != null && progressDialog.isShowing()) {
+			progressDialog.dismiss();
+			progressDialog = null;
+		}
+		progressDialog = new ProgressDialog(this);
+		progressDialog.setMessage("正在生成图片...");
+		progressDialog.setCanceledOnTouchOutside(false);
+		progressDialog.setButton("取消", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				isCancelCreateImage = true;
+			}
+		});
+		progressDialog.show();
 
-		String path = BitmapUtils.createMindMap(this, mindMap.mindMapId);
-		File file = new File(path);
+		Runnable runnable = new Runnable() {
 
-		Uri uri = Uri.fromFile(file);
-		Intent intent = new Intent();
-		intent.setAction(android.content.Intent.ACTION_VIEW);
-		intent.setDataAndType(uri, "image/jpeg");
-		startActivity(intent);
+			@Override
+			public void run() {
+				final String path = createMindMapImageByThread(mindMap.mindMapId);
+				if (!isCancelCreateImage) {
+					Message message = mHandler.obtainMessage(MSG_CREATE_IMAGE);
+					message.obj = path;
+					message.sendToTarget();
+				}
+			}
+		};
+
+		new Thread(runnable).start();
+
 	}
 
 	private void redo() {
@@ -302,7 +332,10 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 
 	private void moveToRootNode() {
 		Node rootNode = mindMap.getRootNode();
-		mindMapPad.requestMoveToNode((EditTextNode) findViewById((int) rootNode._id));
+		EditTextNode etn = (EditTextNode) findViewById((int) rootNode._id);
+		mindMapPad.requestMoveToNode(etn);
+		etn.requestFocus();
+
 	}
 
 	@Override
@@ -564,9 +597,9 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 		}
 		return super.dispatchTouchEvent(ev);
 	}
-	
-	private class MyArrayAdapter extends BaseAdapter {
-		String[] items = {"管理","根节点","清空节点","导出图片"};
+
+	private class MyArrayAdapter extends BaseAdapter implements OnItemClickListener {
+		String[] items = { "管理", "根节点", "清空节点", "导出图片" };
 
 		@Override
 		public int getCount() {
@@ -585,16 +618,175 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			if(convertView==null){
+			if (convertView == null) {
 				LayoutInflater li = LayoutInflater.from(MindMapActivity.this);
 				convertView = li.inflate(R.layout.drop_down_item, null);
 			}
 			String item = items[position];
 			TextView textItem = (TextView) convertView.findViewById(R.id.text_item);
 			textItem.setText(item);
+			textItem.setTag(position);
 			return convertView;
 		}
-		
+
+		@Override
+		public void onItemClick(AdapterView<?> adaterView, View view, int positon, long index) {
+			switch (positon) {
+			case 0:
+				Intent intent = new Intent(MindMapActivity.this, MMManagerActivity.class);
+				startActivityForResult(intent, REQUST_CODE_MANAGE_MINDMAP);
+				break;
+			case 1:
+				moveToRootNode();
+				break;
+			case 2:
+				clearNodes();
+				break;
+			case 3:
+				createMindMapImage();
+				break;
+			default:
+				break;
+			}
+			dropDownList.dismiss();
+		}
+
+	}
+
+	private void processCreatedImage(final String path) {
+		if (progressDialog != null && progressDialog.isShowing()) {
+			progressDialog.dismiss();
+			progressDialog = null;
+		}
+		if (path != null) {
+			String message = getString(R.string.hint_created_image);
+			Formatter ft = new Formatter().format(message, mindMap.name, path);
+			DialogUtils.showHintDilog(this, ft.toString(), getString(R.string.preview), getString(R.string.cancel),
+					new DialogInterface.OnClickListener() {
+
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							if (which == DialogInterface.BUTTON_POSITIVE) {
+								File file = new File(path);
+								Uri uri = Uri.fromFile(file);
+								Intent intent = new Intent();
+								intent.setAction(android.content.Intent.ACTION_VIEW);
+								intent.setDataAndType(uri, "image/jpeg");
+								try {
+									startActivity(intent);
+									overridePendingTransition(R.anim.right_in_activity, R.anim.left_out_activity);
+								} catch (ActivityNotFoundException e) {
+									Toast.makeText(MindMapActivity.this, "没有找到查看图片的应用", Toast.LENGTH_LONG).show();
+								}
+							}
+						}
+					});
+		} else {
+			String message = getString(R.string.hint_failed_create_image);
+			Formatter ft = new Formatter().format(message, mindMap.name);
+			Toast.makeText(this, ft.toString(), Toast.LENGTH_LONG).show();
+		}
+	}
+
+	private String createMindMapImageByThread(long mindMapId) {
+		MindMapManager mmManager = new MindMapManager();
+		MindMap tempMindMap = mmManager.getMindMapBy(mindMapId);
+		MindMapView tempMMView = new MindMapView(this);
+
+		List<Node> nodeList = tempMindMap.getNodes();
+		for (Node node : nodeList) {
+			EditTextNode nl = new EditTextNode(this);
+			nl.setNode(node);
+			tempMMView.addView(nl);
+		}
+
+		if (isCancelCreateImage) {
+			return null;
+		}
+
+		tempMMView.measure(MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
+				MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
+
+		int top = 0;
+		int bottom = 0;
+		int left = 0;
+		int right = 0;
+
+		for (Node node : nodeList) {
+			View nodeView = tempMMView.findViewById((int) node._id);
+			int cTop = (int) node.y;
+			int cBottom = (int) node.y + nodeView.getMeasuredHeight();
+
+			int cLeft = (int) node.x;
+			int cRight = (int) node.x + nodeView.getMeasuredWidth();
+
+			top = top < cTop ? top : cTop;
+			bottom = bottom > cBottom ? bottom : cBottom;
+			left = left < cLeft ? left : cLeft;
+			right = right > cRight ? right : cRight;
+
+			if (!node.isRootNode) {
+				LinkView lv = new LinkView(tempMMView, node);
+				tempMMView.addView(lv, 0);
+			}
+		}
+
+		if (isCancelCreateImage) {
+			return null;
+		}
+
+		tempMMView.measure(MeasureSpec.UNSPECIFIED, MeasureSpec.UNSPECIFIED);
+
+		int width = right - left;
+		int height = bottom - top;
+
+		int scrollX = 0;
+		int scrollY = 0;
+
+		if (width <= 800) {
+			scrollX = left - (840 - width) / 2;
+			width = 840;
+		} else {
+			width += 40;
+			scrollX = left - 20;
+		}
+
+		if (height <= 800) {
+			scrollY = top - (840 - height) / 2;
+			height = 840;
+		} else {
+			height += 40;
+			scrollY = top - 20;
+		}
+
+		tempMMView.layout(left, top, right, bottom);
+
+		tempMMView.scrollTo(scrollX, scrollY);
+
+		if (isCancelCreateImage) {
+			return null;
+		}
+		Bitmap bitmap = BitmapUtils.convertViewToBitmap(tempMMView, width, height);
+
+		if (bitmap != null && !isCancelCreateImage) {
+
+			String fileName = tempMindMap.name + "_" + System.currentTimeMillis() + ".jpeg";
+			String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/M_mindmap";
+
+			try {
+				FileUtils.createFile(path, ".NOMEDIA");
+				File file = FileUtils.createFile(path, fileName);
+				OutputStream os = new FileOutputStream(file);
+				bitmap.compress(CompressFormat.JPEG, 100, os);
+				os.close();
+				bitmap.recycle();
+				return file.getAbsolutePath();
+			} catch (Exception e) {
+				e.printStackTrace();
+				return null;
+			}
+		}
+		return null;
 	}
 
 }

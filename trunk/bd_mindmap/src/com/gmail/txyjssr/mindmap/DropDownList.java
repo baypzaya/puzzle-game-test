@@ -5,6 +5,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.PopupWindow;
@@ -29,6 +30,10 @@ public class DropDownList {
 
 	public void setAdapter(BaseAdapter adapter) {
 		mListView.setAdapter(adapter);
+	}
+	
+	public void setOnItemClickListener(OnItemClickListener listener) {
+		mListView.setOnItemClickListener(listener);
 	}
 
 	public void show(View anchor) {

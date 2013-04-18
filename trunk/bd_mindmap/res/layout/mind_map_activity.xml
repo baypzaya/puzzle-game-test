@@ -9,8 +9,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:focusable="true"
-        android:focusableInTouchMode="true"
-        />
+        android:focusableInTouchMode="true" />
 
     <LinearLayout
         android:id="@+id/tools_bar"
@@ -18,10 +17,10 @@
         android:layout_height="40dip"
         android:layout_gravity="center_vertical"
         android:background="@drawable/black_backgroud"
-        android:orientation="horizontal" 
-        android:gravity="center_vertical">
-        
-         <ImageView
+        android:gravity="center_vertical"
+        android:orientation="horizontal" >
+
+        <ImageView
             android:id="@+id/iv_arrow_back"
             android:layout_width="35dip"
             android:layout_height="35dip"
@@ -38,63 +37,40 @@
             android:singleLine="true"
             android:textColor="#ffffff"
             android:textSize="18dp" />
-        
-          <ImageView
+
+        <ImageView
             android:id="@+id/iv_undo"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
+            android:background="@drawable/bottom_bar_item_selector"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:background="@drawable/bottom_bar_item_selector"
             android:scaleType="centerInside"
             android:src="@drawable/undo_selector" />
-         <View
+
+        <View
             android:layout_width="1px"
             android:layout_height="fill_parent"
-            android:background="@drawable/menu_divider" />
+            android:background="#65ffffff" 
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp"/>
 
         <ImageView
             android:id="@+id/iv_redo"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
+            android:background="@drawable/bottom_bar_item_selector"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:background="@drawable/bottom_bar_item_selector"
             android:scaleType="centerInside"
             android:src="@drawable/redo_selector" />
 
-        <ImageView
-            android:id="@+id/iv_root"
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:background="@drawable/bottom_bar_item_selector"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:scaleType="centerInside"
-            android:src="@drawable/node_root" 
-            android:visibility="gone"/>
-
-        <View
+         <View
             android:layout_width="1px"
             android:layout_height="fill_parent"
-            android:background="@drawable/menu_divider" 
-            android:visibility="gone"/>
-
-        <ImageView
-            android:id="@+id/iv_clear"
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:background="@drawable/bottom_bar_item_selector"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:scaleType="centerInside"
-            android:src="@drawable/node_clear" 
-            android:visibility="gone"/>
-
-        <View
-            android:layout_width="1px"
-            android:layout_height="fill_parent"
-            android:background="@drawable/menu_divider" />
+            android:background="#65ffffff" 
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp"/>
 
         <ImageView
             android:id="@+id/iv_mind_map_more"
@@ -112,8 +88,8 @@
         android:layout_height="50dip"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:background="@drawable/activity_title_bar" 
-        android:padding="0dp">
+        android:background="@drawable/activity_title_bar"
+        android:padding="0dp" >
 
         <com.baidu.mobads.AdView
             android:id="@+id/adView"
@@ -128,8 +104,7 @@
         android:layout_height="match_parent"
         android:layout_above="@id/layout_adview"
         android:layout_below="@id/tools_bar"
-        android:background="#ffffff"
-        >
+        android:background="#ffffff" >
     </com.gmail.txyjssr.mindmap.MindMapView>
 
     <LinearLayout
@@ -141,19 +116,6 @@
         android:background="@drawable/activity_title_bar"
         android:orientation="horizontal"
         android:visibility="gone" >
-         <ImageView
-            android:id="@+id/iv_send"
-            android:layout_width="0dp"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
-            android:background="@drawable/bottom_bar_item_selector"
-            android:scaleType="centerInside"
-            android:src="@drawable/mm_send" />
-
-        <View
-            android:layout_width="1px"
-            android:layout_height="fill_parent"
-            android:background="@drawable/menu_divider" />
 
         <ImageView
             android:id="@+id/iv_edit"
@@ -191,7 +153,6 @@
             android:background="@drawable/bottom_bar_item_selector"
             android:scaleType="centerInside"
             android:src="@drawable/node_add" />
-               
     </LinearLayout>
 
 </RelativeLayout>

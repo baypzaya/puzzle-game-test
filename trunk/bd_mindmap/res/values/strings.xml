@@ -2,6 +2,7 @@
 
     <string name="app_name">思维导图</string>
     <string name="dialog_title_hint">温馨提示</string>
+    <string name="preview">预览</string>
     <string name="entry">确定</string>
     <string name="delete">删除</string>
     <string name="cancel">取消</string>
@@ -11,10 +12,11 @@
 	<string name="edit_node">修改节点</string>
 	<string name="create_new_mm">创建思维导图</string>
 	<string name="new_mind_map">思维启点</string>
-	<string name="delete_all_nodes">您确定要删除全部节点吗？</string>
+	<string name="delete_all_nodes">您确定要删除全部节点吗?</string>
 	<string name="delete_all">删除全部</string>
-	<string name="delete_node">如果删除该节点，其所有子节点也将全部被删除。\n您确定要删除节点(%1$s)吗？</string>
+	<string name="delete_node">如果删除该节点，其所有子节点也将全部被删除。\n您确定要删除节点(%1$s)吗?</string>
 	<string name="pre_back">请再点击一次返回键，退出思维导图工具</string>
 	<string name="hint_node_name_empty">没有输入节点名称</string>
-	
+	<string name="hint_created_image">思维导图(%1$s)图片已成功生成,保存位置:\n%2$s\n您是否需要预览?</string>
+	<string name="hint_failed_create_image">思维导图(%1$s)图片生成失败</string>
 </resources>

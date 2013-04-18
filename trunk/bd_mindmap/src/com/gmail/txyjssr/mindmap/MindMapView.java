@@ -152,6 +152,7 @@ public class MindMapView extends AbsoluteLayout {
 	public void requestMoveToNode(EditTextNode etn){
 		isMoveToCenter = false;
 		moveToNode = etn;
+		requestLayout();
 	}
 
 	private void moveToNodeLocationTocenter(EditTextNode etn) {
