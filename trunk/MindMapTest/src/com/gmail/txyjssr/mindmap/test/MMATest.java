@@ -23,8 +23,6 @@ import com.gmail.txyjssr.mindmap.test.utils.ReflectUtils;
 public class MMATest extends InstrumentationTestCase {
 
 	MindMapActivity mmActivity;
-	private ImageView ivRoot;
-	private ImageView ivClear;
 	private ImageView ivDelete;
 	private ImageView ivAdd;
 	private ImageView ivEdit;
@@ -36,14 +34,12 @@ public class MMATest extends InstrumentationTestCase {
 		intent.setClassName("com.gmail.txyjssr.mindmap", "com.gmail.txyjssr.mindmap.MindMapActivity");
 		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		mmActivity = (MindMapActivity) getInstrumentation().startActivitySync(intent);
-		ivRoot = (ImageView) mmActivity.findViewById(R.id.iv_root);
-		ivClear = (ImageView) mmActivity.findViewById(R.id.iv_clear);
 		ivDelete = (ImageView) mmActivity.findViewById(R.id.iv_delete);
 		ivAdd = (ImageView) mmActivity.findViewById(R.id.iv_add);
 		ivEdit = (ImageView) mmActivity.findViewById(R.id.iv_edit);
 
 	}
-
+	@Suppress
 	public void testIntertInfo() {
 
 		String[] insertTables = { "TabMindMap.sql", "Node.sql" };
@@ -67,7 +63,7 @@ public class MMATest extends InstrumentationTestCase {
 		super.tearDown();
 	}
 
-	@Suppress
+	
 	public void testAddNode() {
 		final MindMap mindMap = (MindMap) ReflectUtils.getField(mmActivity, "mindMap");
 		final int lNodeCount = mindMap.nodeList.size();
