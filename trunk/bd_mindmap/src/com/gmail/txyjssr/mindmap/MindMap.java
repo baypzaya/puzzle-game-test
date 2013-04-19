@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
-import android.util.Log;
-
 public class MindMap {
 	public static final float DISTANCE_dEFAULT = 120; // 单位dp
 	public long mindMapId;

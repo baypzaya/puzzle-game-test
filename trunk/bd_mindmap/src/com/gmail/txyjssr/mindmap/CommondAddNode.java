@@ -19,7 +19,7 @@ public class CommondAddNode implements ICommond {
 
 	@Override
 	public void redo() {
-		mindMap.addNode(childNode);
+		mindMap.addNode(childNode,true);
 		EditTextNode nv = createNodeLayout(childNode);
 		mindMapPad.addView(nv);
 		int addIndex = mindMap.getNodes().size() - 2;
