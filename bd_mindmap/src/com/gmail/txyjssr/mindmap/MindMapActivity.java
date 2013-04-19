@@ -46,6 +46,7 @@ import com.gmail.txyjssr.mindmap.EditTextNode.OnMoveListener;
 public class MindMapActivity extends Activity implements OnClickListener, OnFocusChangeListener, OnMoveListener {
 	private static final int REQUST_CODE_MANAGE_MINDMAP = 1;
 	private static final int MSG_CREATE_IMAGE = 1;
+	public static final String MM_CACHE_PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + "/M_mindmap";
 
 	private MindMapView mindMapPad;
 	private MindMapManager mindMapManager;
@@ -771,11 +772,11 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 		if (bitmap != null && !isCancelCreateImage) {
 
 			String fileName = tempMindMap.name + "_" + System.currentTimeMillis() + ".jpeg";
-			String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/M_mindmap";
+			
 
 			try {
-				FileUtils.createFile(path, ".NOMEDIA");
-				File file = FileUtils.createFile(path, fileName);
+				FileUtils.createFile(MM_CACHE_PATH, ".NOMEDIA");
+				File file = FileUtils.createFile(MM_CACHE_PATH, fileName);
 				OutputStream os = new FileOutputStream(file);
 				bitmap.compress(CompressFormat.JPEG, 100, os);
 				os.close();

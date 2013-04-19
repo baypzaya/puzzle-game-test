@@ -1,5 +1,6 @@
 package com.gmail.txyjssr.mindmap;
 
+import java.util.Formatter;
 import java.util.List;
 
 import android.app.ListActivity;
@@ -48,6 +49,12 @@ public class MMManagerActivity extends ListActivity implements OnItemClickListen
 
 		ivdelete = (ImageView) findViewById(R.id.iv_mm_menu_delete);
 		ivdelete.setOnClickListener(this);
+
+		TextView tvSavePath = (TextView) findViewById(R.id.tv_image_save_path);
+		Formatter formatter = new Formatter();
+
+		String message = formatter.format(getString(R.string.hint_image_save_path), MindMapActivity.MM_CACHE_PATH).toString();
+		tvSavePath.setText(message);
 	}
 
 	class MindMapAdapter extends BaseAdapter {
