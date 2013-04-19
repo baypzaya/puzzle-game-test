@@ -3,6 +3,8 @@ package com.gmail.txyjssr.mindmap;
 import java.util.Formatter;
 import java.util.List;
 
+import com.baidu.mobstat.StatService;
+
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
@@ -55,6 +57,20 @@ public class MMManagerActivity extends ListActivity implements OnItemClickListen
 
 		String message = formatter.format(getString(R.string.hint_image_save_path), MindMapActivity.MM_CACHE_PATH).toString();
 		tvSavePath.setText(message);
+	}
+	
+	public void onResume() {
+		super.onResume();
+		// baidu code start
+		StatService.onResume(this);
+		// baidu code end
+	}
+
+	public void onPause() {
+		super.onPause();
+		// baidu code start
+		StatService.onPause(this);
+		// baidu code end
 	}
 
 	class MindMapAdapter extends BaseAdapter {
