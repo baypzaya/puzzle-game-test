@@ -14,7 +14,7 @@ import android.widget.AbsoluteLayout.LayoutParams;
 
 public class LinkView extends View {
 	private final int strokeWidth = 3;
-	
+
 	public EditTextNode parentEtn;
 	public EditTextNode childEtn;
 
@@ -41,12 +41,12 @@ public class LinkView extends View {
 	public LinkView(MindMapView mindMapPad, Node node) {
 		this(mindMapPad.getContext());
 		this.setTag(node._id);
-		parentEtn = (EditTextNode) mindMapPad.findViewById((int)node.parentNode._id);
-		childEtn = (EditTextNode) mindMapPad.findViewById((int)node._id);		
+		parentEtn = (EditTextNode) mindMapPad.findViewById((int) node.parentNode._id);
+		childEtn = (EditTextNode) mindMapPad.findViewById((int) node._id);
 		updateLinkColor(node);
 	}
-	
-	private void updateLinkColor(Node node){
+
+	private void updateLinkColor(Node node) {
 		int layerNum = node.getLayerNum();
 		switch (layerNum) {
 		case 5:
@@ -69,10 +69,10 @@ public class LinkView extends View {
 			break;
 		}
 	}
-	
+
 	@Override
 	protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-		updateLinkColor((Node)childEtn.getTag());
+		updateLinkColor((Node) childEtn.getTag());
 		super.onLayout(changed, left, top, right, bottom);
 	}
 
@@ -91,26 +91,28 @@ public class LinkView extends View {
 	}
 
 	private void drawLineByPath(Canvas canvas, float startX, float startY, float stopX, float stopY, Paint paint) {
-		float controlX = (startX + stopX) / 2;
-//		float controlY = (startY + stopY) / 2;
-		Path path = new Path();
-		path.moveTo(startX, startY);
-		path.cubicTo(controlX, startY, controlX, stopY, stopX, stopY);
-		canvas.drawPath(path, paint);
-//		 canvas.drawLine(startX,startY,stopX,stopY, paint);
+		// float controlX = (startX + stopX) / 2;
+		// Path path = new Path();
+		// path.moveTo(startX, startY);
+		// path.cubicTo(controlX, startY, controlX, stopY, stopX, stopY);
+		// canvas.drawPath(path, paint);
+		canvas.drawLine(startX, startY, stopX, stopY, paint);
 	}
 
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 		int pWidth = parentEtn.getMeasuredWidth();
 		int pHeight = parentEtn.getMeasuredHeight();
-		
+
 		int cWidth = childEtn.getMeasuredWidth();
 		int cHeight = childEtn.getMeasuredHeight();
-		
-		setLink(parentEtn.getPointX()+pWidth/2,parentEtn.getPointY()+pHeight/2,childEtn.getPointX()+cWidth/2,childEtn.getPointY()+cHeight/2);
-		int width = (int) Math.abs((childEtn.getPointX()+cWidth/2) - (parentEtn.getPointX()+pWidth/2)) + strokeWidth;
-		int height = (int) Math.abs((childEtn.getPointY()+cHeight/2) - (parentEtn.getPointY()+pHeight/2)) + strokeWidth;
+
+		setLink(parentEtn.getPointX() + pWidth / 2, parentEtn.getPointY() + pHeight / 2, childEtn.getPointX() + cWidth
+				/ 2, childEtn.getPointY() + cHeight / 2);
+		int width = (int) Math.abs((childEtn.getPointX() + cWidth / 2) - (parentEtn.getPointX() + pWidth / 2))
+				+ strokeWidth;
+		int height = (int) Math.abs((childEtn.getPointY() + cHeight / 2) - (parentEtn.getPointY() + pHeight / 2))
+				+ strokeWidth;
 		setMeasuredDimension(width, height);
 	}
 
@@ -121,8 +123,7 @@ public class LinkView extends View {
 		childY = y2;
 		int lx = (int) (x < x2 ? x : x2);
 		int ly = (int) (y < y2 ? y : y2);
-		
-		
+
 		setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, lx, ly));
 	}
 }

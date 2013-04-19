@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="40dip"
         android:layout_gravity="center_vertical"
-        android:background="@drawable/activity_title_bar"
+        android:background="@drawable/black_backgroud"
         android:orientation="horizontal"
         android:padding="0dp" >
 
@@ -23,7 +23,9 @@
         <View
             android:layout_width="1px"
             android:layout_height="fill_parent"
-            android:background="@drawable/menu_divider" />
+            android:background="#65ffffff" 
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp"/>
 
         <TextView
             android:id="@+id/tv_title"
@@ -36,11 +38,7 @@
             android:text="@string/mind_map_list"
             android:textColor="#ffffff"
             android:textSize="18dp" />
-
-        <View
-            android:layout_width="1px"
-            android:layout_height="fill_parent"
-            android:background="@drawable/menu_divider" />
+               
 
         <ImageView
             android:id="@+id/iv_mm_menu_add"
@@ -52,10 +50,12 @@
             android:scaleType="centerInside"
             android:src="@drawable/mm_menu_add" />
 
-        <View
+       <View
             android:layout_width="1px"
             android:layout_height="fill_parent"
-            android:background="@drawable/menu_divider" />
+            android:background="#65ffffff" 
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp"/>
 
         <ImageView
             android:id="@+id/iv_mm_menu_delete"
@@ -68,10 +68,22 @@
             android:src="@drawable/mm_menu_delete" />
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/tv_image_save_path"
+        android:layout_width="match_parent"
+        android:layout_height="50dp" 
+        android:textColor="#ffffff"
+        android:textSize="15dp"
+        android:gravity="center"
+        android:background="@drawable/activity_title_bar"
+        android:layout_alignParentBottom="true"
+        />
+
     <ListView
         android:id="@android:id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_above="@id/tv_image_save_path"
         android:layout_below="@id/tools_bar" />
 
 </RelativeLayout>
