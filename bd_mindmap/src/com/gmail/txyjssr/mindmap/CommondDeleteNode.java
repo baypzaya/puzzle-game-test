@@ -10,8 +10,9 @@ public class CommondDeleteNode implements ICommond {
 	private List<Node> deleteNodeList;
 	private MindMap mindMap;
 	private MindMapView mindMapPad;
-	
-	public CommondDeleteNode(MindMapActivity mmActivity,MindMap mindMap, MindMapView mindMapPad,Node deleteNode,List<Node> deleteNodeList) {
+
+	public CommondDeleteNode(MindMapActivity mmActivity, MindMap mindMap, MindMapView mindMapPad, Node deleteNode,
+			List<Node> deleteNodeList) {
 		this.mmActivity = mmActivity;
 		this.mindMap = mindMap;
 		this.mindMapPad = mindMapPad;
@@ -19,7 +20,6 @@ public class CommondDeleteNode implements ICommond {
 		this.deleteNodeList = deleteNodeList;
 		mindMap.orderNodeList(this.deleteNodeList);
 	}
-	
 
 	@Override
 	public void redo() {
@@ -34,17 +34,24 @@ public class CommondDeleteNode implements ICommond {
 
 	@Override
 	public void undo() {
-		
+
 		for (Node childNode : deleteNodeList) {
-			mindMap.addNode(childNode,true);
+			mindMap.addNode(childNode, true);
 			EditTextNode nv = new EditTextNode(mmActivity);
 			nv.setNode(childNode);
 			mindMapPad.addView(nv);
+			
+			if(childNode.parentNode == null){
+				EditTextNode pnv = (EditTextNode) mindMapPad.findViewById((int)childNode.parentNodeId);
+				childNode.parentNode = (Node)pnv.getTag();
+			}
 		}
-		
+
 		for (Node childNode : deleteNodeList) {
-			LinkView lv = new LinkView(mindMapPad,childNode);
-			mindMapPad.addView(lv, 0);
+			if (!childNode.isRootNode) {
+				LinkView lv = new LinkView(mindMapPad, childNode);
+				mindMapPad.addView(lv, 0);
+			}
 		}
 	}
 
