@@ -12,6 +12,7 @@ public class GameData {
 	public static final int STATUS_OVER = 1;
 	public static final int STATUS_PAUSE = 2;
 	public static final int STATUS_SUCCESS = 3;
+	public static final int STATUS_RESTART = 4;
 
 	public static final int TILE_COUNT_X = 10;
 	public static final int TILE_COUNT_Y = 6;
@@ -32,14 +33,14 @@ public class GameData {
 	private Hashtable<Integer, Tower> towerMap = new Hashtable<Integer, Tower>();
 
 	private int currentMoney;
-	private OnGameStatusChangedListener onMoneyChangedListener;
+	private OnGameStatusChangedListener onGameStatusChangedListener;
 
 	private int[] enemies;
 	private int currentEnemyIndex = 0;
 	private boolean startNextTime = true;
 
 	public void setOnGameStatusChangedListener(OnGameStatusChangedListener onGameStatusChangedListener) {
-		this.onMoneyChangedListener = onGameStatusChangedListener;
+		this.onGameStatusChangedListener = onGameStatusChangedListener;
 	}
 
 	public Hashtable<Integer, Enemy> getEnemyMap() {
@@ -167,19 +168,26 @@ public class GameData {
 	public int getMoney() {
 		return currentMoney;
 	}
+	
+	private void setMoney(int money) {
+		currentMoney = money;
+		if (onGameStatusChangedListener != null) {
+			onGameStatusChangedListener.onMoneyChangedListener(currentMoney);
+		}
+	}
 
 	public void addMoney(int addMoney) {
 		currentMoney += addMoney;
-		if (onMoneyChangedListener != null) {
-			onMoneyChangedListener.onMoneyChangedListener(currentMoney);
+		if (onGameStatusChangedListener != null) {
+			onGameStatusChangedListener.onMoneyChangedListener(currentMoney);
 		}
 	}
 
 	public void subMoney(int subMoney) {
 		currentMoney = currentMoney - subMoney;
 		currentMoney = currentMoney < 0 ? 0 : currentMoney;
-		if (onMoneyChangedListener != null) {
-			onMoneyChangedListener.onMoneyChangedListener(currentMoney);
+		if (onGameStatusChangedListener != null) {
+			onGameStatusChangedListener.onMoneyChangedListener(currentMoney);
 		}
 	}
 
@@ -209,6 +217,18 @@ public class GameData {
 	}
 	
 	public void setGameStatus(int status){
-		onMoneyChangedListener.onGameStatusChanged(status);
+		onGameStatusChangedListener.onGameStatusChanged(status);
+	}
+	
+	public void resetData(){
+		enemyMap.clear();
+		towerMap.clear();
+		currentEnemyIndex = 0;
+		startNextTime = true;
+		gameSafeValue = 100;
+		setMoney(100);
+		defenseLocationMap = new boolean[TILE_COUNT_Y][TILE_COUNT_X];
+		setCurrentMap(currentGate);
+		onGameStatusChangedListener.onGameStatusChanged(STATUS_RESTART);
 	}
 }

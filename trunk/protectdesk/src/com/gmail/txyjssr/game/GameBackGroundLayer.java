@@ -81,7 +81,7 @@ public class GameBackGroundLayer extends Layer {
 		enemyHintLabel = Label.make("ememies:", 20);
 		enemyHintLabel.setAnchor(1,1);
 		enemyHintLabel.setPosition(wySize.width - 20-enemyNumberLabel.getWidth(), wySize.height -10);
-		addChild(enemyHintLabel);		
+		addChild(enemyHintLabel);
 	}
 	
 	public void updateMoney(int money){
@@ -91,5 +91,10 @@ public class GameBackGroundLayer extends Layer {
 	
 	public void updateEnemy(int enemy){
 		enemyNumberLabel.setText(""+enemy);
+	}
+
+	public void createBackGroup() {
+		// TODO Auto-generated method stub
+		
 	}
 }

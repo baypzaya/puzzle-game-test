@@ -113,6 +113,7 @@ public class EnemiesLayer extends Layer implements Callback {
 			} else {
 				node.stopAllActions();
 				removeChild(node, true);
+				GameData.getInstance().getEnemyMap().remove(node.getPointer());
 				listener.onCrossed(enemy);
 			}
 		} else {

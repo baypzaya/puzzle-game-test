@@ -16,7 +16,7 @@ public class DefenseLayer extends Layer {
 	
 	Texture2D texPoint;
 	GameData mGameData;
-	Layer selectTowerLayer;
+//	Layer selectTowerLayer;
 	
 
 	// WYPoint currentPointer;
