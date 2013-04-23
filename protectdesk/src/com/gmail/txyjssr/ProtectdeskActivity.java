@@ -40,7 +40,7 @@ public class ProtectdeskActivity extends Activity implements IDirectorLifecycleL
         super.onCreate(savedInstanceState);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         mGLView = new WYGLSurfaceView(this);
         setContentView(mGLView);
@@ -65,7 +65,6 @@ public class ProtectdeskActivity extends Activity implements IDirectorLifecycleL
     @Override
     public void onResume() {
         super.onResume();
-
         Director.getInstance().resume();
     }
 

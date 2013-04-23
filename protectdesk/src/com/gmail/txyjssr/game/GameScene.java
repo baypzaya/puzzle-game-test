@@ -141,14 +141,14 @@ public class GameScene extends Scene implements OnEnemyStateChangedListener, OnS
 
 	@Override
 	public void onCrossed(Enemy target) {
-		 mGameData.destroyGame(target.getDestroyValue());
-//		if (isOver) {
-//			unschedule(shotTS);
-//			Director.getInstance().pauseUI();
-//
-//			gameStatusLayer.setStatus(GameData.STATUS_OVER);
-//			gameStatusLayer.setVisible(true);
-//		}
+		mGameData.destroyGame(target.getDestroyValue());
+		// if (isOver) {
+		// unschedule(shotTS);
+		// Director.getInstance().pauseUI();
+		//
+		// gameStatusLayer.setStatus(GameData.STATUS_OVER);
+		// gameStatusLayer.setVisible(true);
+		// }
 	}
 
 	@Override
@@ -169,9 +169,18 @@ public class GameScene extends Scene implements OnEnemyStateChangedListener, OnS
 
 	@Override
 	public void onGameStatusChanged(int status) {
-		gameStatusLayer.setStatus(status);
-		gameStatusLayer.setVisible(true);
-
+		switch (status) {
+		case GameData.STATUS_RESTART:
+			defenseLayer.removeAllChildren(true);
+			bulletsLayer.removeAllChildren(true);
+			enemiesLayer.removeAllChildren(true);
+			bgLayer.createBackGroup();
+			gameStatusLayer.setVisible(false);
+			break;
+		default:
+			gameStatusLayer.setStatus(status);
+			gameStatusLayer.setVisible(true);
+			break;
+		}
 	}
-
 }
