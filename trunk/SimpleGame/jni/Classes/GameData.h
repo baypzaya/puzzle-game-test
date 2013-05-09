@@ -29,19 +29,24 @@ public:
 	int money;
 	int currentGameState;
 
-
-
+	CCPoint converToCellPoint(float x, float y);
+	bool canLocationTower(float x, float y);
 	bool hasNextEnimy();
 	int getNextEnimyType();
+	void addTower(CCObject* tower, float x, float y);
 	void removeEnimy(CCObject* enimy);
 	void refreshData();
 	CCPointArray* getEnimyPath();
 	static GameData* getInstance();
 	virtual ~GameData();
 
+	float computeDistance(CCPoint p1,CCPoint p2);
+
 private:
 	GameData();
 
+	static const int cellRow = 10;
+	static const int cellCol = 6;
 	virtual void initData();
 	float cellWidth;
 	float cellHeight;
@@ -50,6 +55,7 @@ private:
 	int countEnimy;
 	int countPW;
 	int* enimies;
+	int* towerLocation;
 };
 
 #endif /* GAMEDATA_H_ */

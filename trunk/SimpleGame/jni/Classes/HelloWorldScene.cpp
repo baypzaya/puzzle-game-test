@@ -4,6 +4,7 @@
 #include "GameData.h"
 #include "Enimy.h"
 #include "DefenceTower.h"
+#include "Bullet.h"
 
 using namespace cocos2d;
 
@@ -128,26 +129,71 @@ void HelloWorld::ccTouchesEnded(CCSet* touches, CCEvent* event) {
 
 	CCTouch* touch = (CCTouch*) (touches->anyObject());
 	CCPoint location = touch->getLocation();
-	DefenceTower* tower = new DefenceTower(location.x,location.y);
-	addChild(tower->spriteTower);
-	mGameData->_towers->addObject(tower);
+
+	float x = location.x;
+	float y = location.y;
+	if (mGameData->canLocationTower(x, y)) {
+		CCPoint point = mGameData->converToCellPoint(x, y);
+		DefenceTower* tower = new DefenceTower(point.x, point.y);
+		addChild(tower->spriteTower);
+		mGameData->_towers->addObject(tower);
+	}
 }
 
 void HelloWorld::updateGame(float dt) {
 	int gameState = mGameData->currentGameState;
-	switch (gameState) {
-	case GameData::STATE_OVER:
-		break;
-	case GameData::STATE_PAUSE:
-		break;
-	case GameData::STATE_SUCCESS: {
-		GameOverScene *gameOverScene = GameOverScene::create();
-		gameOverScene->getLayer()->getLabel()->setString("You Success");
-		CCDirector::sharedDirector()->replaceScene(gameOverScene);
-		break;
-	}
-	default:
-		break;
+	if (gameState == GameData::STATE_START) {
+		CCObject* enimyO;
+		CCObject* towerO;
+		CCArray* deathEnimy = CCArray::array();
+		CCARRAY_FOREACH( mGameData->_enimies, enimyO) {
+				Enimy *enimy = dynamic_cast<Enimy*> (enimyO);
+				if (enimy->life <= 0) {
+					deathEnimy->addObject(enimy);
+					enimy->enimySprite->stopAllActions();
+					removeChild(enimy->enimySprite, true);
+					continue;
+				}
+				CCARRAY_FOREACH( mGameData->_towers, towerO) {
+						DefenceTower *tower =
+								dynamic_cast<DefenceTower*> (towerO);
+						if (tower->canFire(enimyO)) {
+							Bullet* bullet = tower->fire(enimyO, dt);
+							if (bullet) {
+								addChild(bullet->bulletSprite);
+								bullet->flyToTarget(enimyO);
+								mGameData->_bullets->addObject(bullet);
+							}
+						}
+					}
+			}
+
+		CCARRAY_FOREACH( deathEnimy, enimyO){
+			 mGameData->removeEnimy(enimyO);
+			 enimyO->release();
+		}
+
+		deathEnimy->release();
+		deathEnimy = NULL;
+	} else {
+		switch (gameState) {
+		case GameData::STATE_OVER: {
+			GameOverScene *gameOverScene = GameOverScene::create();
+			gameOverScene->getLayer()->getLabel()->setString("You Lose");
+			CCDirector::sharedDirector()->replaceScene(gameOverScene);
+			break;
+		}
+		case GameData::STATE_PAUSE:
+			break;
+		case GameData::STATE_SUCCESS: {
+			GameOverScene *gameOverScene = GameOverScene::create();
+			gameOverScene->getLayer()->getLabel()->setString("You Success");
+			CCDirector::sharedDirector()->replaceScene(gameOverScene);
+			break;
+		}
+		default:
+			break;
+		}
 	}
 }
 

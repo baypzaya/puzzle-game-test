@@ -81,3 +81,20 @@ void Enimy::addToScenne(CCLayer* layer) {
 	layer->addChild(enimySprite);
 }
 
+CCPoint Enimy::getCurrentLocation() {
+	CCPoint position = enimySprite->getPosition();
+	return position;
+}
+
+void Enimy::subLife(int power) {
+	if (life > 0) {
+		life = life - power;
+	}
+	//	if (life <= 0 && enimySprite->getTag()!=5) {
+	//		enimySprite->stopAllActions();
+	//		enimySprite->getParent()->removeChild(enimySprite, false);
+	//		mGameData->removeEnimy(this);
+	//		enimySprite->setTag(5);
+	//	}
+}
+

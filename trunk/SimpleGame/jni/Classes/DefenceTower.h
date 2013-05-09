@@ -9,6 +9,7 @@
 #define DEFENCETOWER_H_
 
 #include "cocos2d.h"
+#include "Bullet.h"
 
 USING_NS_CC;
 
@@ -20,12 +21,13 @@ public:
 	CCSprite* spriteTower;
 
 	bool canFire(CCObject* target);
-	void fire(CCObject* target);
+	Bullet* fire(CCObject *target,float dt);
 	bool hasFireTarget();
 
 private:
+	float fireTime;
 	float fireInterval;
-	CCRect fireScope;
+	int fireScope;
 
 };
 
