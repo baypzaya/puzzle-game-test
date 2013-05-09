@@ -19,14 +19,17 @@ public:
 	static const int TYPE_ENIMY2 = 2;
 	void spriteMoveFinished(cocos2d::CCNode* sender);
 	void addToScenne(CCLayer* layer);
+	CCPoint getCurrentLocation();
+	void subLife(int power);
+	int life;
+	CCSprite *enimySprite;
 
 
 private:
 	~Enimy();
-	int life;
 	int speed;
 	int destroy;
-	CCSprite *enimySprite;
+
 	GameData* mGameData;
 	void init();
 	void moveToNextPoint(int);
