@@ -12,14 +12,14 @@ Enimy::~Enimy() {
 
 void Enimy::init() {
 
-	CCLog("init()");
 	mGameData = GameData::getInstance();
 	life = 100;
-	speed = 20;
+	speed = 100;
+	destroy = 10;
 
-	CCPoint initPoint = mGameData->_enimiesPath[0];
-	CCPoint nextPoint = mGameData->_enimiesPath[1];
-	CCLog("init()_1");
+	CCPoint initPoint = mGameData->getEnimyPath()->getControlPointAtIndex(0);
+	CCPoint nextPoint = mGameData->getEnimyPath()->getControlPointAtIndex(1);
+
 	enimySprite = CCSprite::create("enemy1.png", CCRectMake(0,0,40,55));//¾«ÁéµÚÒ»Ö¡
 	enimySprite->setPosition(initPoint);
 
@@ -31,50 +31,53 @@ void Enimy::init() {
 	CCFiniteTimeAction* frameAction = CCSequence::create(
 			CCRepeatForever::create(pRunDouga), NULL);
 
-	CCFiniteTimeAction* actionMove = CCMoveTo::create((float) 5, nextPoint);
-	CCFiniteTimeAction* actionMoveDone = CCCallFuncN::create(enimySprite,
-			callfuncN_selector(Enimy::spriteMoveFinished));
-
-	CCFiniteTimeAction* targetMoveAction = CCSequence::create(actionMove,
-			actionMoveDone, NULL);
-//	targetMoveAction->setTag(2);
 	enimySprite->runAction(frameAction);
-	enimySprite->runAction(targetMoveAction);
-	CCLog("init()_2");
-	enimySprite->setTag(1);
 
-//	mGameData->_enimies->addObject(enimySprite);
+	moveToNextPoint(1);
+
+	//	mGameData->_enimies->addObject(enimySprite);
 
 }
 
 void Enimy::spriteMoveFinished(CCNode* sender) {
-	CCLog("spriteMoveFinished()");
 
 	int currentPointIndex = sender->getTag();
-	CCLog("spriteMoveFinished()_1 %d",currentPointIndex);
-//	sender->stopActionByTag(2);
-	sender->stopAllActions();
+	sender->stopActionByTag(2);
 	currentPointIndex++;
-
-		mGameData = GameData::getInstance();
-		CCPoint endPoint = mGameData->_enimiesPath[currentPointIndex];
-
-
-
-	CCFiniteTimeAction* actionMove = CCMoveTo::create((float) 5,endPoint);
-	CCLog("spriteMoveFinished()_3");
-	CCFiniteTimeAction* actionMoveDone = CCCallFuncN::create(enimySprite,
-			callfuncN_selector(Enimy::spriteMoveFinished));
-	CCLog("spriteMoveFinished()_4");
-	CCFiniteTimeAction* targetMoveAction = CCSequence::create(actionMove,
-			actionMoveDone, NULL);
-//	targetMoveAction->setTag(2);
-
-	sender->runAction(targetMoveAction);
-	sender->setTag(currentPointIndex);
+	int length = mGameData->getEnimyPath()->count();
+	if (currentPointIndex < length) {
+		moveToNextPoint(currentPointIndex);
+	} else {
+		sender->getParent()->removeChild(sender, true);
+		mGameData->removeEnimy(this);
+	}
 }
 
-void Enimy::addToScenne(CCLayer* layer){
+void Enimy::moveToNextPoint(int nextIndex) {
+	CCPoint endPoint = mGameData->getEnimyPath()->getControlPointAtIndex(
+			nextIndex);
+	float length;
+	if (enimySprite->getPositionX() == endPoint.x) {
+		length = endPoint.y - enimySprite->getPositionY();
+	} else {
+		length = endPoint.x - enimySprite->getPositionX();
+	}
+
+	length = length > 0 ? length : -length;
+	float dt = length / speed;
+
+	CCFiniteTimeAction* actionMove = CCMoveTo::create((float) dt, endPoint);
+	CCFiniteTimeAction* actionMoveDone = CCCallFuncN::create(this,
+			callfuncN_selector(Enimy::spriteMoveFinished));
+	CCFiniteTimeAction* targetMoveAction = CCSequence::create(actionMove,
+			actionMoveDone, NULL);
+	targetMoveAction->setTag(2);
+
+	enimySprite->runAction(targetMoveAction);
+	enimySprite->setTag(nextIndex);
+}
+
+void Enimy::addToScenne(CCLayer* layer) {
 	layer->addChild(enimySprite);
 }
 

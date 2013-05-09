@@ -3,26 +3,18 @@
 #include "SimpleAudioEngine.h"
 #include "GameData.h"
 #include "Enimy.h"
+#include "DefenceTower.h"
 
 using namespace cocos2d;
 
 HelloWorld::~HelloWorld() {
-	if (_targets) {
-		_targets->release();
-		_targets = NULL;
-	}
-
-	if (_projectiles) {
-		_projectiles->release();
-		_projectiles = NULL;
-	}
-
 	// cpp don't need to call super dealloc
 	// virtual destructor will do this
+
+	delete mGameData;
 }
 
-HelloWorld::HelloWorld() :
-	_targets(NULL), _projectiles(NULL), _projectilesDestroyed(0) {
+HelloWorld::HelloWorld() {
 }
 
 CCScene* HelloWorld::scene() {
@@ -90,25 +82,11 @@ bool HelloWorld::init() {
 		// Add the menu to HelloWorld layer as a child layer.
 		this->addChild(pMenu, 1);
 
-		/////////////////////////////
-		// 2. add your codes below...
-		CCSprite *player = CCSprite::create("Player.png",
-				CCRectMake(0, 0, 27, 40));
-		player->setPosition(ccp(origin.x + player->getContentSize().width/2,
-				origin.y + visibleSize.height/2));
-		this->addChild(player);
-
-		this->schedule(schedule_selector(HelloWorld::gameLogic), 5.0);
+		this->schedule(schedule_selector(HelloWorld::gameLogic), 0.5);
+		this->schedule(schedule_selector(HelloWorld::updateGame));
 
 		this->setTouchEnabled(true);
 		this->setKeypadEnabled(true);
-
-		_targets = new CCArray;
-		_projectiles = new CCArray;
-
-		// use updateGame instead of update, otherwise it will conflit with SelectorProtocol::update
-		// see http://www.cocos2d-x.org/boards/6/topics/1478
-		this->schedule(schedule_selector(HelloWorld::updateGame));
 
 		CocosDenshion::SimpleAudioEngine::sharedEngine()->playBackgroundMusic(
 				"background-music-aac.wav", true);
@@ -121,16 +99,18 @@ bool HelloWorld::init() {
 
 void HelloWorld::menuCloseCallback(CCObject* pSender) {
 	// "close" menu item clicked
+	delete mGameData;
 	CCDirector::sharedDirector()->end();
 }
 
 // cpp with cocos2d-x
 void HelloWorld::addTarget() {
-	Enimy* enimy = new Enimy();
-	enimy->addToScenne(this);
+	if (mGameData->hasNextEnimy() && mGameData->getNextEnimyType() != -1) {
+		Enimy* enimy = new Enimy();
+		enimy->addToScenne(this);
+		mGameData->_enimies->addObject(enimy);
+	}
 }
-
-
 
 void HelloWorld::gameLogic(float dt) {
 	this->addTarget();
@@ -145,14 +125,35 @@ bool HelloWorld::ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent) {
 void HelloWorld::ccTouchesEnded(CCSet* touches, CCEvent* event) {
 	CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect(
 			"pew-pew-lei.wav");
+
+	CCTouch* touch = (CCTouch*) (touches->anyObject());
+	CCPoint location = touch->getLocation();
+	DefenceTower* tower = new DefenceTower(location.x,location.y);
+	addChild(tower->spriteTower);
+	mGameData->_towers->addObject(tower);
 }
 
 void HelloWorld::updateGame(float dt) {
-
+	int gameState = mGameData->currentGameState;
+	switch (gameState) {
+	case GameData::STATE_OVER:
+		break;
+	case GameData::STATE_PAUSE:
+		break;
+	case GameData::STATE_SUCCESS: {
+		GameOverScene *gameOverScene = GameOverScene::create();
+		gameOverScene->getLayer()->getLabel()->setString("You Success");
+		CCDirector::sharedDirector()->replaceScene(gameOverScene);
+		break;
+	}
+	default:
+		break;
+	}
 }
 
 void HelloWorld::keyBackClicked() {
 	CCLog("keyBackClicked");
+	delete mGameData;
 	CCDirector::sharedDirector()->end();
 }
 void HelloWorld::keyMenuClicked() {
@@ -162,7 +163,6 @@ void HelloWorld::keyMenuClicked() {
 void HelloWorld::createEnimyFrame(int rowNumber, CCSpriteFrame *pRun[]) {
 
 	for (int j = 0; j < 4; j++) {
-		//每张图片大小为64×64
 		pRun[j] = CCSpriteFrame::create("enemy1.png",
 				CCRectMake(j*40,rowNumber*55,40,55));
 

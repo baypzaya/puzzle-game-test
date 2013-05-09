@@ -12,23 +12,24 @@
 #include "GameData.h"
 USING_NS_CC;
 
-class Enimy : public CCSprite{
+class Enimy :public CCObject{
 public:
 	Enimy();
 	static const int TYPE_ENIMY1 = 1;
 	static const int TYPE_ENIMY2 = 2;
-
 	void spriteMoveFinished(cocos2d::CCNode* sender);
 	void addToScenne(CCLayer* layer);
 
-private:
 
+private:
 	~Enimy();
 	int life;
 	int speed;
-//	CCSprite *enimySprite;
+	int destroy;
+	CCSprite *enimySprite;
 	GameData* mGameData;
 	void init();
+	void moveToNextPoint(int);
 };
 
 #endif /* ENIMY_H_ */
