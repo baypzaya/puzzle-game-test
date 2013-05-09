@@ -37,17 +37,10 @@ public:
 	static CCPoint *enimiesPath;
 
 protected:
-	CCArray *_targets;
-	CCArray *_projectiles;
-	int _projectilesDestroyed;
 	GameData* mGameData ;
-
 	void addTarget();
 	void createEnimyFrame(int rowNumber, CCSpriteFrame *pRun[]);
 	void initResource();
-
-
-
 };
 
 #endif  // __HELLOWORLD_SCENE_H__
