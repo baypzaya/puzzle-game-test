@@ -47,6 +47,7 @@ void Bullet::spriteMoveFinished(cocos2d::CCNode* sender, CCObject* target) {
 	CCLog("spriteMoveFinished");
 	if (target) {
 		Enimy *enimy = dynamic_cast<Enimy*> (target);
+		if(0!=enimy)
 		enimy->subLife(power);
 	}
 	CCLog("spriteMoveFinished2");

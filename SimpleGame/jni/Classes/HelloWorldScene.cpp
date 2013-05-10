@@ -145,7 +145,7 @@ void HelloWorld::updateGame(float dt) {
 	if (gameState == GameData::STATE_START) {
 		CCObject* enimyO;
 		CCObject* towerO;
-		CCArray* deathEnimy = CCArray::array();
+		CCArray* deathEnimy = CCArray::create();
 		CCARRAY_FOREACH( mGameData->_enimies, enimyO) {
 				Enimy *enimy = dynamic_cast<Enimy*> (enimyO);
 				if (enimy->life <= 0) {
@@ -170,7 +170,6 @@ void HelloWorld::updateGame(float dt) {
 
 		CCARRAY_FOREACH( deathEnimy, enimyO){
 			 mGameData->removeEnimy(enimyO);
-			 enimyO->release();
 		}
 
 		deathEnimy->release();

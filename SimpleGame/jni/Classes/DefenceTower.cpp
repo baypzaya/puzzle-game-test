@@ -14,7 +14,7 @@ DefenceTower::DefenceTower(float x, float y) {
 	spriteTower = CCSprite::create("tower1.png");
 	spriteTower->setPosition(ccp(x,y));
 	fireScope = 300;
-	fireInterval = 0.5;
+	fireInterval =( 0.5);
 	fireTime = fireInterval;
 
 }

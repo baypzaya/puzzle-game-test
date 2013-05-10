@@ -20,11 +20,11 @@ void Enimy::init() {
 	CCPoint initPoint = mGameData->getEnimyPath()->getControlPointAtIndex(0);
 	CCPoint nextPoint = mGameData->getEnimyPath()->getControlPointAtIndex(1);
 
-	enimySprite = CCSprite::create("enemy1.png", CCRectMake(0,0,40,55));//¾«ÁéµÚÒ»Ö¡
+	enimySprite = CCSprite::create("enemy1.png", CCRectMake(0,0,40,55));
 	enimySprite->setPosition(initPoint);
 
 	CCAnimate *pRunDouga =
-			CCAnimate::actionWithAnimation(
+			CCAnimate::create(
 					CCAnimationCache::sharedAnimationCache()->animationByName(
 							"downRun"));
 
