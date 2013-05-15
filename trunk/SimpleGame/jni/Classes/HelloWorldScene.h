@@ -23,8 +23,8 @@ public:
 	// implement the "static node()" method manually
 	CREATE_FUNC(HelloWorld);
 
+	void shoot(float dt);
 	void gameLogic(float dt);
-
 	void updateGame(float dt);
 
 	//	void registerWithTouchDispatcher();

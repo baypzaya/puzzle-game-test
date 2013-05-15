@@ -14,8 +14,9 @@ DefenceTower::DefenceTower(float x, float y) {
 	spriteTower = CCSprite::create("tower1.png");
 	spriteTower->setPosition(ccp(x,y));
 	fireScope = 300;
-	fireInterval =( 0.5);
-	fireTime = fireInterval;
+	fireInterval = (1);
+	fireTime = 0;
+	currentTarget = NULL;
 
 }
 
@@ -24,6 +25,11 @@ DefenceTower::~DefenceTower() {
 
 bool DefenceTower::canFire(CCObject *target) {
 	Enimy *enimy = dynamic_cast<Enimy*> (target);
+
+	if(enimy->life <= 0){
+		return false;
+	}
+
 	CCPoint enimyLP = enimy->getCurrentLocation();
 
 	CCPoint towerLP = spriteTower->getPosition();
@@ -37,23 +43,29 @@ bool DefenceTower::canFire(CCObject *target) {
 	return result;
 }
 
-Bullet* DefenceTower::fire(CCObject *target,float dt) {
+Bullet* DefenceTower::fire(CCObject *target) {
 
-	fireTime = fireTime + dt;
-	if(fireTime >= fireInterval){
-		CCLog("fire1 %.2f, %.2f ",fireTime,fireInterval);
-		fireTime = fireTime - fireInterval;
-		CCLog("fire2 %.2f, %.2f ",fireTime,fireInterval);
+	CCPoint towerLP = spriteTower->getPosition();
+	Bullet* bullet = new Bullet(towerLP.x, towerLP.y);
+	return bullet;
+}
 
-		GameData* mGameData = GameData::getInstance();
-
-		CCPoint towerLP = spriteTower->getPosition();
-		Bullet* bullet = new Bullet(towerLP.x,towerLP.y);
-		return bullet;
+Bullet* DefenceTower::fireCurrentTarget() {
+	if (currentTarget != NULL) {
+		CCLog("fireCurrentTarget");
+		return fire(currentTarget);
 	}
 	return NULL;
 }
 
 bool DefenceTower::hasFireTarget() {
+	bool result = false;
+	if (currentTarget != NULL) {
+		result =  canFire(currentTarget);
+	}
+	if(!result){
+		currentTarget = NULL;
+	}
+	return result;
 }
 

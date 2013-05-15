@@ -83,6 +83,7 @@ bool HelloWorld::init() {
 		// Add the menu to HelloWorld layer as a child layer.
 		this->addChild(pMenu, 1);
 
+		this->schedule(schedule_selector(HelloWorld::shoot), 0.5);
 		this->schedule(schedule_selector(HelloWorld::gameLogic), 0.5);
 		this->schedule(schedule_selector(HelloWorld::updateGame));
 
@@ -111,6 +112,41 @@ void HelloWorld::addTarget() {
 		enimy->addToScenne(this);
 		mGameData->_enimies->addObject(enimy);
 	}
+}
+
+void HelloWorld::shoot(float dt) {
+	CCLog("-------------------start shoot-------------------");
+	CCObject* enimyO;
+	CCObject* towerO;
+	CCARRAY_FOREACH( mGameData->_towers, towerO) {
+			DefenceTower *tower = dynamic_cast<DefenceTower*> (towerO);
+			bool hasTarget = tower->hasFireTarget();
+			Bullet* bullet = NULL;
+			if (hasTarget) {
+				CCLog("hasTarget");
+				bullet = tower->fireCurrentTarget();
+			} else {
+				CCLog("no hasTarget");
+				CCARRAY_FOREACH( mGameData->_enimies, enimyO) {
+						Enimy *enimy = dynamic_cast<Enimy*> (enimyO);
+						if (enimy->life <= 0) {
+							continue;
+						}
+
+						if (tower->canFire(enimyO)) {
+							tower->setCurrentTarget(enimyO);
+							bullet = tower->fire(enimyO);
+							break;
+						}
+					}
+			}
+			if (bullet) {
+				addChild(bullet->bulletSprite);
+				bullet->flyToTarget(tower->getCurrentTarget());
+				mGameData->_bullets->addObject(bullet);
+			}
+		}
+	CCLog("-------------------end shoot-------------------");
 }
 
 void HelloWorld::gameLogic(float dt) {
@@ -152,25 +188,12 @@ void HelloWorld::updateGame(float dt) {
 					deathEnimy->addObject(enimy);
 					enimy->enimySprite->stopAllActions();
 					removeChild(enimy->enimySprite, true);
-					continue;
 				}
-				CCARRAY_FOREACH( mGameData->_towers, towerO) {
-						DefenceTower *tower =
-								dynamic_cast<DefenceTower*> (towerO);
-						if (tower->canFire(enimyO)) {
-							Bullet* bullet = tower->fire(enimyO, dt);
-							if (bullet) {
-								addChild(bullet->bulletSprite);
-								bullet->flyToTarget(enimyO);
-								mGameData->_bullets->addObject(bullet);
-							}
-						}
-					}
 			}
 
-		CCARRAY_FOREACH( deathEnimy, enimyO){
-			 mGameData->removeEnimy(enimyO);
-		}
+		CCARRAY_FOREACH( deathEnimy, enimyO) {
+				mGameData->removeEnimy(enimyO);
+			}
 
 		deathEnimy->release();
 		deathEnimy = NULL;

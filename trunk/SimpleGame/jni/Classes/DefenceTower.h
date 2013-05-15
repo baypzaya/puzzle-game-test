@@ -21,14 +21,16 @@ public:
 	CCSprite* spriteTower;
 
 	bool canFire(CCObject* target);
-	Bullet* fire(CCObject *target,float dt);
+	Bullet* fire(CCObject *target);
 	bool hasFireTarget();
+	Bullet* fireCurrentTarget();
+
+	CC_SYNTHESIZE(CCObject*,currentTarget,CurrentTarget);
 
 private:
-	float fireTime;
-	float fireInterval;
+	long fireTime;// unit second
+	long fireInterval;// unit second
 	int fireScope;
-
 };
 
 #endif /* DEFENCETOWER_H_ */
