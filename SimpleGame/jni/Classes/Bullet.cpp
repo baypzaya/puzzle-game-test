@@ -15,10 +15,13 @@ Bullet::Bullet(float x, float y) {
 
 	bulletSprite = CCSprite::create("bullet1.png");
 	bulletSprite->setPosition(ccp(x,y));
+
+	bulletSprite->retain();
+
 }
 
 Bullet::~Bullet() {
-	// TODO Auto-generated destructor stub
+	bulletSprite->release();
 }
 
 void Bullet::flyToTarget(CCObject* target) {
