@@ -11,7 +11,6 @@ using namespace cocos2d;
 HelloWorld::~HelloWorld() {
 	// cpp don't need to call super dealloc
 	// virtual destructor will do this
-
 	delete mGameData;
 }
 
@@ -47,7 +46,7 @@ bool HelloWorld::init() {
 		CC_BREAK_IF(! CCLayerColor::initWithColor( ccc4(255,255,255,255) ) );
 
 		initResource();
-
+		CCLog("mGameData getInstance");
 		mGameData = GameData::getInstance();
 
 		CCSprite *backgroup = CCSprite::create("map1.png");
@@ -101,7 +100,6 @@ bool HelloWorld::init() {
 
 void HelloWorld::menuCloseCallback(CCObject* pSender) {
 	// "close" menu item clicked
-	delete mGameData;
 	CCDirector::sharedDirector()->end();
 }
 
@@ -180,7 +178,6 @@ void HelloWorld::updateGame(float dt) {
 	int gameState = mGameData->currentGameState;
 	if (gameState == GameData::STATE_START) {
 		CCObject* enimyO;
-		CCObject* towerO;
 		CCArray* deathEnimy = CCArray::create();
 		CCARRAY_FOREACH( mGameData->_enimies, enimyO) {
 				Enimy *enimy = dynamic_cast<Enimy*> (enimyO);
