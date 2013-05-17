@@ -20,6 +20,28 @@ public:
 	static const int STATE_OVER = 2;
 	static const int STATE_SUCCESS = 3;
 
+	struct EnimyData {
+		int lift;
+		int speed;
+		int cost;
+		int destroy;
+		char* imagePath;
+	};
+
+	struct BulletData {
+		int power;
+		int speed;
+		char* imagepath;
+	};
+
+	struct TowerData {
+		int scope;
+		int speed;
+		int cost;
+		char* imagepath;
+		struct BulletData bullet;
+	};
+
 	CCArray *_enimies;
 	CCArray *_bullets;
 	CCArray *_towers;
@@ -40,7 +62,7 @@ public:
 	static GameData* getInstance();
 	virtual ~GameData();
 
-	float computeDistance(CCPoint p1,CCPoint p2);
+	float computeDistance(CCPoint p1, CCPoint p2);
 
 private:
 	GameData();

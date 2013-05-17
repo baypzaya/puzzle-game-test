@@ -82,6 +82,22 @@ bool HelloWorld::init() {
 		// Add the menu to HelloWorld layer as a child layer.
 		this->addChild(pMenu, 1);
 
+		//money label
+		CCLabelTTF* moneyLabel = CCLabelTTF::create("0",
+				"fonts/American Typewriter.ttf", 45);
+		moneyLabel->setAnchorPoint(ccp(0,1));
+		moneyLabel->setTag(10);
+		moneyLabel->setPosition(ccp(0,visibleSize.height));
+		addChild(moneyLabel);
+
+		//power label
+		CCLabelTTF* powerLabel = CCLabelTTF::create("0",
+				"fonts/American Typewriter.ttf", 45);
+		powerLabel->setAnchorPoint(ccp(1,1));
+		powerLabel->setTag(11);
+		powerLabel->setPosition(ccp(visibleSize.width,visibleSize.height));
+		addChild(powerLabel);
+
 		this->schedule(schedule_selector(HelloWorld::shoot), 0.5);
 		this->schedule(schedule_selector(HelloWorld::gameLogic), 0.5);
 		this->schedule(schedule_selector(HelloWorld::updateGame));
@@ -158,8 +174,6 @@ bool HelloWorld::ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent) {
 
 // cpp with cocos2d-x
 void HelloWorld::ccTouchesEnded(CCSet* touches, CCEvent* event) {
-	CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect(
-			"pew-pew-lei.wav");
 
 	CCTouch* touch = (CCTouch*) (touches->anyObject());
 	CCPoint location = touch->getLocation();
@@ -168,15 +182,40 @@ void HelloWorld::ccTouchesEnded(CCSet* touches, CCEvent* event) {
 	float y = location.y;
 	if (mGameData->canLocationTower(x, y)) {
 		CCPoint point = mGameData->converToCellPoint(x, y);
-		DefenceTower* tower = new DefenceTower(point.x, point.y);
-		addChild(tower->spriteTower);
-		mGameData->_towers->addObject(tower);
+
+		CCMenuItemImage *item1 = CCMenuItemImage::create("tower1.png", "tower1.png",
+				this, menu_selector( HelloWorld::buildDenfenceTower));
+		CCMenuItemImage *item2 = CCMenuItemImage::create("tower2.png", "tower2.png",
+				this, menu_selector( HelloWorld::buildDenfenceTower));
+		CCMenuItemImage *item3 = CCMenuItemImage::create("tower3.png", "tower3.png",
+				this, menu_selector( HelloWorld::buildDenfenceTower));
+
+		item1->setTag(101);
+		item2->setTag(102);
+		item3->setTag(103);
+
+		CCSize menuContentSize;
+		menuContentSize.setSize(item1->getContentSize().width * 3,
+				item1->getContentSize().height);
+
+		CCMenu *menu = CCMenu::create(item1, item2, item3, NULL);
+		menu->alignItemsHorizontally();
+		menu->setPosition(point);
+		menu->setContentSize(menuContentSize);
+
+		addChild(menu);
+
+//		DefenceTower* tower = new DefenceTower(point.x, point.y);
+//		addChild(tower->spriteTower);
+//		mGameData->_towers->addObject(tower);
 	}
 }
 
 void HelloWorld::updateGame(float dt) {
 	int gameState = mGameData->currentGameState;
 	if (gameState == GameData::STATE_START) {
+
+		//update enimy
 		CCObject* enimyO;
 		CCArray* deathEnimy = CCArray::create();
 		CCARRAY_FOREACH( mGameData->_enimies, enimyO) {
@@ -189,11 +228,32 @@ void HelloWorld::updateGame(float dt) {
 			}
 
 		CCARRAY_FOREACH( deathEnimy, enimyO) {
+				Enimy *enimy = dynamic_cast<Enimy*> (enimyO);
+				mGameData->money = mGameData->money + enimy->cost;
 				mGameData->removeEnimy(enimyO);
+
 			}
 
 		deathEnimy->release();
 		deathEnimy = NULL;
+
+		//update money
+		CCLabelTTF* moneyLabel = dynamic_cast<CCLabelTTF*> (getChildByTag(10));
+		char* moneyStr = new char[32];
+		sprintf(moneyStr, "%d", mGameData->money);
+		moneyLabel->setString(moneyStr);
+
+		//update money
+		CCLabelTTF* powerLabel = dynamic_cast<CCLabelTTF*> (getChildByTag(11));
+		char* powerStr = new char[32];
+		sprintf(powerStr, "%d", mGameData->power);
+		powerLabel->setString(powerStr);
+
+		//update game state
+		if (mGameData->power <= 0) {
+			mGameData->currentGameState = GameData::STATE_OVER;
+		}
+
 	} else {
 		switch (gameState) {
 		case GameData::STATE_OVER: {
@@ -285,6 +345,15 @@ void HelloWorld::initResource() {
 	CCAnimation *pTopRunAnimation = CCAnimation::createWithSpriteFrames(pArr,
 			0.2f);
 	animCache->addAnimation(pTopRunAnimation, "topRun");
+}
+
+void HelloWorld::buildDenfenceTower(CCObject* pSender)
+{
+	CCMenuItemImage* item = dynamic_cast<CCMenuItemImage*>(pSender);
+
+	CCLog("pSender type:%d",item->getTag());
+	removeChild(item->getParent(),true);
+
 }
 
 //void HelloWorld::registerWithTouchDispatcher() {

@@ -5,9 +5,11 @@ using namespace cocos2d;
 
 Enimy::Enimy() {
 	init();
+	enimySprite->retain();
 }
 
 Enimy::~Enimy() {
+	enimySprite->release();
 }
 
 void Enimy::init() {
@@ -16,6 +18,7 @@ void Enimy::init() {
 	life = 100;
 	speed = 100;
 	destroy = 10;
+	cost = 10;
 
 	CCPoint initPoint = mGameData->getEnimyPath()->getControlPointAtIndex(0);
 	CCPoint nextPoint = mGameData->getEnimyPath()->getControlPointAtIndex(1);
@@ -27,16 +30,8 @@ void Enimy::init() {
 			CCAnimate::create(
 					CCAnimationCache::sharedAnimationCache()->animationByName(
 							"downRun"));
-
-	CCFiniteTimeAction* frameAction = CCSequence::create(
-			CCRepeatForever::create(pRunDouga), NULL);
-
-	enimySprite->runAction(frameAction);
-
+	enimySprite->runAction(CCRepeatForever::create(pRunDouga));
 	moveToNextPoint(1);
-
-	//	mGameData->_enimies->addObject(enimySprite);
-
 }
 
 void Enimy::spriteMoveFinished(CCNode* sender) {
@@ -48,6 +43,7 @@ void Enimy::spriteMoveFinished(CCNode* sender) {
 	if (currentPointIndex < length) {
 		moveToNextPoint(currentPointIndex);
 	} else {
+		mGameData->power = mGameData->power - destroy;
 		sender->getParent()->removeChild(sender, true);
 		mGameData->removeEnimy(this);
 	}

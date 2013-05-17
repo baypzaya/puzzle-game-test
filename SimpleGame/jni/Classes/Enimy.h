@@ -22,6 +22,7 @@ public:
 	CCPoint getCurrentLocation();
 	void subLife(int power);
 	int life;
+	int cost;
 	CCSprite *enimySprite;
 
 
