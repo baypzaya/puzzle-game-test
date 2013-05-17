@@ -33,6 +33,7 @@ public:
 
 	void keyBackClicked();
 	void keyMenuClicked();
+	void buildDenfenceTower(CCObject* pSender);
 
 	static CCPoint *enimiesPath;
 

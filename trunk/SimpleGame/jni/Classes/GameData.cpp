@@ -94,9 +94,12 @@ GameData* GameData::getInstance() {
 }
 
 void GameData::initData() {
-	CCLog("gamedata initData");
 	int enimyRunPath[] = { 3, 9, 3, 5, 2, 5, 2, 0 };
-	int enimyWave[] = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+	int enimyWave[] = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+			1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+			1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+			1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+			1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
 	int towerL[] = { 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1,
 			1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 1,
 			1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1 };
@@ -114,6 +117,7 @@ void GameData::initData() {
 	countPW = 10;
 	currentPage = 1;
 	power = 100;
+	money = 100;
 	currentEnimyIndex = 0;
 	currentGameState = STATE_START;
 	startNextWave = true;

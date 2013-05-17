@@ -27,6 +27,7 @@ public:
 
 	CC_SYNTHESIZE(CCObject*,currentTarget,CurrentTarget);
 
+
 private:
 	long fireTime;// unit second
 	long fireInterval;// unit second
