@@ -11,10 +11,15 @@ using namespace cocos2d;
 HelloWorld::~HelloWorld() {
 	// cpp don't need to call super dealloc
 	// virtual destructor will do this
+	if (menu) {
+		menu->release();
+		menu = NULL;
+	}
 	delete mGameData;
 }
 
 HelloWorld::HelloWorld() {
+	menu = NULL;
 }
 
 CCScene* HelloWorld::scene() {
@@ -180,34 +185,73 @@ void HelloWorld::ccTouchesEnded(CCSet* touches, CCEvent* event) {
 
 	float x = location.x;
 	float y = location.y;
-	if (mGameData->canLocationTower(x, y)) {
+	if (menu) {
+		hideSelectTowerMenu();
+	} else if (mGameData->canLocationTower(x, y)) {
 		CCPoint point = mGameData->converToCellPoint(x, y);
+		showSelectTowerMenu(point);
 
-		CCMenuItemImage *item1 = CCMenuItemImage::create("tower1.png", "tower1.png",
-				this, menu_selector( HelloWorld::buildDenfenceTower));
-		CCMenuItemImage *item2 = CCMenuItemImage::create("tower2.png", "tower2.png",
-				this, menu_selector( HelloWorld::buildDenfenceTower));
-		CCMenuItemImage *item3 = CCMenuItemImage::create("tower3.png", "tower3.png",
-				this, menu_selector( HelloWorld::buildDenfenceTower));
+		//		CCMenuItemImage *item1 = CCMenuItemImage::create("tower1.png",
+		//				"tower1.png", this,
+		//				menu_selector( HelloWorld::buildDenfenceTower));
+		//		CCMenuItemImage *item2 = CCMenuItemImage::create("tower2.png",
+		//				"tower2.png", this,
+		//				menu_selector( HelloWorld::buildDenfenceTower));
+		//		CCMenuItemImage *item3 = CCMenuItemImage::create("tower3.png",
+		//				"tower3.png", this,
+		//				menu_selector( HelloWorld::buildDenfenceTower));
+		//
+		//		item1->setTag(101);
+		//		item2->setTag(102);
+		//		item3->setTag(103);
+		//
+		//		CCSize menuContentSize;
+		//		menuContentSize.setSize(item1->getContentSize().width * 3,
+		//				item1->getContentSize().height);
+		//
+		//		CCMenu *menu = CCMenu::create(item1, item2, item3, NULL);
+		//		menu->alignItemsHorizontally();
+		//		menu->setPosition(point);
+		//		menu->setContentSize(menuContentSize);
+		//
+		//		addChild(menu);
 
-		item1->setTag(101);
-		item2->setTag(102);
-		item3->setTag(103);
+		//		DefenceTower* tower = new DefenceTower(point.x, point.y);
+		//		addChild(tower->spriteTower);
+		//		mGameData->_towers->addObject(tower);
+	}
+}
 
-		CCSize menuContentSize;
-		menuContentSize.setSize(item1->getContentSize().width * 3,
-				item1->getContentSize().height);
+void HelloWorld::showSelectTowerMenu(CCPoint location) {
+	hideSelectTowerMenu();
 
-		CCMenu *menu = CCMenu::create(item1, item2, item3, NULL);
-		menu->alignItemsHorizontally();
-		menu->setPosition(point);
-		menu->setContentSize(menuContentSize);
+	CCMenuItemImage *item1 = CCMenuItemImage::create("tower1.png",
+			"tower1.png", this, menu_selector( HelloWorld::buildDenfenceTower));
+	CCMenuItemImage *item2 = CCMenuItemImage::create("tower2.png",
+			"tower2.png", this, menu_selector( HelloWorld::buildDenfenceTower));
+	CCMenuItemImage *item3 = CCMenuItemImage::create("tower3.png",
+			"tower3.png", this, menu_selector( HelloWorld::buildDenfenceTower));
 
-		addChild(menu);
+	item1->setTag(101);
+	item2->setTag(102);
+	item3->setTag(103);
 
-//		DefenceTower* tower = new DefenceTower(point.x, point.y);
-//		addChild(tower->spriteTower);
-//		mGameData->_towers->addObject(tower);
+	CCSize menuContentSize;
+	menuContentSize.setSize(item1->getContentSize().width * 3,
+			item1->getContentSize().height);
+
+	menu = CCMenu::create(item1, item2, item3, NULL);
+	menu->alignItemsHorizontally();
+	menu->setPosition(location);
+	menu->setContentSize(menuContentSize);
+	addChild(menu);
+
+}
+
+void HelloWorld::hideSelectTowerMenu() {
+	if (menu) {
+		removeChild(menu, true);
+		menu = NULL;
 	}
 }
 
@@ -347,12 +391,17 @@ void HelloWorld::initResource() {
 	animCache->addAnimation(pTopRunAnimation, "topRun");
 }
 
-void HelloWorld::buildDenfenceTower(CCObject* pSender)
-{
-	CCMenuItemImage* item = dynamic_cast<CCMenuItemImage*>(pSender);
+void HelloWorld::buildDenfenceTower(CCObject* pSender) {
+	CCMenuItemImage* item = dynamic_cast<CCMenuItemImage*> (pSender);
+	CCLog("pSender type:%d", item->getTag());
 
-	CCLog("pSender type:%d",item->getTag());
-	removeChild(item->getParent(),true);
+	CCPoint point = menu->getPosition();
+	DefenceTower* tower = new DefenceTower(point.x, point.y);
+	addChild(tower->spriteTower);
+	mGameData->_towers->addObject(tower);
+	mGameData->money = mGameData->money - tower->towerCost;
+
+	hideSelectTowerMenu();
 
 }
 

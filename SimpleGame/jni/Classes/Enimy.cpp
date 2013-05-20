@@ -20,8 +20,16 @@ void Enimy::init() {
 	destroy = 10;
 	cost = 10;
 
-	CCPoint initPoint = mGameData->getEnimyPath()->getControlPointAtIndex(0);
-	CCPoint nextPoint = mGameData->getEnimyPath()->getControlPointAtIndex(1);
+	cc_timeval psv;
+	CCTime::gettimeofdayCocos2d(&psv, NULL);
+	unsigned long int seed = psv.tv_sec * 1000 + psv.tv_usec / 1000;
+	srand(seed);
+
+	int randNumber = CCRANDOM_0_1() * 6 + 0;
+
+	CCPoint initPoint = mGameData->getCellPointByIndex(GameData::cellRow - 1,
+			randNumber);
+	CCPoint endPoint = mGameData->getCellPointByIndex(0, randNumber);
 
 	enimySprite = CCSprite::create("enemy1.png", CCRectMake(0,0,40,55));
 	enimySprite->setPosition(initPoint);
@@ -31,22 +39,40 @@ void Enimy::init() {
 					CCAnimationCache::sharedAnimationCache()->animationByName(
 							"downRun"));
 	enimySprite->runAction(CCRepeatForever::create(pRunDouga));
-	moveToNextPoint(1);
+
+	float length;
+	if (enimySprite->getPositionX() == endPoint.x) {
+		length = endPoint.y - enimySprite->getPositionY();
+	} else {
+		length = endPoint.x - enimySprite->getPositionX();
+	}
+
+	length = length > 0 ? length : -length;
+	float dt = length / speed;
+
+	CCFiniteTimeAction* actionMove = CCMoveTo::create((float) dt, endPoint);
+	CCFiniteTimeAction* actionMoveDone = CCCallFuncN::create(this,
+			callfuncN_selector(Enimy::spriteMoveFinished));
+	CCFiniteTimeAction* targetMoveAction = CCSequence::create(actionMove,
+			actionMoveDone, NULL);
+	targetMoveAction->setTag(2);
+
+	enimySprite->runAction(targetMoveAction);
 }
 
 void Enimy::spriteMoveFinished(CCNode* sender) {
 
-	int currentPointIndex = sender->getTag();
-	sender->stopActionByTag(2);
-	currentPointIndex++;
-	int length = mGameData->getEnimyPath()->count();
-	if (currentPointIndex < length) {
-		moveToNextPoint(currentPointIndex);
-	} else {
+//	int currentPointIndex = sender->getTag();
+//	sender->stopActionByTag(2);
+//	currentPointIndex++;
+//	int length = mGameData->getEnimyPath()->count();
+//	if (currentPointIndex < length) {
+//		moveToNextPoint(currentPointIndex);
+//	} else {
 		mGameData->power = mGameData->power - destroy;
 		sender->getParent()->removeChild(sender, true);
 		mGameData->removeEnimy(this);
-	}
+//	}
 }
 
 void Enimy::moveToNextPoint(int nextIndex) {

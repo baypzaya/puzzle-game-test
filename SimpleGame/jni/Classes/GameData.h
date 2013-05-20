@@ -20,6 +20,9 @@ public:
 	static const int STATE_OVER = 2;
 	static const int STATE_SUCCESS = 3;
 
+	static const int cellRow = 10;
+	static const int cellCol = 6;
+
 	struct EnimyData {
 		int lift;
 		int speed;
@@ -59,6 +62,7 @@ public:
 	void removeEnimy(CCObject* enimy);
 	void refreshData();
 	CCPointArray* getEnimyPath();
+	CCPoint getCellPointByIndex(int row,int col);
 	static GameData* getInstance();
 	virtual ~GameData();
 
@@ -67,8 +71,6 @@ public:
 private:
 	GameData();
 
-	static const int cellRow = 10;
-	static const int cellCol = 6;
 	virtual void initData();
 	float cellWidth;
 	float cellHeight;
