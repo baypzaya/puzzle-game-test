@@ -95,14 +95,12 @@ GameData* GameData::getInstance() {
 
 void GameData::initData() {
 	int enimyRunPath[] = { 3, 9, 3, 5, 2, 5, 2, 0 };
-	int enimyWave[] = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-			1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-			1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-			1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-			1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
-	int towerL[] = { 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1,
-			1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 1,
-			1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1 };
+	int enimyWave[] = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+			1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+			1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+	int towerL[] = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+			1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+			1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
 	enimies = enimyWave;
 
 	int towerLL = cellRow * cellCol;
@@ -114,7 +112,7 @@ void GameData::initData() {
 	}
 
 	countEnimy = (sizeof enimyWave) / (sizeof enimyWave[0]);
-	countPW = 10;
+	countPW = 1;
 	currentPage = 1;
 	power = 100;
 	money = 100;
@@ -155,4 +153,11 @@ float GameData::computeDistance(CCPoint p1, CCPoint p2) {
 
 	float l = sqrtf((xL * xL) + (yL * yL));
 	return l;
+}
+
+CCPoint GameData::getCellPointByIndex(int row, int col) {
+	float pathX = cellWidth * col + cellWidth / 2;
+	float pathY = cellHeight * row + cellHeight / 2;
+	CCPoint ccPoint = ccp(pathX,pathY);
+	return ccPoint;
 }

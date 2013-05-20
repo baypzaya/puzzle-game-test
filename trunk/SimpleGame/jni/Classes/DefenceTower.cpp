@@ -17,7 +17,7 @@ DefenceTower::DefenceTower(float x, float y) {
 	fireInterval = (1);
 	fireTime = 0;
 	currentTarget = NULL;
-
+	towerCost = 30;
 }
 
 DefenceTower::~DefenceTower() {

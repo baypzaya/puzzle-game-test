@@ -19,7 +19,7 @@ public:
 	virtual ~DefenceTower();
 
 	CCSprite* spriteTower;
-
+	int towerCost;
 	bool canFire(CCObject* target);
 	Bullet* fire(CCObject *target);
 	bool hasFireTarget();

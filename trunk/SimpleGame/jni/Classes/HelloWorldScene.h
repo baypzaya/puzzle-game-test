@@ -39,9 +39,12 @@ public:
 
 protected:
 	GameData* mGameData ;
+	CCMenu *menu;
 	void addTarget();
 	void createEnimyFrame(int rowNumber, CCSpriteFrame *pRun[]);
 	void initResource();
+	void showSelectTowerMenu(CCPoint location);
+	void hideSelectTowerMenu();
 };
 
 #endif  // __HELLOWORLD_SCENE_H__
