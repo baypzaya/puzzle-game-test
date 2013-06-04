@@ -2,83 +2,144 @@
 #include "SimpleAudioEngine.h"
 
 using namespace cocos2d;
-using namespace CocosDenshion;
+//using namespace CocosDenshion;
 
-CCScene* HelloWorld::scene()
-{
-    // 'scene' is an autorelease object
-    CCScene *scene = CCScene::create();
-    
-    // 'layer' is an autorelease object
-    HelloWorld *layer = HelloWorld::create();
+#define PTM_RATIO       32
+#define FLOOR_HEIGHT    0.0f
 
-    // add layer as a child to scene
-    scene->addChild(layer);
+CCScene* HelloWorld::scene() {
+	// 'scene' is an autorelease object
+	CCScene *scene = CCScene::create();
 
-    // return the scene
-    return scene;
+	// 'layer' is an autorelease object
+	HelloWorld *layer = HelloWorld::create();
+
+	// add layer as a child to scene
+	scene->addChild(layer);
+
+	// return the scene
+	return scene;
 }
 
 // on "init" you need to initialize your instance
-bool HelloWorld::init()
-{
-    //////////////////////////////
-    // 1. super init first
-    if ( !CCLayer::init() )
-    {
-        return false;
-    }
+bool HelloWorld::init() {
+	if (!CCLayer::init()) {
+		return false;
+	}
+	setTouchEnabled(true);
+	CCSize screenSize = CCDirector::sharedDirector()->getWinSize();
 
-    /////////////////////////////
-    // 2. add a menu item with "X" image, which is clicked to quit the program
-    //    you may modify it.
+	//add close menu item
+	CCMenuItemImage *pCloseItem = CCMenuItemImage::create("CloseNormal.png", "CloseSelected.png", this,
+			menu_selector(HelloWorld::menuCloseCallback));
+	pCloseItem->setPosition(ccp(CCDirector::sharedDirector()->getWinSize().width - 20, 20));
+	CCMenu* pMenu = CCMenu::create(pCloseItem, NULL);
+	pMenu->setPosition(CCPointZero);
+	this->addChild(pMenu, 1);
 
-    // add a "close" icon to exit the progress. it's an autorelease object
-    CCMenuItemImage *pCloseItem = CCMenuItemImage::create(
-                                        "CloseNormal.png",
-                                        "CloseSelected.png",
-                                        this,
-                                        menu_selector(HelloWorld::menuCloseCallback) );
-    pCloseItem->setPosition( ccp(CCDirector::sharedDirector()->getWinSize().width - 20, 20) );
+	//add jump egg
+	CCSprite *jumpEgg = CCSprite::create("jump_egg.png");
+//	jumpEgg->setAnchorPoint(CCPointZero);
+	addChild(jumpEgg);
 
-    // create menu, it's an autorelease object
-    CCMenu* pMenu = CCMenu::create(pCloseItem, NULL);
-    pMenu->setPosition( CCPointZero );
-    this->addChild(pMenu, 1);
+	b2Vec2 gravity;
+	gravity.Set(0.0f, -10.0f);
+	bool doSleep = true;
+	m_world = new b2World(gravity);
+	m_world->SetAllowSleeping(doSleep);
+	m_world->SetContinuousPhysics(true);
 
-    /////////////////////////////
-    // 3. add your codes below...
+	CCLog("win width:%.2f height:%.2f", screenSize.width, screenSize.height);
+	b2BodyDef groundBodyDef;
+	groundBodyDef.position.Set(0, 0);
+	m_groundBody = m_world->CreateBody(&groundBodyDef);
 
-    // add a label shows "Hello World"
-    // create and initialize a label
-    CCLabelTTF* pLabel = CCLabelTTF::create("Hello World", "Thonburi", 34);
+	// bottom
+	b2EdgeShape groundBox;
 
-    // ask director the window size
-    CCSize size = CCDirector::sharedDirector()->getWinSize();
+	groundBox.Set(b2Vec2(0, FLOOR_HEIGHT / PTM_RATIO), b2Vec2(screenSize.width / PTM_RATIO, FLOOR_HEIGHT / PTM_RATIO));
+	m_groundBody->CreateFixture(&groundBox, 0);
+	// top
+	groundBox.Set(b2Vec2(0, screenSize.height / PTM_RATIO),
+			b2Vec2(screenSize.width / PTM_RATIO, screenSize.height / PTM_RATIO));
+	m_groundBody->CreateFixture(&groundBox, 0);
+	// left
+	groundBox.Set(b2Vec2(0, screenSize.height / PTM_RATIO), b2Vec2(0, 0));
+	m_groundBody->CreateFixture(&groundBox, 0);
+	// right
+	groundBox.Set(b2Vec2(screenSize.width / PTM_RATIO, screenSize.height / PTM_RATIO),
+			b2Vec2(screenSize.width / PTM_RATIO, 0));
+	m_groundBody->CreateFixture(&groundBox, 0);
 
-    // position the label on the center of the screen
-    pLabel->setPosition( ccp(size.width / 2, size.height - 20) );
+	b2BodyDef armBodyDef;
+	armBodyDef.type = b2_dynamicBody;
+	armBodyDef.linearDamping = 1;
+	armBodyDef.angularDamping = 1;
+	armBodyDef.position.Set(230.0f / PTM_RATIO, (FLOOR_HEIGHT + 91.0f) / PTM_RATIO);
+	armBodyDef.userData = jumpEgg;
+	m_armBody = m_world->CreateBody(&armBodyDef);
 
-    // add the label as a child to this layer
-    this->addChild(pLabel, 1);
+	b2PolygonShape armBox;
+	b2FixtureDef armBoxDef;
+	armBoxDef.shape = &armBox;
+	armBoxDef.density = 0.3F;
+	armBox.SetAsBox(23.0f / PTM_RATIO, 24.0f / PTM_RATIO);
+	m_armFixture = m_armBody->CreateFixture(&armBoxDef);
 
-    // add "HelloWorld" splash screen"
-    CCSprite* pSprite = CCSprite::create("HelloWorld.png");
+	scheduleUpdate();
 
-    // position the sprite on the center of the screen
-    pSprite->setPosition( ccp(size.width/2, size.height/2) );
-
-    // add the sprite as a child to this layer
-    this->addChild(pSprite, 0);
-    
-    return true;
+	return true;
 }
 
-void HelloWorld::menuCloseCallback(CCObject* pSender)
-{
-    CCDirector::sharedDirector()->end();
+void HelloWorld::update(float dt) {
+	int velocityIterations = 8;
+	int positionIterations = 1;
+	m_world->Step(dt, velocityIterations, positionIterations);
+
+	for (b2Body* b = m_world->GetBodyList(); b; b = b->GetNext()) {
+		if (b->GetUserData() != NULL) {
+			//Synchronize the AtlasSprites position and rotation with the corresponding body
+			CCSprite* myActor = (CCSprite*) b->GetUserData();
+			myActor->setPosition(CCPointMake( b->GetPosition().x * PTM_RATIO, b->GetPosition().y * PTM_RATIO));
+			myActor->setRotation(-1 * CC_RADIANS_TO_DEGREES(b->GetAngle()));
+		}
+	}
+}
+
+void HelloWorld::draw() {
+
+	CCLayer::draw();
+	ccGLEnableVertexAttribs(kCCVertexAttribFlag_Position);
+
+	kmGLPushMatrix();
+
+	m_world->DrawDebugData();
+
+	kmGLPopMatrix();
+}
+
+void HelloWorld::ccTouchesBegan(cocos2d::CCSet* touches, cocos2d::CCEvent* event) {
+
+}
+
+void HelloWorld::ccTouchesMoved(cocos2d::CCSet* touches, cocos2d::CCEvent* event) {
+
+}
+
+void HelloWorld::ccTouchesEnded(cocos2d::CCSet* touches, cocos2d::CCEvent* event) {
+	b2Vec2 vel = m_armBody->GetLinearVelocity();
+	float m = m_armBody->GetMass();// the mass of the body
+	b2Vec2 desiredVel = b2Vec2(0,20);// the vector speed you set
+	b2Vec2 velChange = desiredVel - vel;
+	b2Vec2 impluse = m * velChange; //impluse = mv
+	m_armBody->ApplyLinearImpulse( impluse, m_armBody->GetWorldCenter() );
+	m_armBody->ApplyTorque(100);
+}
+
+void HelloWorld::menuCloseCallback(CCObject* pSender) {
+	CCDirector::sharedDirector()->end();
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    exit(0);
+	exit(0);
 #endif
 }
