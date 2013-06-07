@@ -12,6 +12,7 @@ class HelloWorld: public cocos2d::CCLayer {
 public:
 	// Here's a difference. Method 'init' in cocos2d-x returns bool, instead of returning 'id' in cocos2d-iphone
 	virtual bool init();
+	virtual ~HelloWorld();
 
 	// there's no 'id' in cpp, so we recommand to return the exactly class pointer
 	static cocos2d::CCScene* scene();
@@ -31,17 +32,22 @@ public:
 	virtual void ccTouchesEnded(cocos2d::CCSet* touches, cocos2d::CCEvent* event);
 
 private:
+	static const int nest_max_move_speed = 150;
+	static const int nest_min_move_speed = 50;
 	b2World* m_world;
 	b2Body* m_groundBody;
 	b2Body* m_armBody;
 	b2Fixture* m_armFixture;
 	b2MouseJoint* m_mouseJoint;
 
-
-	CCSprite* m_currentNest;
+	CCArray* nestArray;
 	CCSprite *jumpEgg;
 	bool isJumpEggDown;
+	int jumpState;
+
+
 	void createNest();
+	CCActionInterval* createNestAction(CCSprite* nest);
 };
 
 #endif // __HELLOWORLD_SCENE_H__
