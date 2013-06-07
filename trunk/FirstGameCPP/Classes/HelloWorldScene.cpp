@@ -181,6 +181,7 @@ void HelloWorld::update(float dt) {
 			}
 	} else if (jumpState == -1 && followNest != NULL) {
 		jumpEgg->setPosition(followNest->getPosition());
+		jumpEgg->setRotation(0.0f);
 	}
 
 	if(jumpEgg->getPositionY()<=FLOOR_HEIGHT){
@@ -241,7 +242,7 @@ void HelloWorld::ccTouchesEnded(cocos2d::CCSet* touches, cocos2d::CCEvent* event
 	b2Vec2 velChange = desiredVel - vel;
 	b2Vec2 impluse = m * velChange; //impluse = mv
 	m_armBody->ApplyLinearImpulse(impluse, m_armBody->GetWorldCenter());
-	m_armBody->ApplyTorque(50);
+	m_armBody->ApplyTorque(100);
 	jumpState = 0;
 }
 
