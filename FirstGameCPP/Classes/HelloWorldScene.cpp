@@ -56,7 +56,6 @@ bool HelloWorld::init() {
 	m_world->SetAllowSleeping(doSleep);
 	m_world->SetContinuousPhysics(true);
 
-	CCLog("win width:%.2f height:%.2f", screenSize.width, screenSize.height);
 	b2BodyDef groundBodyDef;
 	groundBodyDef.position.Set(0,FLOOR_HEIGHT / PTM_RATIO);
 	m_groundBody = m_world->CreateBody(&groundBodyDef);
@@ -168,14 +167,6 @@ void HelloWorld::update(float dt) {
 					}
 					followNest = nest;
 					jumpState = -1;
-					//					CCFollow* follow = CCFollow::create(nest,CCRectZero);
-					//					jumpEgg->runAction(follow);
-					//					removeChild(jumpEgg, true);
-					//					jumpEgg = CCSprite::create("jump_egg.png");
-					//					jumpEgg->setPosition(
-					//							ccp(m_currentNest->getContentSize().width/2,m_currentNest->getContentSize().height/2));
-					//					m_currentNest->addChild(jumpEgg);
-
 					break;
 				}
 			}
