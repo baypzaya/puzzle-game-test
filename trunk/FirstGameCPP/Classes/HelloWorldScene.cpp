@@ -2,7 +2,7 @@
 #include "SimpleAudioEngine.h"
 
 #define PTM_RATIO 32.0f
-#define FLOOR_HEIGHT    0.0f
+#define FLOOR_HEIGHT    -100.0f
 
 CCScene* HelloWorld::scene() {
 	// 'scene' is an autorelease object
@@ -18,6 +18,10 @@ CCScene* HelloWorld::scene() {
 	return scene;
 }
 
+HelloWorld::~HelloWorld() {
+	CC_SAFE_RELEASE_NULL(nestArray);
+}
+
 // on "init" you need to initialize your instance
 bool HelloWorld::init() {
 	if (!CCLayer::init()) {
@@ -26,6 +30,7 @@ bool HelloWorld::init() {
 	setTouchEnabled(true);
 	isJumpEggDown = false;
 	m_mouseJoint = NULL;
+	jumpState = -1;
 	CCSize screenSize = CCDirector::sharedDirector()->getWinSize();
 
 	//add close menu item
@@ -38,13 +43,12 @@ bool HelloWorld::init() {
 
 	//add jump egg
 	jumpEgg = CCSprite::create("jump_egg.png");
-	//	jumpEgg->setAnchorPoint(CCPointZero);
+	jumpEgg->setAnchorPoint(ccp(0.5,0));
+	jumpEgg->setPosition(ccp(screenSize.width/2,20.0f));
 	addChild(jumpEgg);
 
-
-
 	createNest();
-	
+
 	b2Vec2 gravity;
 	gravity.Set(0.0f, -10.0f);
 	bool doSleep = true;
@@ -54,7 +58,7 @@ bool HelloWorld::init() {
 
 	CCLog("win width:%.2f height:%.2f", screenSize.width, screenSize.height);
 	b2BodyDef groundBodyDef;
-	groundBodyDef.position.Set(0, 0);
+	groundBodyDef.position.Set(0,FLOOR_HEIGHT / PTM_RATIO);
 	m_groundBody = m_world->CreateBody(&groundBodyDef);
 
 	// bottom
@@ -63,15 +67,15 @@ bool HelloWorld::init() {
 	groundBox.Set(b2Vec2(0, FLOOR_HEIGHT / PTM_RATIO), b2Vec2(screenSize.width / PTM_RATIO, FLOOR_HEIGHT / PTM_RATIO));
 	m_groundBody->CreateFixture(&groundBox, 0);
 	// top
-	groundBox.Set(b2Vec2(0, screenSize.height / PTM_RATIO),
-			b2Vec2(screenSize.width / PTM_RATIO, screenSize.height / PTM_RATIO));
+	groundBox.Set(b2Vec2(0, (screenSize.height-FLOOR_HEIGHT) / PTM_RATIO),
+			b2Vec2(screenSize.width / PTM_RATIO, (screenSize.height-FLOOR_HEIGHT) / PTM_RATIO));
 	m_groundBody->CreateFixture(&groundBox, 0);
 	// left
-	groundBox.Set(b2Vec2(0, screenSize.height / PTM_RATIO), b2Vec2(0, 0));
+	groundBox.Set(b2Vec2(0, (screenSize.height-FLOOR_HEIGHT) / PTM_RATIO), b2Vec2(0, FLOOR_HEIGHT));
 	m_groundBody->CreateFixture(&groundBox, 0);
 	// right
-	groundBox.Set(b2Vec2(screenSize.width / PTM_RATIO, screenSize.height / PTM_RATIO),
-			b2Vec2(screenSize.width / PTM_RATIO, 0));
+	groundBox.Set(b2Vec2(screenSize.width / PTM_RATIO, (screenSize.height-FLOOR_HEIGHT) / PTM_RATIO),
+			b2Vec2(screenSize.width / PTM_RATIO, FLOOR_HEIGHT));
 	m_groundBody->CreateFixture(&groundBox, 0);
 
 	scheduleUpdate();
@@ -80,18 +84,56 @@ bool HelloWorld::init() {
 }
 
 void HelloWorld::createNest() {
+	if (nestArray == NULL) {
+		nestArray = CCArray::create();
+		CC_SAFE_RETAIN(nestArray);
+	}
+
 	CCSize size = CCDirector::sharedDirector()->getWinSize();
-	m_currentNest = CCSprite::create("nest.png");
-	m_currentNest->setPosition(ccp(size.width/2,size.height/2));
-	addChild(m_currentNest);
-	CCMoveTo::CCActionInterval* move1 = CCMoveTo::create(10.0f, ccp(size.width,size.height/2));
-	CCActionInterval* move2 = CCMoveTo::create(10.0f, ccp(0,size.height/2));
-	CCActionInterval* moveRepeat = CCRepeatForever::create(CCSequence::create(move1, move2, NULL));
-	m_currentNest->runAction(moveRepeat);
+	CCSprite* nest = CCSprite::create("nest.png");
+	nest->setPosition(ccp(size.width/2,size.height/3));
+	addChild(nest);
+	nestArray->addObject(nest);
+	nest->runAction(createNestAction(nest));
+
+	CCSprite* nest1 = CCSprite::create("nest.png");
+	nest1->setPosition(ccp(size.width/3,size.height*2/3));
+	addChild(nest1);
+	nestArray->addObject(nest1);
+	nest1->runAction(createNestAction(nest1));
 
 }
 
+CCActionInterval* HelloWorld::createNestAction(CCSprite* nest) {
+	CCSize size = CCDirector::sharedDirector()->getWinSize();
+	CCPoint position = nest->getPosition();
+	float speed = nest_min_move_speed + CCRANDOM_0_1() * 100;
+	bool isLeft = CCRANDOM_0_1() > 0.5;
+	CCPoint endPoint1;
+	CCPoint endPoint2;
+
+	float dt1;
+	float dt2;
+	dt2 = size.width / speed;
+	if (isLeft) {
+		endPoint1 = ccp(0,position.y);
+		endPoint2 = ccp(size.width,position.y);
+		dt1 = position.x / speed;
+	} else {
+		endPoint1 = ccp(size.width,position.y);
+		endPoint2 = ccp(0,position.y);
+		dt1 = (size.width - position.x) / speed;
+	}
+
+	CCMoveTo::CCActionInterval* move1 = CCMoveTo::create(dt1, endPoint1);
+	CCActionInterval* move2 = CCMoveTo::create(dt2, endPoint2);
+	CCActionInterval* move3 = CCMoveTo::create(dt2, endPoint1);
+	CCActionInterval* moveRepeat = CCRepeatForever::create(CCSequence::create(move2, move3, NULL));
+	return moveRepeat;//CCSequence::create(move1,moveRepeat,NULL);
+}
+
 CCPoint preLocation = CCPointZero;
+CCSprite* followNest;
 void HelloWorld::update(float dt) {
 	int velocityIterations = 8;
 	int positionIterations = 1;
@@ -102,7 +144,6 @@ void HelloWorld::update(float dt) {
 			//Synchronize the AtlasSprites position and rotation with the corresponding body
 			CCSprite* myActor = (CCSprite*) b->GetUserData();
 
-
 			myActor->setPosition(CCPointMake( b->GetPosition().x * PTM_RATIO, b->GetPosition().y * PTM_RATIO));
 			myActor->setRotation(-1 * CC_RADIANS_TO_DEGREES(b->GetAngle()));
 			isJumpEggDown = preLocation.y > myActor->getPosition().y;
@@ -112,23 +153,38 @@ void HelloWorld::update(float dt) {
 	isJumpEggDown = preLocation.y > jumpEgg->getPosition().y;
 	preLocation = jumpEgg->getPosition();
 
+	if (isJumpEggDown && jumpState != -1) {
+		CCObject* nestO;
+		CCARRAY_FOREACH(nestArray,nestO) {
+				CCSprite* nest = dynamic_cast<CCSprite*> (nestO);
+				CCRect nestBound = nest->boundingBox();
+				bool isContain = nestBound.containsPoint(jumpEgg->getPosition());
+				if (isContain) {
+					if (m_armBody != NULL) {
+						m_armBody->DestroyFixture(m_armFixture);
+						m_world->DestroyBody(m_armBody);
+						m_armFixture = NULL;
+						m_armBody = NULL;
+					}
+					followNest = nest;
+					jumpState = -1;
+					//					CCFollow* follow = CCFollow::create(nest,CCRectZero);
+					//					jumpEgg->runAction(follow);
+					//					removeChild(jumpEgg, true);
+					//					jumpEgg = CCSprite::create("jump_egg.png");
+					//					jumpEgg->setPosition(
+					//							ccp(m_currentNest->getContentSize().width/2,m_currentNest->getContentSize().height/2));
+					//					m_currentNest->addChild(jumpEgg);
 
-	if (isJumpEggDown && m_currentNest != NULL && m_mouseJoint == NULL) {
-		CCRect nestBound = m_currentNest->boundingBox();
-		bool isContain = nestBound.containsPoint(jumpEgg->getPosition());
-		if (isContain) {
-			if (m_armBody != NULL) {
-				m_armBody->DestroyFixture(m_armFixture);
-				m_world->DestroyBody(m_armBody);
-				m_armFixture = NULL;
-				m_armBody = NULL;
+					break;
+				}
 			}
-			removeChild(jumpEgg, true);
-			jumpEgg = CCSprite::create("jump_egg.png");
-			jumpEgg->setPosition(ccp(m_currentNest->getContentSize().width/2,m_currentNest->getContentSize().height/2));
-			m_currentNest->addChild(jumpEgg);
-			//			jumpEgg->setPosition(ccp(0,));
-		}
+	} else if (jumpState == -1 && followNest != NULL) {
+		jumpEgg->setPosition(followNest->getPosition());
+	}
+
+	if(jumpEgg->getPositionY()<=FLOOR_HEIGHT){
+		CCDirector::sharedDirector()->replaceScene(HelloWorld::scene());
 	}
 
 }
@@ -155,24 +211,17 @@ void HelloWorld::ccTouchesMoved(cocos2d::CCSet* touches, cocos2d::CCEvent* event
 
 void HelloWorld::ccTouchesEnded(cocos2d::CCSet* touches, cocos2d::CCEvent* event) {
 
-	if (m_mouseJoint != NULL) {
-		m_world->DestroyJoint(m_mouseJoint);
-		m_mouseJoint = NULL;
+	if(jumpState==0){
+		return;
 	}
 
 	if (m_armBody == NULL) {
 		CCPoint worldPosition = jumpEgg->getParent()->convertToWorldSpace(jumpEgg->getPosition());
-		removeChild(jumpEgg, true);
-		m_currentNest->removeChild(jumpEgg, true);
-		jumpEgg = CCSprite::create("jump_egg.png");
-		jumpEgg->setPosition(worldPosition);
-		addChild(jumpEgg);
-
 		b2FixtureDef armBoxDef;
 		b2BodyDef armBodyDef;
 		armBodyDef.type = b2_dynamicBody;
-		armBodyDef.linearDamping = 1;
-		armBodyDef.angularDamping = 1;
+		armBodyDef.linearDamping = 0;
+		armBodyDef.angularDamping = 0;
 
 		armBodyDef.position.Set(worldPosition.x / PTM_RATIO, worldPosition.y / PTM_RATIO);
 		armBodyDef.userData = jumpEgg;
@@ -181,19 +230,19 @@ void HelloWorld::ccTouchesEnded(cocos2d::CCSet* touches, cocos2d::CCEvent* event
 		CCSize jumpEggContent = jumpEgg->getContentSize();
 		armCircle.m_radius = jumpEggContent.width / 2 / PTM_RATIO;
 		armBoxDef.shape = &armCircle;
-		armBoxDef.density = 0.5F;
+		armBoxDef.density = 10.0F;
 		m_armBody = m_world->CreateBody(&armBodyDef);
 		m_armFixture = m_armBody->CreateFixture(&armBoxDef);
-
 	}
 
 	b2Vec2 vel = m_armBody->GetLinearVelocity();
 	float m = m_armBody->GetMass();// the mass of the body
-	b2Vec2 desiredVel = b2Vec2(0, 32);// the vector speed you set
+	b2Vec2 desiredVel = b2Vec2(0, b2Sqrt(2.0f*10*320/PTM_RATIO));// the vector speed you set
 	b2Vec2 velChange = desiredVel - vel;
 	b2Vec2 impluse = m * velChange; //impluse = mv
 	m_armBody->ApplyLinearImpulse(impluse, m_armBody->GetWorldCenter());
-	//	m_armBody->ApplyTorque(100);
+	m_armBody->ApplyTorque(50);
+	jumpState = 0;
 }
 
 void HelloWorld::menuCloseCallback(CCObject* pSender) {
