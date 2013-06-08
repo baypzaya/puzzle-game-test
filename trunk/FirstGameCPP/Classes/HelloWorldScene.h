@@ -3,7 +3,7 @@
 
 #include "cocos2d.h"
 #include "Box2D/Box2D.h"
-
+#include "NestLayer.h"
 #include "GLES-Render.h"
 
 USING_NS_CC;
@@ -40,11 +40,14 @@ private:
 	b2Fixture* m_armFixture;
 	b2MouseJoint* m_mouseJoint;
 
+	NestLayer* m_nestLayer;
 	CCArray* nestArray;
 	CCSprite *jumpEgg;
+	CCSprite* followNest;
+	CCLabelTTF* scoreLable;
 	bool isJumpEggDown;
 	int jumpState;
-
+	int score;
 
 	void createNest();
 	CCActionInterval* createNestAction(CCSprite* nest);
