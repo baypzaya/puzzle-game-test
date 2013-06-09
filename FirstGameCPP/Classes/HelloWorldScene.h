@@ -48,9 +48,9 @@ private:
 	bool isJumpEggDown;
 	int jumpState;
 	int score;
-
-	void createNest();
-	CCActionInterval* createNestAction(CCSprite* nest);
+//
+//	void createNest();
+//	CCActionInterval* createNestAction(CCSprite* nest);
 };
 
 #endif // __HELLOWORLD_SCENE_H__

@@ -20,6 +20,7 @@ public:
 
 	CCSprite* catchEgg(CCSprite* jumpEgg);
 	void updateNestPositon(CCPoint position);
+	CC_SYNTHESIZE_READONLY(bool,m_isMoving,Moving);
 private:
 	static const int nest_step_height = 320;
 	static const int nest_max_move_speed = 150;

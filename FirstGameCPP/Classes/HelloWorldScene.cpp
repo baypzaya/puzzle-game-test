@@ -36,7 +36,7 @@ bool HelloWorld::init() {
 	setTouchEnabled(true);
 	isJumpEggDown = false;
 	m_mouseJoint = NULL;
-	jumpState = -1;
+	jumpState = 1;
 	CCSize screenSize = CCDirector::sharedDirector()->getWinSize();
 
 	//init ui
@@ -61,7 +61,7 @@ bool HelloWorld::init() {
 	//add jump egg
 	jumpEgg = CCSprite::create("jump_egg.png");
 	jumpEgg->setAnchorPoint(ccp(0.5,0));
-	jumpEgg->setPosition(ccp(screenSize.width/2,20.0f));
+	jumpEgg->setPosition(ccp(0,20.0f));
 	addChild(jumpEgg);
 
 	followNest = m_nestLayer->catchEgg(jumpEgg);
@@ -101,68 +101,68 @@ bool HelloWorld::init() {
 	return true;
 }
 
-void HelloWorld::createNest() {
-	if (nestArray == NULL) {
-		nestArray = CCArray::create();
-		CC_SAFE_RETAIN(nestArray);
-	}
+//void HelloWorld::createNest() {
+//	if (nestArray == NULL) {
+//		nestArray = CCArray::create();
+//		CC_SAFE_RETAIN(nestArray);
+//	}
+//
+//	CCSize size = CCDirector::sharedDirector()->getWinSize();
+//
+//	CCSprite* nest0 = CCSprite::create("nest.png");
+//	nest0->setPosition(ccp(size.width/2,20.0f));
+//	addChild(nest0);
+//	nestArray->addObject(nest0);
+//	followNest = nest0;
+//
+//	CCSprite* nest = CCSprite::create("nest.png");
+//	nest->setPosition(ccp(size.width,size.height/3));
+//	addChild(nest);
+//	nestArray->addObject(nest);
+//	nest->runAction(createNestAction(nest));
+//
+//	CCSprite* nest1 = CCSprite::create("nest.png");
+//	nest1->setPosition(ccp(0,size.height*2/3));
+//	addChild(nest1);
+//	nestArray->addObject(nest1);
+//	nest1->runAction(createNestAction(nest1));
+//
+//}
 
-	CCSize size = CCDirector::sharedDirector()->getWinSize();
-
-	CCSprite* nest0 = CCSprite::create("nest.png");
-	nest0->setPosition(ccp(size.width/2,20.0f));
-	addChild(nest0);
-	nestArray->addObject(nest0);
-	followNest = nest0;
-
-	CCSprite* nest = CCSprite::create("nest.png");
-	nest->setPosition(ccp(size.width,size.height/3));
-	addChild(nest);
-	nestArray->addObject(nest);
-	nest->runAction(createNestAction(nest));
-
-	CCSprite* nest1 = CCSprite::create("nest.png");
-	nest1->setPosition(ccp(0,size.height*2/3));
-	addChild(nest1);
-	nestArray->addObject(nest1);
-	nest1->runAction(createNestAction(nest1));
-
-}
-
-CCActionInterval* HelloWorld::createNestAction(CCSprite* nest) {
-	CCSize size = CCDirector::sharedDirector()->getWinSize();
-	CCPoint position = nest->getPosition();
-	float speed = nest_min_move_speed + CCRANDOM_0_1() * 100;
-	bool isLeft = position.x != 0;
-	CCPoint endPoint1;
-	CCPoint endPoint2;
-
-	float dt1;
-	float dt2;
-	dt2 = size.width / speed;
-	if (isLeft) {
-		endPoint1 = ccp(0,position.y);
-		endPoint2 = ccp(size.width,position.y);
-		dt1 = position.x / speed;
-	} else {
-		endPoint1 = ccp(size.width,position.y);
-		endPoint2 = ccp(0,position.y);
-		dt1 = (size.width - position.x) / speed;
-	}
-	//	CCActionInterval* move1 = CCMoveTo::create(dt1, endPoint1);
-	CCActionInterval* move2 = CCMoveTo::create(dt2, endPoint2);
-	CCActionInterval* move3 = CCMoveTo::create(dt2, endPoint1);
-	CCActionInterval* moveRepeat = CCRepeatForever::create(CCSequence::create(move3, move2, NULL));
-	return moveRepeat;//CCSequence::create(move1,moveRepeat,NULL);
-}
+//CCActionInterval* HelloWorld::createNestAction(CCSprite* nest) {
+//	CCSize size = CCDirector::sharedDirector()->getWinSize();
+//	CCPoint position = nest->getPosition();
+//	float speed = nest_min_move_speed + CCRANDOM_0_1() * 100;
+//	bool isLeft = position.x != 0;
+//	CCPoint endPoint1;
+//	CCPoint endPoint2;
+//
+//	float dt1;
+//	float dt2;
+//	dt2 = size.width / speed;
+//	if (isLeft) {
+//		endPoint1 = ccp(0,position.y);
+//		endPoint2 = ccp(size.width,position.y);
+//		dt1 = position.x / speed;
+//	} else {
+//		endPoint1 = ccp(size.width,position.y);
+//		endPoint2 = ccp(0,position.y);
+//		dt1 = (size.width - position.x) / speed;
+//	}
+//	//	CCActionInterval* move1 = CCMoveTo::create(dt1, endPoint1);
+//	CCActionInterval* move2 = CCMoveTo::create(dt2, endPoint2);
+//	CCActionInterval* move3 = CCMoveTo::create(dt2, endPoint1);
+//	CCActionInterval* moveRepeat = CCRepeatForever::create(CCSequence::create(move3, move2, NULL));
+//	return moveRepeat;//CCSequence::create(move1,moveRepeat,NULL);
+//}
 
 CCPoint preLocation = CCPointZero;
 
 void HelloWorld::update(float dt) {
+
 	int velocityIterations = 8;
 	int positionIterations = 1;
 	m_world->Step(1.0 / 60, velocityIterations, positionIterations);
-
 	for (b2Body* b = m_world->GetBodyList(); b; b = b->GetNext()) {
 		if (b->GetUserData() != NULL) {
 			//Synchronize the AtlasSprites position and rotation with the corresponding body
@@ -177,25 +177,32 @@ void HelloWorld::update(float dt) {
 	isJumpEggDown = preLocation.y > jumpEgg->getPosition().y;
 	preLocation = jumpEgg->getPosition();
 
-	if (isJumpEggDown && jumpState != -1) {
+	if (isJumpEggDown && jumpState != 1) {
+		CCLog("update jump");
 		CCSprite* nest = m_nestLayer->catchEgg(jumpEgg);
-		if (nest!=NULL && nest->getPositionY() > followNest->getPositionY()) {
-			if (m_armBody != NULL) {
-				m_armBody->DestroyFixture(m_armFixture);
-				m_world->DestroyBody(m_armBody);
-				m_armFixture = NULL;
-				m_armBody = NULL;
+		if (nest != NULL) {
+			float cy = nest->getParent()->convertToWorldSpace(nest->getPosition()).y;
+			float fy = followNest->getParent()->convertToWorldSpace(followNest->getPosition()).y;
+			CCLog("cy %.1f , fy %.1f", cy, fy);
+			if (cy > fy) {
+				if (m_armBody != NULL) {
+					CCLog("cy destroy body");
+					m_armBody->DestroyFixture(m_armFixture);
+					m_world->DestroyBody(m_armBody);
+					m_armFixture = NULL;
+					m_armBody = NULL;
+				}
+				followNest = nest;
+				score += 10;
+				jumpState = 1;
+				CCPoint worldPoint = followNest->getParent()->convertToWorldSpace(followNest->getPosition());
+				m_nestLayer->updateNestPositon(worldPoint);
 			}
-			followNest = nest;
-			score += 10;
-			jumpState = -1;
-			CCPoint worldPoint = followNest->getParent()->convertToWorldSpace(followNest->getPosition());
-			m_nestLayer->updateNestPositon(worldPoint);
-
 		}
-	} else if (jumpState == -1 && followNest != NULL) {
+	} else if (jumpState == 1 && followNest != NULL) {
+		CCLog("update follownest");
 		CCPoint worldPoint = followNest->getParent()->convertToWorldSpace(followNest->getPosition());
-		jumpEgg->setPosition(worldPoint);
+		jumpEgg->setPosition(jumpEgg->getParent()->convertToNodeSpace(worldPoint));
 		jumpEgg->setRotation(0.0f);
 	}
 
@@ -210,7 +217,7 @@ void HelloWorld::update(float dt) {
 		CCPoint worldPoint = followNest->getParent()->convertToWorldSpaceAR(followNest->getPosition());
 		jumpEgg->setPosition(worldPoint);
 		jumpEgg->setRotation(0.0f);
-		jumpState = -1;
+		jumpState = 1;
 	}
 
 	char* scoreStr = new char[10];
@@ -239,8 +246,11 @@ void HelloWorld::ccTouchesMoved(cocos2d::CCSet* touches, cocos2d::CCEvent* event
 }
 
 void HelloWorld::ccTouchesEnded(cocos2d::CCSet* touches, cocos2d::CCEvent* event) {
+	CCLog("ccTouchesEnded jumpState:%d", jumpState);
 
-	if (jumpState == 0) {
+	CCLog("ccTouchesEnded m_armBody:%d", m_armBody);
+
+	if (jumpState == 0 || m_nestLayer->getMoving()) {
 		return;
 	}
 
@@ -250,7 +260,7 @@ void HelloWorld::ccTouchesEnded(cocos2d::CCSet* touches, cocos2d::CCEvent* event
 		b2BodyDef armBodyDef;
 		armBodyDef.type = b2_dynamicBody;
 		armBodyDef.linearDamping = 0;
-		armBodyDef.angularDamping = 0;
+		armBodyDef.angularDamping = 1;
 
 		armBodyDef.position.Set(worldPosition.x / PTM_RATIO, worldPosition.y / PTM_RATIO);
 		armBodyDef.userData = jumpEgg;
@@ -269,8 +279,11 @@ void HelloWorld::ccTouchesEnded(cocos2d::CCSet* touches, cocos2d::CCEvent* event
 	b2Vec2 desiredVel = b2Vec2(0, b2Sqrt(2.0f*10*350/PTM_RATIO));// the vector speed you set
 	b2Vec2 velChange = desiredVel - vel;
 	b2Vec2 impluse = m * velChange; //impluse = mv
+	CCLog("ccTouchesEnded ApplyLinearImpulse");
 	m_armBody->ApplyLinearImpulse(impluse, m_armBody->GetWorldCenter());
 	//	m_armBody->ApplyTorque(100);
+	isJumpEggDown = false;
+	CCPoint preLocation = CCPointZero;
 	jumpState = 0;
 }
 
