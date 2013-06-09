@@ -189,13 +189,12 @@ void HelloWorld::update(float dt) {
 			followNest = nest;
 			score += 10;
 			jumpState = -1;
-			CCPoint worldPoint = m_nestLayer->convertToWorldSpace(followNest->getPosition());
+			CCPoint worldPoint = followNest->getParent()->convertToWorldSpace(followNest->getPosition());
 			m_nestLayer->updateNestPositon(worldPoint);
 
 		}
 	} else if (jumpState == -1 && followNest != NULL) {
-//		m_nestLayer->stopAllActions();
-		CCPoint worldPoint = m_nestLayer->convertToWorldSpaceAR(followNest->getPosition());
+		CCPoint worldPoint = followNest->getParent()->convertToWorldSpace(followNest->getPosition());
 		jumpEgg->setPosition(worldPoint);
 		jumpEgg->setRotation(0.0f);
 	}
@@ -208,7 +207,7 @@ void HelloWorld::update(float dt) {
 			m_armBody = NULL;
 		}
 		//		CCDirector::sharedDirector()->replaceScene(HelloWorld::scene());
-		CCPoint worldPoint = m_nestLayer->convertToWorldSpaceAR(followNest->getPosition());
+		CCPoint worldPoint = followNest->getParent()->convertToWorldSpaceAR(followNest->getPosition());
 		jumpEgg->setPosition(worldPoint);
 		jumpEgg->setRotation(0.0f);
 		jumpState = -1;
