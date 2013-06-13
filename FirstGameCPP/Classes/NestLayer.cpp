@@ -41,21 +41,14 @@ CCSprite* NestLayer::catchEgg(CCSprite* jumpEgg) {
 			CCRect nestBound = nest->boundingBox();
 			CCPoint worldPoint = jumpEgg->getParent()->convertToWorldSpace(jumpEgg->getPosition());
 			CCPoint nodePoint = nest->getParent()->convertToNodeSpace(worldPoint);
-
-			CCLog("nest%d t:%.1f,b:%.1f", nest->getTag(), nestBound.getMaxY(), nestBound.getMinY());
-			//			CCLog("sl2Bound t:%.1f,b:%.1f", sl2Bound.getMaxY(), sl2Bound.getMinY());
-			CCLog("nest%d nodePoint height:%.1f", nest->getTag(), nodePoint.y);
-
 			bool isContain = nestBound.containsPoint(nodePoint);
 			if (isContain) {
-				CCLog("catchEgg isContained");
 				return nest;
 			}
 		}
 	return NULL;
 }
 void NestLayer::updateNestPositon(CCPoint position) {
-	CCLog("nest layout y :%.1f", getPositionY());
 	float subHeight = getPositionY() - position.y + 20;
 	lastNestHeight = lastNestHeight + subHeight;
 
@@ -75,25 +68,17 @@ void NestLayer::moveEnd() {
 	CCARRAY_FOREACH(m_nestArray,nestO) {
 			CCSprite* nest = dynamic_cast<CCSprite*> (nestO);
 			CCPoint worldPoint = nest->getParent()->convertToWorldSpace(nest->getPosition());
-			CCLog("moveEnd nest%d", nest->getTag());
 			if (worldPoint.y <= 0) {
-				CCLog("moveEnd nest%d is under floor", nest->getTag());
 				nest->stopAllActions();
 				nest->getParent()->removeChild(nest, false);
 				int height = lastNestHeight + nest_step_height;
 				CCPoint nestWPosition = ccp(0,height);
-				CCLog("lastNestHeight:%d", lastNestHeight);
 				CCRect sl1Bound = scollerLayer1->boundingBox();
 				CCRect sl2Bound = scollerLayer2->boundingBox();
-				CCLog("sl1Bound t:%.1f,b:%.1f", sl1Bound.getMaxY(), sl1Bound.getMinY());
-				CCLog("sl2Bound t:%.1f,b:%.1f", sl2Bound.getMaxY(), sl2Bound.getMinY());
-				CCLog("height:%d", height);
 				if (sl1Bound.containsPoint(nestWPosition)) {
-					CCLog("sl1Bound contained");
 					scollerLayer1->addChild(nest);
 					nest->setPosition(scollerLayer1->convertToNodeSpace(nestWPosition));
 				} else if (sl2Bound.containsPoint(nestWPosition)) {
-					CCLog("sl2Bound contained");
 					scollerLayer2->addChild(nest);
 					nest->setPosition(scollerLayer2->convertToNodeSpace(nestWPosition));
 				}
@@ -105,12 +90,10 @@ void NestLayer::moveEnd() {
 
 	CCSize size = CCDirector::sharedDirector()->getWinSize();
 	if (convertToWorldSpace(scollerLayer1->getPosition()).y <= -size.height + 20) {
-		CCLog("scollerLayer1 to zero");
 		scollerLayer1->setPosition(ccp(0,size.height));
 	}
 
 	if (convertToWorldSpace(scollerLayer2->getPosition()).y <= -size.height + 20) {
-		CCLog("scollerLayer2 to zero");
 		scollerLayer2->setPosition(ccp(0,size.height));
 	}
 }

@@ -178,15 +178,12 @@ void HelloWorld::update(float dt) {
 	preLocation = jumpEgg->getPosition();
 
 	if (isJumpEggDown && jumpState != 1) {
-		CCLog("update jump");
 		CCSprite* nest = m_nestLayer->catchEgg(jumpEgg);
 		if (nest != NULL) {
 			float cy = nest->getParent()->convertToWorldSpace(nest->getPosition()).y;
 			float fy = followNest->getParent()->convertToWorldSpace(followNest->getPosition()).y;
-			CCLog("cy %.1f , fy %.1f", cy, fy);
 			if (cy > fy) {
 				if (m_armBody != NULL) {
-					CCLog("cy destroy body");
 					m_armBody->DestroyFixture(m_armFixture);
 					m_world->DestroyBody(m_armBody);
 					m_armFixture = NULL;
@@ -200,7 +197,6 @@ void HelloWorld::update(float dt) {
 			}
 		}
 	} else if (jumpState == 1 && followNest != NULL) {
-		CCLog("update follownest");
 		CCPoint worldPoint = followNest->getParent()->convertToWorldSpace(followNest->getPosition());
 		jumpEgg->setPosition(jumpEgg->getParent()->convertToNodeSpace(worldPoint));
 		jumpEgg->setRotation(0.0f);
@@ -246,10 +242,6 @@ void HelloWorld::ccTouchesMoved(cocos2d::CCSet* touches, cocos2d::CCEvent* event
 }
 
 void HelloWorld::ccTouchesEnded(cocos2d::CCSet* touches, cocos2d::CCEvent* event) {
-	CCLog("ccTouchesEnded jumpState:%d", jumpState);
-
-	CCLog("ccTouchesEnded m_armBody:%d", m_armBody);
-
 	if (jumpState == 0 || m_nestLayer->getMoving()) {
 		return;
 	}
@@ -279,7 +271,6 @@ void HelloWorld::ccTouchesEnded(cocos2d::CCSet* touches, cocos2d::CCEvent* event
 	b2Vec2 desiredVel = b2Vec2(0, b2Sqrt(2.0f*10*350/PTM_RATIO));// the vector speed you set
 	b2Vec2 velChange = desiredVel - vel;
 	b2Vec2 impluse = m * velChange; //impluse = mv
-	CCLog("ccTouchesEnded ApplyLinearImpulse");
 	m_armBody->ApplyLinearImpulse(impluse, m_armBody->GetWorldCenter());
 	//	m_armBody->ApplyTorque(100);
 	isJumpEggDown = false;
