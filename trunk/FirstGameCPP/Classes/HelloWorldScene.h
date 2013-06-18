@@ -4,7 +4,6 @@
 #include "cocos2d.h"
 #include "Box2D/Box2D.h"
 #include "NestLayer.h"
-#include "GLES-Render.h"
 #include "GameStateLayer.h"
 
 USING_NS_CC;
@@ -20,12 +19,9 @@ public:
 
 	// a selector callback
 	void menuCloseCallback(CCObject* pSender);
-
-	GLESDebugDraw* m_debugDraw;
-
 	// implement the "static node()" method manually
 	CREATE_FUNC(HelloWorld)
-	virtual void draw();
+
 	virtual void update(float);
 	virtual void ccTouchesBegan(cocos2d::CCSet* touches, cocos2d::CCEvent* event);
 	virtual void ccTouchesMoved(cocos2d::CCSet* touches, cocos2d::CCEvent* event);
@@ -34,11 +30,6 @@ public:
 private:
 	static const int nest_max_move_speed = 150;
 	static const int nest_min_move_speed = 50;
-	b2World* m_world;
-	b2Body* m_groundBody;
-	b2Body* m_armBody;
-	b2Fixture* m_armFixture;
-	b2MouseJoint* m_mouseJoint;
 
 	NestLayer* m_nestLayer;
 	CCArray* nestArray;
@@ -49,9 +40,6 @@ private:
 	bool isJumpEggDown;
 	int jumpState;
 	int score;
-	//
-	//	void createNest();
-	//	CCActionInterval* createNestAction(CCSprite* nest);
 };
 
 #endif // __HELLOWORLD_SCENE_H__
