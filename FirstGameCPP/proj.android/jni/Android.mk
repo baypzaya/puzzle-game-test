@@ -7,8 +7,9 @@ LOCAL_MODULE := game_shared
 LOCAL_MODULE_FILENAME := libgame
 
 LOCAL_SRC_FILES := hellocpp/main.cpp \
-../../Classes/JumpActor.cpp \
-../../Classes/NestLayer.cpp \
+				   ../../Classes/JumpActor.cpp \
+				   ../../Classes/NestLayer.cpp \
+				   ../../Classes/GameStateLayer.cpp \
 				   ../../Classes/GLES-Render.cpp \
                    ../../Classes/AppDelegate.cpp \
                    ../../Classes/HelloWorldScene.cpp

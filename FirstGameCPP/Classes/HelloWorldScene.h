@@ -5,6 +5,7 @@
 #include "Box2D/Box2D.h"
 #include "NestLayer.h"
 #include "GLES-Render.h"
+#include "GameStateLayer.h"
 
 USING_NS_CC;
 
@@ -24,7 +25,6 @@ public:
 
 	// implement the "static node()" method manually
 	CREATE_FUNC(HelloWorld)
-	;
 	virtual void draw();
 	virtual void update(float);
 	virtual void ccTouchesBegan(cocos2d::CCSet* touches, cocos2d::CCEvent* event);
@@ -42,15 +42,16 @@ private:
 
 	NestLayer* m_nestLayer;
 	CCArray* nestArray;
+	GameStateLayer* m_stateLayer;
 	CCSprite *jumpEgg;
 	CCSprite* followNest;
 	CCLabelTTF* scoreLable;
 	bool isJumpEggDown;
 	int jumpState;
 	int score;
-//
-//	void createNest();
-//	CCActionInterval* createNestAction(CCSprite* nest);
+	//
+	//	void createNest();
+	//	CCActionInterval* createNestAction(CCSprite* nest);
 };
 
 #endif // __HELLOWORLD_SCENE_H__
