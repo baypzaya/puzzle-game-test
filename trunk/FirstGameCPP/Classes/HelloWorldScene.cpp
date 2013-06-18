@@ -39,6 +39,8 @@ bool HelloWorld::init() {
 	jumpState = 1;
 	CCSize screenSize = CCDirector::sharedDirector()->getWinSize();
 
+	CCDirector::sharedDirector()->pause();
+
 	//init ui
 	//add close menu item
 	CCMenuItemImage *pCloseItem = CCMenuItemImage::create("CloseNormal.png", "CloseSelected.png", this,
@@ -57,6 +59,13 @@ bool HelloWorld::init() {
 	m_nestLayer->setPosition(CCPointZero);
 	m_nestLayer->setAnchorPoint(ccp(0,0));
 	addChild(m_nestLayer);
+
+
+	//init stateLayer
+	m_stateLayer = GameStateLayer::create();
+	m_stateLayer->setAnchorPoint(ccp(0,0));
+	m_stateLayer->setPosition(CCPointZero);
+	addChild(m_stateLayer,100);
 
 	//add jump egg
 	jumpEgg = CCSprite::create("jump_egg.png");
@@ -100,61 +109,6 @@ bool HelloWorld::init() {
 
 	return true;
 }
-
-//void HelloWorld::createNest() {
-//	if (nestArray == NULL) {
-//		nestArray = CCArray::create();
-//		CC_SAFE_RETAIN(nestArray);
-//	}
-//
-//	CCSize size = CCDirector::sharedDirector()->getWinSize();
-//
-//	CCSprite* nest0 = CCSprite::create("nest.png");
-//	nest0->setPosition(ccp(size.width/2,20.0f));
-//	addChild(nest0);
-//	nestArray->addObject(nest0);
-//	followNest = nest0;
-//
-//	CCSprite* nest = CCSprite::create("nest.png");
-//	nest->setPosition(ccp(size.width,size.height/3));
-//	addChild(nest);
-//	nestArray->addObject(nest);
-//	nest->runAction(createNestAction(nest));
-//
-//	CCSprite* nest1 = CCSprite::create("nest.png");
-//	nest1->setPosition(ccp(0,size.height*2/3));
-//	addChild(nest1);
-//	nestArray->addObject(nest1);
-//	nest1->runAction(createNestAction(nest1));
-//
-//}
-
-//CCActionInterval* HelloWorld::createNestAction(CCSprite* nest) {
-//	CCSize size = CCDirector::sharedDirector()->getWinSize();
-//	CCPoint position = nest->getPosition();
-//	float speed = nest_min_move_speed + CCRANDOM_0_1() * 100;
-//	bool isLeft = position.x != 0;
-//	CCPoint endPoint1;
-//	CCPoint endPoint2;
-//
-//	float dt1;
-//	float dt2;
-//	dt2 = size.width / speed;
-//	if (isLeft) {
-//		endPoint1 = ccp(0,position.y);
-//		endPoint2 = ccp(size.width,position.y);
-//		dt1 = position.x / speed;
-//	} else {
-//		endPoint1 = ccp(size.width,position.y);
-//		endPoint2 = ccp(0,position.y);
-//		dt1 = (size.width - position.x) / speed;
-//	}
-//	//	CCActionInterval* move1 = CCMoveTo::create(dt1, endPoint1);
-//	CCActionInterval* move2 = CCMoveTo::create(dt2, endPoint2);
-//	CCActionInterval* move3 = CCMoveTo::create(dt2, endPoint1);
-//	CCActionInterval* moveRepeat = CCRepeatForever::create(CCSequence::create(move3, move2, NULL));
-//	return moveRepeat;//CCSequence::create(move1,moveRepeat,NULL);
-//}
 
 CCPoint preLocation = CCPointZero;
 
@@ -279,9 +233,12 @@ void HelloWorld::ccTouchesEnded(cocos2d::CCSet* touches, cocos2d::CCEvent* event
 }
 
 void HelloWorld::menuCloseCallback(CCObject* pSender) {
-	CCDirector::sharedDirector()->end();
-
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-	exit(0);
-#endif
+	CCLog("menuCloseCallback");
+	CCDirector::sharedDirector()->pause();
+	m_stateLayer->setVisible(true);
+//	CCDirector::sharedDirector()->end();
+//
+//#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+//	exit(0);
+//#endif
 }
