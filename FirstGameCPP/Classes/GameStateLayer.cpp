@@ -40,7 +40,7 @@ void GameStateLayer::playGame() {
 
 bool GameStateLayer::ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent) {
 	CCLog("GameStateLayer::ccTouchBegan");
-	return true;
+	return false;
 }
 void GameStateLayer::ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent){
 	;
