@@ -9,6 +9,7 @@
 #define NESTLAYER_H_
 
 #include "cocos2d.h"
+#include "GameData.h"
 
 USING_NS_CC;
 
@@ -22,17 +23,13 @@ public:
 	void updateNestPositon(CCPoint position);
 	CC_SYNTHESIZE_READONLY(bool,m_isMoving,Moving);
 private:
-	static const int nest_step_height = 320;
-	static const int nest_max_move_speed = 150;
-	static const int nest_min_move_speed = 50;
-
 	CCLayer* scollerLayer1;
 	CCLayer* scollerLayer2;
 	CCArray* m_nestArray;
 	void createNest();
-	CCActionInterval* createNestAction(CCSprite* nest);
-	int lastNestHeight;
+	CCActionInterval* createNestAction(Nest nest);
 	void moveEnd();
+	void addToLayer(CCSprite* nestSprite);
 };
 
 #endif /* NESTLAYER_H_ */

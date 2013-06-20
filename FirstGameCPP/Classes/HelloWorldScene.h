@@ -5,6 +5,7 @@
 #include "Box2D/Box2D.h"
 #include "NestLayer.h"
 #include "GameStateLayer.h"
+#include "GameData.h"
 
 USING_NS_CC;
 
@@ -37,9 +38,10 @@ private:
 	CCSprite *jumpEgg;
 	CCSprite* followNest;
 	CCLabelTTF* scoreLable;
+	CCLabelTTF* eggLable;
 	bool isJumpEggDown;
 	int jumpState;
-	int score;
+
 };
 
 #endif // __HELLOWORLD_SCENE_H__

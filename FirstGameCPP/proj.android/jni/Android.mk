@@ -9,9 +9,11 @@ LOCAL_MODULE_FILENAME := libgame
 LOCAL_SRC_FILES := hellocpp/main.cpp \
 				   ../../Classes/JumpActor.cpp \
 				   ../../Classes/NestLayer.cpp \
+				   ../../Classes/GameData.cpp \
 				   ../../Classes/GameStateLayer.cpp \
                    ../../Classes/AppDelegate.cpp \
-                   ../../Classes/HelloWorldScene.cpp
+                   ../../Classes/HelloWorldScene.cpp 
+                   
                    
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../Classes                   
 

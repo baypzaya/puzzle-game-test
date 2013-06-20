@@ -19,7 +19,7 @@ CCScene* HelloWorld::scene() {
 }
 
 HelloWorld::~HelloWorld() {
-	CC_SAFE_RELEASE_NULL(nestArray);
+	delete GameData::getInstance();
 }
 
 // on "init" you need to initialize your instance
@@ -32,6 +32,7 @@ bool HelloWorld::init() {
 	setTouchEnabled(true);
 	isJumpEggDown = false;
 	jumpState = 1;
+
 	CCSize screenSize = CCDirector::sharedDirector()->getWinSize();
 
 	//	CCDirector::sharedDirector()->pause();
@@ -50,6 +51,12 @@ bool HelloWorld::init() {
 	scoreLable->setPosition(ccp(20,screenSize.height - 20));
 	addChild(scoreLable, 1);
 
+	eggLable = CCLabelTTF::create("E:  ", "fonts/Abduction.ttf", 35);
+	eggLable->setAnchorPoint(ccp(1,1));
+	eggLable->setPosition(ccp(screenSize.width-20,screenSize.height - 20));
+	addChild(eggLable, 1);
+
+	CCLog("NestLayer::create()");
 	m_nestLayer = NestLayer::create();
 	m_nestLayer->setPosition(CCPointZero);
 	m_nestLayer->setAnchorPoint(ccp(0,0));
@@ -64,7 +71,7 @@ bool HelloWorld::init() {
 	//add jump egg
 	jumpEgg = CCSprite::create("jump_egg.png");
 	jumpEgg->setAnchorPoint(ccp(0.5,0));
-	jumpEgg->setPosition(ccp(0,20.0f));
+	jumpEgg->setPosition(ccp(screenSize.width/2,20.0f));
 	addChild(jumpEgg);
 
 	followNest = m_nestLayer->catchEgg(jumpEgg);
@@ -78,18 +85,18 @@ bool HelloWorld::init() {
 CCPoint preLocation = CCPointZero;
 
 void HelloWorld::update(float dt) {
-
+	GameData* gameData = GameData::getInstance();
 	isJumpEggDown = preLocation.y > jumpEgg->getPosition().y;
 	preLocation = jumpEgg->getPosition();
-	CCLog("isJumpEggDown:%d", isJumpEggDown);
 	if (isJumpEggDown && jumpState != 1) {
 		CCSprite* nest = m_nestLayer->catchEgg(jumpEgg);
+		CCLog("catchEgg end");
 		if (nest != NULL) {
 			float cy = nest->getParent()->convertToWorldSpace(nest->getPosition()).y;
 			float fy = followNest->getParent()->convertToWorldSpace(followNest->getPosition()).y;
 			if (cy > fy) {
 				followNest = nest;
-				score += 10;
+				gameData->addScore(10);
 				jumpState = 1;
 				CCPoint worldPoint = followNest->getParent()->convertToWorldSpace(followNest->getPosition());
 				m_nestLayer->updateNestPositon(worldPoint);
@@ -104,17 +111,26 @@ void HelloWorld::update(float dt) {
 
 	if (jumpEgg->getPositionY() <= -10) {
 
-		//		CCDirector::sharedDirector()->replaceScene(HelloWorld::scene());
-		CCPoint worldPoint = followNest->getParent()->convertToWorldSpaceAR(followNest->getPosition());
-		jumpEgg->stopAllActions();
-		jumpEgg->setPosition(worldPoint);
-		jumpEgg->setRotation(0.0f);
-		jumpState = 1;
+		gameData->subEggCount();
+		if (gameData->getEggCount() <= 0) {
+			CCDirector::sharedDirector()->replaceScene(HelloWorld::scene());
+		} else {
+			jumpEgg->stopAllActions();
+			CCPoint worldPoint = followNest->getParent()->convertToWorldSpaceAR(followNest->getPosition());
+			jumpEgg->setPosition(worldPoint);
+			jumpEgg->setRotation(0.0f);
+			jumpState = 1;
+		}
 	}
 
 	char* scoreStr = new char[10];
-	sprintf(scoreStr, "s:%d", score);
+	sprintf(scoreStr, "s:%d", gameData->getScore());
 	scoreLable->setString(scoreStr);
+
+	char* eggStr = new char[10];
+	sprintf(eggStr, "E:%2d", gameData->getEggCount());
+	eggLable->setString(eggStr);
+
 }
 
 void HelloWorld::ccTouchesBegan(cocos2d::CCSet* touches, cocos2d::CCEvent* event) {
@@ -129,7 +145,7 @@ void HelloWorld::ccTouchesEnded(cocos2d::CCSet* touches, cocos2d::CCEvent* event
 	}
 
 	jumpEgg->stopAllActions();
-	CCJumpBy* jumpBy = CCJumpBy::create(1.0f,ccp(0,-40), 390, 1);
+	CCJumpBy* jumpBy = CCJumpBy::create(1.0f, ccp(0,-40), 390, 1);
 	jumpEgg->runAction(jumpBy);
 
 	isJumpEggDown = false;
