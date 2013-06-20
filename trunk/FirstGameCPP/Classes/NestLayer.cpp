@@ -8,22 +8,22 @@
 #include <NestLayer.h>
 
 NestLayer::~NestLayer() {
-	CC_SAFE_DELETE_ARRAY(m_nestArray);
+	CCLog("~NestLayer");
+	CC_SAFE_DELETE(m_nestArray);
 }
 
 bool NestLayer::init() {
 	//init data
-
-
+	CCLog("NestLayer initData");
 	//init ui
 	CCSize screenSize = CCDirector::sharedDirector()->getWinSize();
-	scollerLayer1 = CCLayerColor::create(ccc4(255, 255, 0, 160));
+	scollerLayer1 = CCLayerColor::create(ccc4(255, 255, 0, 100));
 	scollerLayer1->setContentSize(screenSize);
 	scollerLayer1->setPosition(0, 0);
 	scollerLayer1->setAnchorPoint(CCPointZero);
 	addChild(scollerLayer1);
 
-	scollerLayer2 = CCLayerColor::create(ccc4(255, 0, 255, 160));
+	scollerLayer2 = CCLayerColor::create(ccc4(255, 0, 255, 100));
 	scollerLayer2->setContentSize(screenSize);
 	scollerLayer2->setPosition(0, screenSize.height);
 	scollerLayer2->setAnchorPoint(CCPointZero);
@@ -49,8 +49,11 @@ CCSprite* NestLayer::catchEgg(CCSprite* jumpEgg) {
 	return NULL;
 }
 void NestLayer::updateNestPositon(CCPoint position) {
-	float subHeight = getPositionY() - position.y + 20;
-	lastNestHeight = lastNestHeight + subHeight;
+	GameData* gameData = GameData::getInstance();
+	float subHeight = getPositionY()-position.y+GameData::nest_base_height;
+	float lastHeight = gameData->getLastNestHeight() + subHeight;
+	CCLog("lastHeight:%.2f", lastHeight);
+	gameData->setLastNestHeight(lastHeight);
 
 	CCMoveBy* moveTo = CCMoveBy::create(0.5, ccp(0,subHeight));
 	CCCallFunc* callBack = CCCallFunc::create(this, callfunc_selector(NestLayer::moveEnd));
@@ -71,29 +74,20 @@ void NestLayer::moveEnd() {
 			if (worldPoint.y <= 0) {
 				nest->stopAllActions();
 				nest->getParent()->removeChild(nest, false);
-				int height = lastNestHeight + nest_step_height;
-				CCPoint nestWPosition = ccp(0,height);
-				CCRect sl1Bound = scollerLayer1->boundingBox();
-				CCRect sl2Bound = scollerLayer2->boundingBox();
-				if (sl1Bound.containsPoint(nestWPosition)) {
-					scollerLayer1->addChild(nest);
-					nest->setPosition(scollerLayer1->convertToNodeSpace(nestWPosition));
-				} else if (sl2Bound.containsPoint(nestWPosition)) {
-					scollerLayer2->addChild(nest);
-					nest->setPosition(scollerLayer2->convertToNodeSpace(nestWPosition));
-				}
 
-				lastNestHeight = height;
-				nest->runAction(createNestAction(nest));
+				Nest nestData = GameData::getInstance()->createNest();
+				nest->setPosition(nestData.location);
+				addToLayer(nest);
+				nest->runAction(createNestAction(nestData));
 			}
 		}
 
 	CCSize size = CCDirector::sharedDirector()->getWinSize();
-	if (convertToWorldSpace(scollerLayer1->getPosition()).y <= -size.height + 20) {
+	if (convertToWorldSpace(scollerLayer1->getPosition()).y <= -size.height+GameData::nest_base_height) {
 		scollerLayer1->setPosition(ccp(0,size.height));
 	}
 
-	if (convertToWorldSpace(scollerLayer2->getPosition()).y <= -size.height + 20) {
+	if (convertToWorldSpace(scollerLayer2->getPosition()).y <= -size.height+GameData::nest_base_height) {
 		scollerLayer2->setPosition(ccp(0,size.height));
 	}
 }
@@ -104,54 +98,66 @@ void NestLayer::createNest() {
 		CC_SAFE_RETAIN(m_nestArray);
 	}
 
+	GameData* gameData = GameData::getInstance();
 	CCSize size = CCDirector::sharedDirector()->getWinSize();
-
 	CCSprite* nest0 = CCSprite::create("nest.png");
-	nest0->setPosition(ccp(0,20.0f));
+	nest0->setPosition(gameData->getInitPosition());
 	scollerLayer1->addChild(nest0);
 	m_nestArray->addObject(nest0);
+	nest0->setScaleX(2);
 	nest0->setTag(0);
 
-	CCSprite* nest = CCSprite::create("nest.png");
-	nest->setPosition(ccp(0,size.height/3+20));
-	scollerLayer1->addChild(nest);
-	m_nestArray->addObject(nest);
-	nest->runAction(createNestAction(nest));
-	nest->setTag(1);
+	int nestCount = (size.height - GameData::nest_base_height) / GameData::nest_step_height;
 
-	CCSprite* nest1 = CCSprite::create("nest.png");
-	nest1->setPosition(ccp(0,size.height*2/3+20));
-	scollerLayer1->addChild(nest1);
-	m_nestArray->addObject(nest1);
-	nest1->runAction(createNestAction(nest1));
-	lastNestHeight = size.height * 2 / 3 + 20;
-	nest1->setTag(2);
+	for (int i = 0; i < nestCount; i++) {
+		Nest nestData = gameData->createNest();
+		CCSprite* nest = CCSprite::create("nest.png");
+		nest->setPosition(nestData.location);
+		m_nestArray->addObject(nest);
+		nest->setScaleX(nestData.width / nest->getContentSize().width);
+		CCLog("createNestAction");
+		nest->runAction(createNestAction(nestData));
+		addToLayer(nest);
+	}
 
 }
 
-CCActionInterval* NestLayer::createNestAction(CCSprite* nest) {
+CCActionInterval* NestLayer::createNestAction(Nest nestData) {
 	CCSize size = CCDirector::sharedDirector()->getWinSize();
-	CCPoint position = nest->getPosition();
-	float speed = nest_min_move_speed + CCRANDOM_0_1() * 100;
-	bool isLeft = position.x != 0;
-	CCPoint endPoint1;
-	CCPoint endPoint2;
+	float speed = nestData.speed;
+	bool isLeft = nestData.direction == left;
+	CCPoint endPoint;
 
-	float dt1;
-	float dt2;
-	dt2 = size.width / speed;
+	float dt2 = size.width / speed;
 	if (isLeft) {
-		endPoint1 = ccp(0,position.y);
-		endPoint2 = ccp(size.width,position.y);
-		dt1 = position.x / speed;
+		endPoint = ccp(-size.width,0);
 	} else {
-		endPoint1 = ccp(size.width,position.y);
-		endPoint2 = ccp(0,position.y);
-		dt1 = (size.width - position.x) / speed;
+		endPoint = ccp(size.width,0);
 	}
-	//	CCActionInterval* move1 = CCMoveTo::create(dt1, endPoint1);
-	CCActionInterval* move2 = CCMoveTo::create(dt2, endPoint2);
-	CCActionInterval* move3 = CCMoveTo::create(dt2, endPoint1);
-	CCActionInterval* moveRepeat = CCRepeatForever::create(CCSequence::create(move3, move2, NULL));
-	return moveRepeat;//CCSequence::create(move1,moveRepeat,NULL);
+
+	CCActionInterval* move1 = CCMoveBy::create(dt2, endPoint);
+	CCActionInterval* move2 = move1->reverse();
+	CCActionInterval* moveRepeat = CCRepeatForever::create(CCSequence::create(move1, move2, NULL));
+	return moveRepeat;
+}
+
+void NestLayer::addToLayer(CCSprite* nestSprite) {
+
+	if (nestSprite) {
+
+		if (nestSprite->getParent()) {
+			nestSprite->getParent()->removeChild(nestSprite, false);
+		}
+
+		CCPoint nestWPosition = nestSprite->getPosition();
+		CCRect sl1Bound = scollerLayer1->boundingBox();
+		CCRect sl2Bound = scollerLayer2->boundingBox();
+		if (sl1Bound.containsPoint(nestWPosition)) {
+			scollerLayer1->addChild(nestSprite);
+			nestSprite->setPosition(scollerLayer1->convertToNodeSpace(nestWPosition));
+		} else if (sl2Bound.containsPoint(nestWPosition)) {
+			scollerLayer2->addChild(nestSprite);
+			nestSprite->setPosition(scollerLayer2->convertToNodeSpace(nestWPosition));
+		}
+	}
 }
