@@ -49,9 +49,11 @@ public:
 	virtual ~GameData();
 	virtual void addScore(int score);
 	virtual void subEggCount();
+	void resetData();
 
 	Nest createNest();
 	CCPoint getInitPosition();
+
 private:
 	GameData();
 	virtual void initData();
