@@ -21,7 +21,6 @@ GameData::~GameData() {
 GameData* GameData::getInstance() {
 
 	if (sGameData == NULL) {
-		CCLog("GameData::getInstance %d",sGameData == NULL );
 		sGameData = new GameData();
 	}
 
@@ -29,13 +28,16 @@ GameData* GameData::getInstance() {
 }
 
 void GameData::initData() {
-	CCLog("initData");
 	m_score = 0;
 	m_eggCount = 5;
 	m_currentGameState = STATE_PAUSE;
 
 	m_lastNestHeight = nest_base_height;
 
+}
+
+void GameData::resetData(){
+	initData();
 }
 
 void GameData::addScore(int score) {
@@ -50,7 +52,6 @@ void GameData::subEggCount() {
 }
 
 Nest GameData::createNest() {
-	CCLog("createNest:%.2f",m_lastNestHeight);
 	m_lastNestHeight = m_lastNestHeight + nest_step_height;
 	CCSize screenSize = CCDirector::sharedDirector()->getWinSize();
 	Nest nest;
@@ -70,3 +71,5 @@ CCPoint GameData::getInitPosition(){
 	CCSize screenSize = CCDirector::sharedDirector()->getWinSize();
 	return ccp(screenSize.width/2,nest_base_height);
 }
+
+

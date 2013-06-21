@@ -19,7 +19,6 @@ CCScene* HelloWorld::scene() {
 }
 
 HelloWorld::~HelloWorld() {
-	delete GameData::getInstance();
 }
 
 // on "init" you need to initialize your instance
@@ -113,6 +112,7 @@ void HelloWorld::update(float dt) {
 
 		gameData->subEggCount();
 		if (gameData->getEggCount() <= 0) {
+			gameData->resetData();
 			CCDirector::sharedDirector()->replaceScene(HelloWorld::scene());
 		} else {
 			jumpEgg->stopAllActions();
@@ -145,7 +145,7 @@ void HelloWorld::ccTouchesEnded(cocos2d::CCSet* touches, cocos2d::CCEvent* event
 	}
 
 	jumpEgg->stopAllActions();
-	CCJumpBy* jumpBy = CCJumpBy::create(1.0f, ccp(0,-40), 390, 1);
+	CCJumpBy* jumpBy = CCJumpBy::create(1.5f, ccp(0,-40), 390, 1);
 	jumpEgg->runAction(jumpBy);
 
 	isJumpEggDown = false;
