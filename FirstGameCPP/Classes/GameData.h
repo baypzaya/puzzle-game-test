@@ -20,11 +20,12 @@ enum NestType {
 };
 
 enum NestRunDirection{
-	left,right
+	none,left,right,up,down,r_rotate,l_rotate
 };
 
 struct Nest {
 	int width;
+	int height;
 	int speed;
 	CCPoint location;
 	NestRunDirection direction;
@@ -57,6 +58,11 @@ public:
 private:
 	GameData();
 	virtual void initData();
+	Nest nestPage1[10];
+	Nest nestPage2[10];
+
+	int currentPageIndex;
+	Nest* currentPage;
 };
 
 #endif /* GAMEDATA_H_ */
