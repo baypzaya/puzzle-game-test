@@ -9,6 +9,7 @@
 #define GAMESTATELAYER_H_
 
 #include "cocos2d.h"
+#include "GameData.h"
 
 USING_NS_CC;
 

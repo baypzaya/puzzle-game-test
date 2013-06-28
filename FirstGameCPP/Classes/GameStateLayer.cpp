@@ -16,7 +16,7 @@ bool GameStateLayer::init() {
 	CCSize screenSize = CCDirector::sharedDirector()->getWinSize();
 	setTouchEnabled(true);
 
-	CCLayerColor* bgLayer = CCLayerColor::create(ccc4(255, 0, 0, 255));
+	CCLayerColor* bgLayer = CCLayerColor::create(ccc4(0, 0, 0, 100));
 	addChild(bgLayer);
 
 	CCMenuItemFont* playItem = CCMenuItemFont::create("PLAY", this, menu_selector(GameStateLayer::playGame));
@@ -34,8 +34,8 @@ void GameStateLayer::hideGameState() {
 }
 
 void GameStateLayer::playGame() {
+	GameData::getInstance()->setCurrentGameState(STATE_START);
 	CCDirector::sharedDirector()->resume();
-	setVisible(false);
 }
 
 bool GameStateLayer::ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent) {

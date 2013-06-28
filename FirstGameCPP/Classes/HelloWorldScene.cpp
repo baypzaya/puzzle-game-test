@@ -4,20 +4,6 @@
 #define PTM_RATIO 32.0f
 #define FLOOR_HEIGHT    -100.0f
 
-CCScene* HelloWorld::scene() {
-	// 'scene' is an autorelease object
-	CCScene *scene = CCScene::create();
-
-	// 'layer' is an autorelease object
-	HelloWorld *layer = HelloWorld::create();
-
-	// add layer as a child to scene
-	scene->addChild(layer);
-
-	// return the scene
-	return scene;
-}
-
 HelloWorld::~HelloWorld() {
 }
 
@@ -112,8 +98,8 @@ void HelloWorld::update(float dt) {
 
 		gameData->subEggCount();
 		if (gameData->getEggCount() <= 0) {
-			gameData->resetData();
-			CCDirector::sharedDirector()->replaceScene(HelloWorld::scene());
+			//			gameData->resetData();
+			//			CCDirector::sharedDirector()->replaceScene(HelloWorld::scene());
 		} else {
 			jumpEgg->stopAllActions();
 			CCPoint worldPoint = followNest->getParent()->convertToWorldSpaceAR(followNest->getPosition());
@@ -140,7 +126,8 @@ void HelloWorld::ccTouchesMoved(cocos2d::CCSet* touches, cocos2d::CCEvent* event
 }
 
 void HelloWorld::ccTouchesEnded(cocos2d::CCSet* touches, cocos2d::CCEvent* event) {
-	if (jumpState == 0 || m_nestLayer->getMoving()) {
+	GameData* gameData = GameData::getInstance();
+	if (STATE_START != gameData->getCurrentGameState() || jumpState == 0 || m_nestLayer->getMoving()) {
 		return;
 	}
 
@@ -154,12 +141,14 @@ void HelloWorld::ccTouchesEnded(cocos2d::CCSet* touches, cocos2d::CCEvent* event
 }
 
 void HelloWorld::menuCloseCallback(CCObject* pSender) {
-	CCLog("menuCloseCallback");
-	CCDirector::sharedDirector()->pause();
-	m_stateLayer->setVisible(true);
+	//	CCLog("menuCloseCallback");
+	//	CCDirector::sharedDirector()->pause();
+	//	m_stateLayer->setVisible(true);
 	//	CCDirector::sharedDirector()->end();
 	//
 	//#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	//	exit(0);
 	//#endif
+
+	GameData::getInstance()->setCurrentGameState(STATE_PAUSE);
 }

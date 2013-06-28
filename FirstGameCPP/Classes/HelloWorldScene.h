@@ -2,21 +2,16 @@
 #define __HELLOWORLD_SCENE_H__
 
 #include "cocos2d.h"
-#include "Box2D/Box2D.h"
 #include "NestLayer.h"
-#include "GameStateLayer.h"
 #include "GameData.h"
 
 USING_NS_CC;
 
-class HelloWorld: public cocos2d::CCLayer {
+class HelloWorld: public CCLayer {
 public:
 	// Here's a difference. Method 'init' in cocos2d-x returns bool, instead of returning 'id' in cocos2d-iphone
 	virtual bool init();
 	virtual ~HelloWorld();
-
-	// there's no 'id' in cpp, so we recommand to return the exactly class pointer
-	static cocos2d::CCScene* scene();
 
 	// a selector callback
 	void menuCloseCallback(CCObject* pSender);
@@ -34,7 +29,6 @@ private:
 
 	NestLayer* m_nestLayer;
 	CCArray* nestArray;
-	GameStateLayer* m_stateLayer;
 	CCSprite *jumpEgg;
 	CCSprite* followNest;
 	CCLabelTTF* scoreLable;
