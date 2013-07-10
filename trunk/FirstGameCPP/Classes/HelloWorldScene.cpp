@@ -71,6 +71,11 @@ CCPoint preLocation = CCPointZero;
 
 void HelloWorld::update(float dt) {
 	GameData* gameData = GameData::getInstance();
+
+	if(STATE_START != gameData->getCurrentGameState()){
+		return;
+	}
+
 	isJumpEggDown = preLocation.y > jumpEgg->getPosition().y;
 	preLocation = jumpEgg->getPosition();
 	if (isJumpEggDown && jumpState != 1) {
@@ -100,6 +105,7 @@ void HelloWorld::update(float dt) {
 		if (gameData->getEggCount() <= 0) {
 			//			gameData->resetData();
 			//			CCDirector::sharedDirector()->replaceScene(HelloWorld::scene());
+			gameData->setCurrentGameState(STATE_OVER);
 		} else {
 			jumpEgg->stopAllActions();
 			CCPoint worldPoint = followNest->getParent()->convertToWorldSpaceAR(followNest->getPosition());
@@ -141,14 +147,5 @@ void HelloWorld::ccTouchesEnded(cocos2d::CCSet* touches, cocos2d::CCEvent* event
 }
 
 void HelloWorld::menuCloseCallback(CCObject* pSender) {
-	//	CCLog("menuCloseCallback");
-	//	CCDirector::sharedDirector()->pause();
-	//	m_stateLayer->setVisible(true);
-	//	CCDirector::sharedDirector()->end();
-	//
-	//#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-	//	exit(0);
-	//#endif
-
 	GameData::getInstance()->setCurrentGameState(STATE_PAUSE);
 }

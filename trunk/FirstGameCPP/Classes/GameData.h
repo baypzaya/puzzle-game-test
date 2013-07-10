@@ -12,15 +12,15 @@
 USING_NS_CC;
 
 enum GameState {
-	STATE_START, STATE_PAUSE, STATE_OVER, STATE_SUCCESS
+	STATE_START = 1, STATE_PAUSE, STATE_OVER, STATE_SUCCESS, STATE_RESTART, STATE_END
 };
 
 enum NestType {
 	lNestType, mNestType, sNestType
 };
 
-enum NestRunDirection{
-	none,left,right,up,down,r_rotate,l_rotate
+enum NestRunDirection {
+	none, left, right, up, down, r_rotate, l_rotate
 };
 
 struct Nest {

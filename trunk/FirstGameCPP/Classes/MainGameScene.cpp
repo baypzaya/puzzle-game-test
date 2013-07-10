@@ -28,13 +28,13 @@ MainGameScene::~MainGameScene() {
 }
 
 void MainGameScene::update(float dt) {
-	CCLog("maingamescene update");
 	processGameState();
 }
 
 void MainGameScene::processGameState() {
 	CCDirector* director = CCDirector::sharedDirector();
 	GameData* gameData = GameData::getInstance();
+	CCLog("current game state: %d",gameData->getCurrentGameState());
 	if (m_gameCurrentSate != gameData->getCurrentGameState()) {
 		m_gameCurrentSate = gameData->getCurrentGameState();
 		switch (m_gameCurrentSate) {
@@ -45,14 +45,29 @@ void MainGameScene::processGameState() {
 			showStateLayer();
 			break;
 		case STATE_OVER:
-			gameData->resetData();
-			removeChild(m_gameLayer, true);
-			m_gameLayer = HelloWorld::create();
-			addChild(m_gameLayer);
 			showStateLayer();
 			break;
 		case STATE_SUCCESS:
 			break;
+		case STATE_RESTART:
+			gameData->resetData();
+			removeChild(m_gameLayer, true);
+			m_gameLayer = HelloWorld::create();
+			addChild(m_gameLayer);
+			gameData->setCurrentGameState(STATE_START);
+			break;
+		case STATE_END:
+			CCDirector::sharedDirector()->end();
+			#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+						exit(0);
+			#endif
+
+			break;
+
+		default:
+			CCLog("unknown game state: %d",m_gameCurrentSate);
+			break;
+
 		}
 	}
 }
@@ -67,9 +82,11 @@ void MainGameScene::showStateLayer() {
 
 	CCDirector::sharedDirector()->pause();
 }
+
 void MainGameScene::hideSateLayer() {
 	if (m_stateLayer) {
 		removeChild(m_stateLayer, true);
 	}
+
 	CCDirector::sharedDirector()->resume();
 }
