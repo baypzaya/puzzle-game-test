@@ -34,7 +34,6 @@ void MainGameScene::update(float dt) {
 void MainGameScene::processGameState() {
 	CCDirector* director = CCDirector::sharedDirector();
 	GameData* gameData = GameData::getInstance();
-	CCLog("current game state: %d",gameData->getCurrentGameState());
 	if (m_gameCurrentSate != gameData->getCurrentGameState()) {
 		m_gameCurrentSate = gameData->getCurrentGameState();
 		switch (m_gameCurrentSate) {

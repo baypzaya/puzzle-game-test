@@ -52,7 +52,6 @@ void NestLayer::updateNestPositon(CCPoint position) {
 	GameData* gameData = GameData::getInstance();
 	float subHeight = getPositionY()-position.y+GameData::nest_base_height;
 	float lastHeight = gameData->getLastNestHeight() + subHeight;
-	CCLog("lastHeight:%.2f", lastHeight);
 	gameData->setLastNestHeight(lastHeight);
 
 	CCMoveBy* moveTo = CCMoveBy::create(0.5, ccp(0,subHeight));
@@ -77,6 +76,7 @@ void NestLayer::moveEnd() {
 
 				Nest nestData = GameData::getInstance()->createNest();
 				nest->setPosition(nestData.location);
+				nest->setScaleX(nestData.width / nest->getContentSize().width);
 				addToLayer(nest);
 				nest->runAction(createNestAction(nestData));
 			}
@@ -115,7 +115,6 @@ void NestLayer::createNest() {
 		nest->setPosition(nestData.location);
 		m_nestArray->addObject(nest);
 		nest->setScaleX(nestData.width / nest->getContentSize().width);
-		CCLog("createNestAction");
 		nest->runAction(createNestAction(nestData));
 		addToLayer(nest);
 	}
