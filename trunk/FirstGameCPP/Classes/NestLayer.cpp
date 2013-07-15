@@ -17,13 +17,13 @@ bool NestLayer::init() {
 	CCLog("NestLayer initData");
 	//init ui
 	CCSize screenSize = CCDirector::sharedDirector()->getWinSize();
-	scollerLayer1 = CCLayerColor::create(ccc4(255, 255, 0, 100));
+	scollerLayer1 = CCLayerColor::create(ccc4(0, 0, 0, 0));
 	scollerLayer1->setContentSize(screenSize);
 	scollerLayer1->setPosition(0, 0);
 	scollerLayer1->setAnchorPoint(CCPointZero);
 	addChild(scollerLayer1);
 
-	scollerLayer2 = CCLayerColor::create(ccc4(255, 0, 255, 100));
+	scollerLayer2 = CCLayerColor::create(ccc4(0, 0, 0, 0));
 	scollerLayer2->setContentSize(screenSize);
 	scollerLayer2->setPosition(0, screenSize.height);
 	scollerLayer2->setAnchorPoint(CCPointZero);
