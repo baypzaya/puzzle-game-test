@@ -20,9 +20,14 @@ bool HelloWorld::init() {
 
 	CCSize screenSize = CCDirector::sharedDirector()->getWinSize();
 
-	//	CCDirector::sharedDirector()->pause();
+
 
 	//init ui
+	CCSprite* background = CCSprite::create("jump_background.png");
+	background->setAnchorPoint(CCPointZero);
+	background->setPosition(CCPointZero);
+	addChild(background);
+
 	//add close menu item
 	CCMenuItemImage *pCloseItem = CCMenuItemImage::create("CloseNormal.png", "CloseSelected.png", this,
 			menu_selector(HelloWorld::menuCloseCallback));
@@ -34,6 +39,7 @@ bool HelloWorld::init() {
 	scoreLable = CCLabelTTF::create("1234", "fonts/Abduction.ttf", 35);
 	scoreLable->setAnchorPoint(ccp(0,1));
 	scoreLable->setPosition(ccp(20,screenSize.height - 20));
+	scoreLable->setColor(ccc3(255,0,0));
 	addChild(scoreLable, 1);
 
 	eggLable = CCLabelTTF::create("E:  ", "fonts/Abduction.ttf", 35);
