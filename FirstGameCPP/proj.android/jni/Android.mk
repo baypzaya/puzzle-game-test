@@ -8,6 +8,7 @@ LOCAL_MODULE_FILENAME := libgame
 
 LOCAL_SRC_FILES := hellocpp/main.cpp \
 ../../Classes/MainGameScene.cpp \
+../../Classes/MainMenuScene.cpp \
 				   ../../Classes/JumpActor.cpp \
 				   ../../Classes/NestLayer.cpp \
 				   ../../Classes/GameData.cpp \
