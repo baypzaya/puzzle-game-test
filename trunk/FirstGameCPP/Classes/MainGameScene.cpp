@@ -10,14 +10,14 @@
 bool MainGameScene::init() {
 
 	//init data
-	GameData::getInstance()->setCurrentGameState(STATE_PAUSE);
-	m_gameCurrentSate = STATE_PAUSE;
+	GameData::getInstance()->setCurrentGameState(STATE_START);
+	m_gameCurrentSate = STATE_START;
 
 	//init ui
 	m_gameLayer = HelloWorld::create();
 	addChild(m_gameLayer);
 
-	showStateLayer();
+//	showStateLayer();
 	scheduleUpdate();
 	return true;
 
@@ -36,6 +36,7 @@ void MainGameScene::processGameState() {
 	GameData* gameData = GameData::getInstance();
 	if (m_gameCurrentSate != gameData->getCurrentGameState()) {
 		m_gameCurrentSate = gameData->getCurrentGameState();
+		CCLog("processGameState:%d",m_gameCurrentSate);
 		switch (m_gameCurrentSate) {
 		case STATE_START:
 			hideSateLayer();
