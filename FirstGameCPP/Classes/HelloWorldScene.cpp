@@ -81,6 +81,7 @@ void HelloWorld::update(float dt) {
 	if(STATE_START != gameData->getCurrentGameState()){
 		return;
 	}
+	CCLog("update sate:%d",gameData->getCurrentGameState());
 
 	isJumpEggDown = preLocation.y > jumpEgg->getPosition().y;
 	preLocation = jumpEgg->getPosition();

@@ -15,22 +15,46 @@ bool GameStateLayer::init() {
 	CCSize screenSize = CCDirector::sharedDirector()->getWinSize();
 	setTouchEnabled(true);
 
-	CCLayerColor* bgLayer = CCLayerColor::create(ccc4(0, 0, 0, 100));
+	//init bg
+	CCLayerColor* bgLayer = CCLayerColor::create(ccc4(0, 0, 0, 200));
 	addChild(bgLayer);
 
+	//init info
+	CCLabelTTF* titleLabel = CCLabelTTF::create("YOUR SCORE", "fonts/Abduction.ttf", 70);
+	titleLabel->setPosition(ccp(screenSize.width/2,screenSize.height*3/4));
+	titleLabel->setColor(ccc3(255, 241, 0));
+	addChild(titleLabel, 1);
+
+	char* scoreStr = new char[10];
+	sprintf(scoreStr, "Current Score: %d", GameData::getInstance()->getScore());
+	CCLabelTTF* currentScoreLabel = CCLabelTTF::create(scoreStr, "", 30);
+	currentScoreLabel->setAnchorPoint(CCPointZero);
+	currentScoreLabel->setPosition(ccp(screenSize.width/8,screenSize.height/2+50));
+	currentScoreLabel->setColor(ccc3(255, 241, 0));
+	addChild(currentScoreLabel, 1);
+
+	char* eggStr = new char[10];
+	sprintf(eggStr, "Highest Score: %d", GameData::getInstance()->getScore());
+	CCLabelTTF* hightestScoreLabel = CCLabelTTF::create(eggStr, "", 30);
+	hightestScoreLabel->setAnchorPoint(CCPointZero);
+	hightestScoreLabel->setPosition(ccp(screenSize.width/8,screenSize.height/2-50));
+	hightestScoreLabel->setColor(ccc3(255, 241, 0));
+	addChild(hightestScoreLabel, 1);
+
+	//init menu
 	if (STATE_PAUSE == GameData::getInstance()->getCurrentGameState()) {
-		CCMenuItemFont* playItem = CCMenuItemFont::create("PLAY", this, menu_selector(GameStateLayer::playGame));
+		CCMenuItemFont* playItem = CCMenuItemFont::create("CONTINUE", this, menu_selector(GameStateLayer::playGame));
 		CCMenu* stateMenu = CCMenu::create(playItem, NULL);
-		stateMenu->setPosition(ccp(screenSize.width/2,screenSize.height/2));
+		stateMenu->setPosition(ccp(screenSize.width/2,screenSize.height/4));
 		addChild(stateMenu);
 	} else if (STATE_OVER == GameData::getInstance()->getCurrentGameState()) {
-		CCMenuItemFont* restartItem = CCMenuItemFont::create("restart", this,
+		CCMenuItemFont* restartItem = CCMenuItemFont::create("RESTART", this,
 				menu_selector(GameStateLayer::restartGame));
-		CCMenuItemFont* exitItem = CCMenuItemFont::create("exit", this, menu_selector(GameStateLayer::exitGame));
+		CCMenuItemFont* exitItem = CCMenuItemFont::create("QUIT", this, menu_selector(GameStateLayer::exitGame));
 
 		CCMenu* stateMenu = CCMenu::create(restartItem, exitItem, NULL);
-		stateMenu->setPosition(ccp(screenSize.width/2,screenSize.height/2));
-		stateMenu->alignItemsHorizontallyWithPadding(20);
+		stateMenu->setPosition(ccp(screenSize.width/2,screenSize.height/4));
+		stateMenu->alignItemsHorizontallyWithPadding(100);
 		addChild(stateMenu);
 	}
 
