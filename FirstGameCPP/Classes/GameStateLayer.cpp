@@ -25,7 +25,7 @@ bool GameStateLayer::init() {
 	titleLabel->setColor(ccc3(255, 241, 0));
 	addChild(titleLabel, 1);
 
-	char* scoreStr = new char[10];
+	char* scoreStr = new char[20];
 	sprintf(scoreStr, "Current Score: %d", GameData::getInstance()->getScore());
 	CCLabelTTF* currentScoreLabel = CCLabelTTF::create(scoreStr, "", 30);
 	currentScoreLabel->setAnchorPoint(CCPointZero);
@@ -33,7 +33,7 @@ bool GameStateLayer::init() {
 	currentScoreLabel->setColor(ccc3(255, 241, 0));
 	addChild(currentScoreLabel, 1);
 
-	char* eggStr = new char[10];
+	char* eggStr = new char[20];
 	sprintf(eggStr, "Highest Score: %d", GameData::getInstance()->getScore());
 	CCLabelTTF* hightestScoreLabel = CCLabelTTF::create(eggStr, "", 30);
 	hightestScoreLabel->setAnchorPoint(CCPointZero);
