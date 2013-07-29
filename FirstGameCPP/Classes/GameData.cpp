@@ -118,24 +118,24 @@ Nest GameData::createNest() {
 	CCLog("createNest level: %d ", level);
 	switch (level) {
 	case 0:
-		nest.width = 100;//GameData::nest_l1_width;
-		nest.speed = 50;//GameData::nest_l1_speed;
+		nest.width = GameData::nest_l1_width;
+		nest.speed = GameData::nest_l1_speed;
 		break;
-//	case 1:
-//		nest.width = GameData::nest_l2_width;
-//		nest.speed = GameData::nest_l1_speed;
-//		break;
-//	case 2:
-//		nest.width = random < 5 ? GameData::nest_l1_width : GameData::nest_l2_width;
-//		nest.speed = random < 3 ? GameData::nest_l1_speed : random < 6 ? GameData::nest_l2_speed : GameData::nest_l3_speed;
-//		break;
-//	case 3:
-//		nest.width = random < 5 ? GameData::nest_l2_width : GameData::nest_l3_width;
-//		nest.speed = nest_l2_speed;
-//		break;
+	case 1:
+		nest.width = GameData::nest_l2_width;
+		nest.speed = GameData::nest_l1_speed;
+		break;
+	case 2:
+		nest.width = random < 5 ? GameData::nest_l1_width : GameData::nest_l2_width;
+		nest.speed = random < 3 ? GameData::nest_l1_speed : random < 6 ? GameData::nest_l2_speed : GameData::nest_l3_speed;
+		break;
+	case 3:
+		nest.width = random < 5 ? GameData::nest_l2_width : GameData::nest_l3_width;
+		nest.speed = nest_l2_speed;
+		break;
 	default:
-		nest.width = 50;//random < 5 ? GameData::nest_l3_width : GameData::nest_l4_widht;
-		nest.speed =200; //random < 5 ? GameData::nest_l3_speed : GameData::nest_l4_speed;
+		nest.width = random < 5 ? GameData::nest_l3_width : GameData::nest_l4_widht;
+		nest.speed = random < 5 ? GameData::nest_l3_speed : GameData::nest_l4_speed;
 		break;
 	}
 
