@@ -34,7 +34,7 @@ bool GameStateLayer::init() {
 	addChild(currentScoreLabel, 1);
 
 	char* eggStr = new char[20];
-	sprintf(eggStr, "Highest Score: %d", GameData::getInstance()->getScore());
+	sprintf(eggStr, "Highest Score: %d", GameData::getInstance()->getHighestScore());
 	CCLabelTTF* hightestScoreLabel = CCLabelTTF::create(eggStr, "", 30);
 	hightestScoreLabel->setAnchorPoint(CCPointZero);
 	hightestScoreLabel->setPosition(ccp(screenSize.width/8,screenSize.height/2-50));
@@ -52,6 +52,7 @@ bool GameStateLayer::init() {
 		stateMenu->alignItemsHorizontallyWithPadding(50);
 		addChild(stateMenu);
 	} else if (STATE_OVER == GameData::getInstance()->getCurrentGameState()) {
+		GameData::getInstance()->saveHighestScore();
 		CCMenu* stateMenu = CCMenu::create(restartItem, exitItem, NULL);
 		stateMenu->setPosition(ccp(screenSize.width/2,screenSize.height/4));
 		stateMenu->alignItemsHorizontallyWithPadding(100);
