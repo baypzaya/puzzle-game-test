@@ -19,8 +19,6 @@ public:
 	CREATE_FUNC(GameStateLayer)CC_SYNTHESIZE(int,m_currentGameState,GameState)
 	virtual ~GameStateLayer();
 	virtual bool init();
-	void showGameState();
-	void hideGameState();
 
 	void playGame();
 	void restartGame();

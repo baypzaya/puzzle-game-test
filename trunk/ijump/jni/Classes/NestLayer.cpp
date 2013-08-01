@@ -39,9 +39,10 @@ CCSprite* NestLayer::catchEgg(CCSprite* jumpEgg) {
 	CCARRAY_FOREACH(m_nestArray,nestO) {
 			CCSprite* nest = dynamic_cast<CCSprite*> (nestO);
 			CCRect nestBound = nest->boundingBox();
+			CCSize eggContentSize = jumpEgg->getContentSize();
 			CCPoint worldPoint = jumpEgg->getParent()->convertToWorldSpace(jumpEgg->getPosition());
 			CCPoint nodePoint = nest->getParent()->convertToNodeSpace(worldPoint);
-			bool isContain = nestBound.containsPoint(nodePoint);
+			bool isContain = nestBound.containsPoint(ccp(nodePoint.x,nodePoint.y-eggContentSize.height/2));
 			if (isContain) {
 				return nest;
 			}

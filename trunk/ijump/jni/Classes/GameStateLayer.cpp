@@ -47,7 +47,7 @@ bool GameStateLayer::init() {
 
 	//init menu
 	if (STATE_PAUSE == GameData::getInstance()->getCurrentGameState()) {
-		CCMenu* stateMenu = CCMenu::create(continueItem,restartItem, exitItem, NULL);
+		CCMenu* stateMenu = CCMenu::create(continueItem, restartItem, exitItem, NULL);
 		stateMenu->setPosition(ccp(screenSize.width/2,screenSize.height/4));
 		stateMenu->alignItemsHorizontallyWithPadding(50);
 		addChild(stateMenu);
@@ -59,35 +59,31 @@ bool GameStateLayer::init() {
 		addChild(stateMenu);
 	}
 
-	CCSprite* star = CCSprite::create("jump_egg.png");
-	star->setPosition(
-			ccp(titleLabel->getPositionX()+titleLabel->getContentSize().width/2,titleLabel->getPositionY()+titleLabel->getContentSize().height/2));
-	addChild(star, 0);
-	CCRotateBy* rotateBy = CCRotateBy::create(2.0f, 360);
-	star->runAction(CCRepeatForever::create(rotateBy));
+//	CCSprite* star = CCSprite::create("jump_egg.png");
+//	star->setPosition(
+//			ccp(titleLabel->getPositionX()+titleLabel->getContentSize().width/2,titleLabel->getPositionY()+titleLabel->getContentSize().height/2));
+//	addChild(star, 0);
+//	CCRotateBy* rotateBy = CCRotateBy::create(2.0f, 360);
+//	star->runAction(CCRepeatForever::create(rotateBy));
 
 	return true;
-}
-void GameStateLayer::showGameState() {
-	setVisible(true);
-}
-void GameStateLayer::hideGameState() {
-	setVisible(false);
 }
 
 void GameStateLayer::playGame() {
 	GameData::getInstance()->setCurrentGameState(STATE_START);
-	CCDirector::sharedDirector()->resume();
+	CCDirector::sharedDirector()->popScene();
 }
 
 void GameStateLayer::restartGame() {
 	GameData::getInstance()->setCurrentGameState(STATE_RESTART);
-	CCDirector::sharedDirector()->resume();
+	CCDirector::sharedDirector()->popScene();
 }
 
 void GameStateLayer::exitGame() {
-	GameData::getInstance()->setCurrentGameState(STATE_END);
-	CCDirector::sharedDirector()->resume();
+	CCDirector::sharedDirector()->end();
+	#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+		exit(0);
+	#endif
 }
 
 bool GameStateLayer::ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent) {

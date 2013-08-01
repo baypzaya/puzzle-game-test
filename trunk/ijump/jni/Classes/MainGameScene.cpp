@@ -74,20 +74,23 @@ void MainGameScene::processGameState() {
 }
 
 void MainGameScene::showStateLayer() {
-	if (m_stateLayer) {
-		removeChild(m_stateLayer, true);
-	}
-
-	m_stateLayer = GameStateLayer::create();
-	addChild(m_stateLayer, 100);
-
-	CCDirector::sharedDirector()->pause();
+//	if (m_stateLayer) {
+//		removeChild(m_stateLayer, true);
+//	}
+//
+//	m_stateLayer = GameStateLayer::create();
+//	addChild(m_stateLayer, 100);
+//
+//	CCDirector::sharedDirector()->pause();
+	CCScene* scene=CCScene::create();
+	scene->addChild(GameStateLayer::create());
+	CCDirector::sharedDirector()->pushScene(scene);
 }
 
 void MainGameScene::hideSateLayer() {
-	if (m_stateLayer) {
-		removeChild(m_stateLayer, true);
-	}
-
-	CCDirector::sharedDirector()->resume();
+//	if (m_stateLayer) {
+//		removeChild(m_stateLayer, true);
+//	}
+//
+//	CCDirector::sharedDirector()->resume();
 }

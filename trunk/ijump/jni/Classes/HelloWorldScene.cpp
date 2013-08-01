@@ -3,6 +3,9 @@
 
 #define PTM_RATIO 32.0f
 #define FLOOR_HEIGHT    -100.0f
+#define NEST_ZORDER 1
+#define PRE_NEST_ZORDER 2
+#define BACK_NEST_ZORDER 0
 
 HelloWorld::~HelloWorld() {
 }
@@ -51,7 +54,7 @@ bool HelloWorld::init() {
 	m_nestLayer = NestLayer::create();
 	m_nestLayer->setPosition(CCPointZero);
 	m_nestLayer->setAnchorPoint(ccp(0,0));
-	addChild(m_nestLayer);
+	addChild(m_nestLayer,NEST_ZORDER);
 
 	//init stateLayer
 	//	m_stateLayer = GameStateLayer::create();
@@ -63,7 +66,7 @@ bool HelloWorld::init() {
 	jumpEgg = CCSprite::create("jump_egg.png");
 	jumpEgg->setAnchorPoint(ccp(0.5,0));
 	jumpEgg->setPosition(ccp(screenSize.width/2,20.0f));
-	addChild(jumpEgg);
+	addChild(jumpEgg,BACK_NEST_ZORDER);
 
 	followNest = m_nestLayer->catchEgg(jumpEgg);
 	//	createNest();
@@ -81,11 +84,11 @@ void HelloWorld::update(float dt) {
 	if(STATE_START != gameData->getCurrentGameState()){
 		return;
 	}
-	CCLog("update sate:%d",gameData->getCurrentGameState());
 
 	isJumpEggDown = preLocation.y > jumpEgg->getPosition().y;
 	preLocation = jumpEgg->getPosition();
 	if (isJumpEggDown && jumpState != 1) {
+		jumpEgg->setZOrder(BACK_NEST_ZORDER);
 		CCSprite* nest = m_nestLayer->catchEgg(jumpEgg);
 		CCLog("catchEgg end");
 		if (nest != NULL) {
@@ -102,6 +105,7 @@ void HelloWorld::update(float dt) {
 	} else if (jumpState == 1 && followNest != NULL) {
 		jumpEgg->stopAllActions();
 		CCPoint worldPoint = followNest->getParent()->convertToWorldSpace(followNest->getPosition());
+		jumpEgg->setAnchorPoint(ccp(0.5f,0));
 		jumpEgg->setPosition(jumpEgg->getParent()->convertToNodeSpace(worldPoint));
 		jumpEgg->setRotation(0.0f);
 	}
@@ -116,6 +120,7 @@ void HelloWorld::update(float dt) {
 		} else {
 			jumpEgg->stopAllActions();
 			CCPoint worldPoint = followNest->getParent()->convertToWorldSpaceAR(followNest->getPosition());
+			jumpEgg->setAnchorPoint(ccp(0.5f,0));
 			jumpEgg->setPosition(worldPoint);
 			jumpEgg->setRotation(0.0f);
 			jumpState = 1;
@@ -143,10 +148,14 @@ void HelloWorld::ccTouchesEnded(cocos2d::CCSet* touches, cocos2d::CCEvent* event
 	if (STATE_START != gameData->getCurrentGameState() || jumpState == 0 || m_nestLayer->getMoving()) {
 		return;
 	}
-
+	jumpEgg->setAnchorPoint(ccp(0.5f,0.5f));
+	jumpEgg->setZOrder(PRE_NEST_ZORDER);
 	jumpEgg->stopAllActions();
 	CCJumpBy* jumpBy = CCJumpBy::create(1.5f, ccp(0,-40), 390, 1);
 	jumpEgg->runAction(jumpBy);
+
+	CCRotateBy* rotateBy = CCRotateBy::create(2.0f, -360);
+	jumpEgg->runAction(CCRepeatForever::create(rotateBy));
 
 	isJumpEggDown = false;
 	CCPoint preLocation = CCPointZero;
