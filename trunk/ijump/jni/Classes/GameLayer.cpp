@@ -23,8 +23,6 @@ bool GameLayer::init() {
 
 	CCSize screenSize = CCDirector::sharedDirector()->getWinSize();
 
-
-
 	//init ui
 	CCSprite* background = CCSprite::create("jump_background.png");
 	background->setAnchorPoint(CCPointZero);
@@ -42,7 +40,7 @@ bool GameLayer::init() {
 	scoreLable = CCLabelTTF::create("1234", "fonts/Abduction.ttf", 35);
 	scoreLable->setAnchorPoint(ccp(0,1));
 	scoreLable->setPosition(ccp(20,screenSize.height - 20));
-	scoreLable->setColor(ccc3(255,0,0));
+	scoreLable->setColor(ccc3(255, 0, 0));
 	addChild(scoreLable, 1);
 
 	eggLable = CCLabelTTF::create("E:  ", "fonts/Abduction.ttf", 35);
@@ -54,19 +52,13 @@ bool GameLayer::init() {
 	m_nestLayer = NestLayer::create();
 	m_nestLayer->setPosition(CCPointZero);
 	m_nestLayer->setAnchorPoint(ccp(0,0));
-	addChild(m_nestLayer,NEST_ZORDER);
-
-	//init stateLayer
-	//	m_stateLayer = GameStateLayer::create();
-	//	m_stateLayer->setAnchorPoint(ccp(0,0));
-	//	m_stateLayer->setPosition(CCPointZero);
-	//	addChild(m_stateLayer,100);
+	addChild(m_nestLayer, NEST_ZORDER);
 
 	//add jump egg
 	jumpEgg = CCSprite::create("jump_egg.png");
 	jumpEgg->setAnchorPoint(ccp(0.5,0));
 	jumpEgg->setPosition(ccp(screenSize.width/2,20.0f));
-	addChild(jumpEgg,BACK_NEST_ZORDER);
+	addChild(jumpEgg, BACK_NEST_ZORDER);
 
 	followNest = m_nestLayer->catchEgg(jumpEgg);
 	//	createNest();
@@ -81,7 +73,7 @@ CCPoint preLocation = CCPointZero;
 void GameLayer::update(float dt) {
 	GameData* gameData = GameData::getInstance();
 
-	if(STATE_START != gameData->getCurrentGameState()){
+	if (STATE_START != gameData->getCurrentGameState()) {
 		return;
 	}
 
@@ -100,22 +92,26 @@ void GameLayer::update(float dt) {
 				jumpState = 1;
 				CCPoint worldPoint = followNest->getParent()->convertToWorldSpace(followNest->getPosition());
 				m_nestLayer->updateNestPositon(worldPoint);
+
+				jumpEgg->stopAllActions();
+				jumpEgg->setRotation(0.0f);
+				float eggCurrentWidth = jumpEgg->boundingBox().size.width;
+				float nestCurrentWidth = followNest->boundingBox().size.width*0.8;
+				float eggCurrentScale = jumpEgg->getScale()*(nestCurrentWidth/eggCurrentWidth);
+				jumpEgg->setScale(eggCurrentScale);
+
 			}
 		}
 	} else if (jumpState == 1 && followNest != NULL) {
-		jumpEgg->stopAllActions();
 		CCPoint worldPoint = followNest->getParent()->convertToWorldSpace(followNest->getPosition());
 		jumpEgg->setAnchorPoint(ccp(0.5f,0));
 		jumpEgg->setPosition(jumpEgg->getParent()->convertToNodeSpace(worldPoint));
-		jumpEgg->setRotation(0.0f);
 	}
 
 	if (jumpEgg->getPositionY() <= -10) {
 
 		gameData->subEggCount();
 		if (gameData->getEggCount() <= 0) {
-			//			gameData->resetData();
-			//			CCDirector::sharedDirector()->replaceScene(GameLayer::scene());
 			gameData->setCurrentGameState(STATE_OVER);
 		} else {
 			jumpEgg->stopAllActions();
