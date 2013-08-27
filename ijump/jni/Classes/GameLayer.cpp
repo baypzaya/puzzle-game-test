@@ -1,4 +1,4 @@
-#include "HelloWorldScene.h"
+#include "GameLayer.h"
 #include "SimpleAudioEngine.h"
 
 #define PTM_RATIO 32.0f
@@ -7,11 +7,11 @@
 #define PRE_NEST_ZORDER 2
 #define BACK_NEST_ZORDER 0
 
-HelloWorld::~HelloWorld() {
+GameLayer::~GameLayer() {
 }
 
 // on "init" you need to initialize your instance
-bool HelloWorld::init() {
+bool GameLayer::init() {
 	if (!CCLayer::init()) {
 		return false;
 	}
@@ -33,7 +33,7 @@ bool HelloWorld::init() {
 
 	//add close menu item
 	CCMenuItemImage *pCloseItem = CCMenuItemImage::create("CloseNormal.png", "CloseSelected.png", this,
-			menu_selector(HelloWorld::menuCloseCallback));
+			menu_selector(GameLayer::menuCloseCallback));
 	pCloseItem->setPosition(ccp(screenSize.width - 20, 20));
 	CCMenu* pMenu = CCMenu::create(pCloseItem, NULL);
 	pMenu->setPosition(CCPointZero);
@@ -78,7 +78,7 @@ bool HelloWorld::init() {
 
 CCPoint preLocation = CCPointZero;
 
-void HelloWorld::update(float dt) {
+void GameLayer::update(float dt) {
 	GameData* gameData = GameData::getInstance();
 
 	if(STATE_START != gameData->getCurrentGameState()){
@@ -115,7 +115,7 @@ void HelloWorld::update(float dt) {
 		gameData->subEggCount();
 		if (gameData->getEggCount() <= 0) {
 			//			gameData->resetData();
-			//			CCDirector::sharedDirector()->replaceScene(HelloWorld::scene());
+			//			CCDirector::sharedDirector()->replaceScene(GameLayer::scene());
 			gameData->setCurrentGameState(STATE_OVER);
 		} else {
 			jumpEgg->stopAllActions();
@@ -137,13 +137,13 @@ void HelloWorld::update(float dt) {
 
 }
 
-void HelloWorld::ccTouchesBegan(cocos2d::CCSet* touches, cocos2d::CCEvent* event) {
+void GameLayer::ccTouchesBegan(cocos2d::CCSet* touches, cocos2d::CCEvent* event) {
 }
 
-void HelloWorld::ccTouchesMoved(cocos2d::CCSet* touches, cocos2d::CCEvent* event) {
+void GameLayer::ccTouchesMoved(cocos2d::CCSet* touches, cocos2d::CCEvent* event) {
 }
 
-void HelloWorld::ccTouchesEnded(cocos2d::CCSet* touches, cocos2d::CCEvent* event) {
+void GameLayer::ccTouchesEnded(cocos2d::CCSet* touches, cocos2d::CCEvent* event) {
 	GameData* gameData = GameData::getInstance();
 	if (STATE_START != gameData->getCurrentGameState() || jumpState == 0 || m_nestLayer->getMoving()) {
 		return;
@@ -162,6 +162,6 @@ void HelloWorld::ccTouchesEnded(cocos2d::CCSet* touches, cocos2d::CCEvent* event
 	jumpState = 0;
 }
 
-void HelloWorld::menuCloseCallback(CCObject* pSender) {
+void GameLayer::menuCloseCallback(CCObject* pSender) {
 	GameData::getInstance()->setCurrentGameState(STATE_PAUSE);
 }

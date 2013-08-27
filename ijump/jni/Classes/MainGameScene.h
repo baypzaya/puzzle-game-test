@@ -9,7 +9,7 @@
 #define MAINGAMESCENE_H_
 
 #include "cocos2d.h"
-#include "HelloWorldScene.h"
+#include "GameLayer.h"
 #include "GameStateLayer.h"
 
 USING_NS_CC;
@@ -21,7 +21,7 @@ public:
 	virtual void update(float dt);
 	virtual ~MainGameScene();
 private:
-	HelloWorld* m_gameLayer;
+	GameLayer* m_gameLayer;
 	GameStateLayer* m_stateLayer;
 	GameState m_gameCurrentSate;
 

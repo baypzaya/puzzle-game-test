@@ -7,16 +7,16 @@
 
 USING_NS_CC;
 
-class HelloWorld: public CCLayer {
+class GameLayer: public CCLayer {
 public:
 	// Here's a difference. Method 'init' in cocos2d-x returns bool, instead of returning 'id' in cocos2d-iphone
 	virtual bool init();
-	virtual ~HelloWorld();
+	virtual ~GameLayer();
 
 	// a selector callback
 	void menuCloseCallback(CCObject* pSender);
 	// implement the "static node()" method manually
-	CREATE_FUNC(HelloWorld)
+	CREATE_FUNC(GameLayer)
 
 	virtual void update(float);
 	virtual void ccTouchesBegan(cocos2d::CCSet* touches, cocos2d::CCEvent* event);

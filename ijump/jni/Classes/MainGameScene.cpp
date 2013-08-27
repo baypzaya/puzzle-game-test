@@ -14,7 +14,7 @@ bool MainGameScene::init() {
 	m_gameCurrentSate = STATE_START;
 
 	//init ui
-	m_gameLayer = HelloWorld::create();
+	m_gameLayer = GameLayer::create();
 	addChild(m_gameLayer);
 
 //	showStateLayer();
@@ -53,7 +53,7 @@ void MainGameScene::processGameState() {
 		case STATE_RESTART:
 			gameData->resetData();
 			removeChild(m_gameLayer, true);
-			m_gameLayer = HelloWorld::create();
+			m_gameLayer = GameLayer::create();
 			addChild(m_gameLayer);
 			gameData->setCurrentGameState(STATE_START);
 			break;
