@@ -14,7 +14,7 @@ Classes/MainMenuScene.cpp \
 				   Classes/GameData.cpp \
 				   Classes/GameStateLayer.cpp \
                    Classes/AppDelegate.cpp \
-                   Classes/HelloWorldScene.cpp 
+                   Classes/GameLayer.cpp 
                    
                    
                    
