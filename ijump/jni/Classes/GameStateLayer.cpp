@@ -15,9 +15,14 @@ bool GameStateLayer::init() {
 	CCSize screenSize = CCDirector::sharedDirector()->getWinSize();
 	setTouchEnabled(true);
 
+	CCSprite* background = CCSprite::create("jump_background.png");
+	background->setAnchorPoint(CCPointZero);
+	background->setPosition(CCPointZero);
+	addChild(background);
+
 	//init bg
-	CCLayerColor* bgLayer = CCLayerColor::create(ccc4(0, 0, 0, 200));
-	addChild(bgLayer);
+//	CCLayerColor* bgLayer = CCLayerColor::create(ccc4(0, 0, 0, 200));
+//	addChild(bgLayer);
 
 	//init info
 	CCLabelTTF* titleLabel = CCLabelTTF::create("YOUR SCORE", "fonts/Abduction.ttf", 70);
@@ -59,12 +64,12 @@ bool GameStateLayer::init() {
 		addChild(stateMenu);
 	}
 
-//	CCSprite* star = CCSprite::create("jump_egg.png");
-//	star->setPosition(
-//			ccp(titleLabel->getPositionX()+titleLabel->getContentSize().width/2,titleLabel->getPositionY()+titleLabel->getContentSize().height/2));
-//	addChild(star, 0);
-//	CCRotateBy* rotateBy = CCRotateBy::create(2.0f, 360);
-//	star->runAction(CCRepeatForever::create(rotateBy));
+	//	CCSprite* star = CCSprite::create("jump_egg.png");
+	//	star->setPosition(
+	//			ccp(titleLabel->getPositionX()+titleLabel->getContentSize().width/2,titleLabel->getPositionY()+titleLabel->getContentSize().height/2));
+	//	addChild(star, 0);
+	//	CCRotateBy* rotateBy = CCRotateBy::create(2.0f, 360);
+	//	star->runAction(CCRepeatForever::create(rotateBy));
 
 	return true;
 }
@@ -81,9 +86,9 @@ void GameStateLayer::restartGame() {
 
 void GameStateLayer::exitGame() {
 	CCDirector::sharedDirector()->end();
-	#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-		exit(0);
-	#endif
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+	exit(0);
+#endif
 }
 
 bool GameStateLayer::ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent) {
