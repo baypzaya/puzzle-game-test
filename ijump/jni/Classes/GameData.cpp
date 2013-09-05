@@ -53,15 +53,12 @@ void GameData::subEggCount() {
 Nest GameData::createNest() {
 	int random = (int) arc4random() % 10;
 
-	//	for(int i = 0;i<100;i++){
-	CCLog("random %d", random);
-	//	}
 	random = random < 0 ? -random : random;
 
 	m_lastNestHeight = m_lastNestHeight + nest_step_height;
 	CCSize screenSize = CCDirector::sharedDirector()->getWinSize();
 
-	int level = currentPageIndex / 10;
+	int level = currentPageIndex / 5;
 	Nest nest;
 	nest.height = 16;
 	nest.direction = random < 5 ? left : right;
