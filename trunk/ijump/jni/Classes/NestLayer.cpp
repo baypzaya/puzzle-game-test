@@ -42,7 +42,14 @@ CCSprite* NestLayer::catchEgg(CCSprite* jumpEgg) {
 			CCSize eggContentSize = jumpEgg->getContentSize();
 			CCPoint worldPoint = jumpEgg->getParent()->convertToWorldSpace(jumpEgg->getPosition());
 			CCPoint nodePoint = nest->getParent()->convertToNodeSpace(worldPoint);
-			bool isContain = nestBound.containsPoint(ccp(nodePoint.x,nodePoint.y-eggContentSize.height/2));
+
+			float catchWidth = nestBound.size.width*0.8f;
+			float catchHeight = nestBound.size.height*0.8f;
+			float catchRectX = nestBound.getMinX() + (nestBound.size.width - catchWidth) / 2;
+			float catchRectY = nestBound.getMinY() + (nestBound.size.height - catchHeight) / 2;
+			CCRect catchRect = CCRectMake(catchRectX,catchRectY,catchWidth,catchHeight);
+
+			bool isContain = catchRect.containsPoint(ccp(nodePoint.x,nodePoint.y-eggContentSize.height/2));
 			if (isContain) {
 				return nest;
 			}
@@ -51,7 +58,7 @@ CCSprite* NestLayer::catchEgg(CCSprite* jumpEgg) {
 }
 void NestLayer::updateNestPositon(CCPoint position) {
 	GameData* gameData = GameData::getInstance();
-	float subHeight = getPositionY()-position.y+GameData::nest_base_height;
+	float subHeight = getPositionY() - position.y + GameData::nest_base_height;
 	float lastHeight = gameData->getLastNestHeight() + subHeight;
 	gameData->setLastNestHeight(lastHeight);
 
@@ -84,11 +91,11 @@ void NestLayer::moveEnd() {
 		}
 
 	CCSize size = CCDirector::sharedDirector()->getWinSize();
-	if (convertToWorldSpace(scollerLayer1->getPosition()).y <= -size.height+GameData::nest_base_height) {
+	if (convertToWorldSpace(scollerLayer1->getPosition()).y <= -size.height + GameData::nest_base_height) {
 		scollerLayer1->setPosition(ccp(0,size.height));
 	}
 
-	if (convertToWorldSpace(scollerLayer2->getPosition()).y <= -size.height+GameData::nest_base_height) {
+	if (convertToWorldSpace(scollerLayer2->getPosition()).y <= -size.height + GameData::nest_base_height) {
 		scollerLayer2->setPosition(ccp(0,size.height));
 	}
 }

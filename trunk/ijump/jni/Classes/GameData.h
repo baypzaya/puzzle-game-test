@@ -45,10 +45,10 @@ public:
 	static const int nest_l3_width = 60;
 	static const int nest_l4_widht = 40;
 
-	static const int nest_l1_speed = 50;
-	static const int nest_l2_speed = 70;
-	static const int nest_l3_speed = 90;
-	static const int nest_l4_speed = 120;
+	static const int nest_l1_speed = 70;
+	static const int nest_l2_speed = 90;
+	static const int nest_l3_speed = 120;
+	static const int nest_l4_speed = 150;
 
 	CC_SYNTHESIZE(GameState,m_currentGameState,CurrentGameState)
 	CC_SYNTHESIZE_READONLY(int,m_score,Score)

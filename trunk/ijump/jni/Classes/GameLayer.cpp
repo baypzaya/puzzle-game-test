@@ -95,10 +95,10 @@ void GameLayer::update(float dt) {
 
 				jumpEgg->stopAllActions();
 				jumpEgg->setRotation(0.0f);
-				float eggCurrentWidth = jumpEgg->boundingBox().size.width;
-				float nestCurrentWidth = followNest->boundingBox().size.width*0.8;
-				float eggCurrentScale = jumpEgg->getScale()*(nestCurrentWidth/eggCurrentWidth);
-				jumpEgg->setScale(eggCurrentScale);
+//				float eggCurrentWidth = jumpEgg->boundingBox().size.width;
+//				float nestCurrentWidth = followNest->boundingBox().size.width*0.8;
+//				float eggCurrentScale = jumpEgg->getScale()*(nestCurrentWidth/eggCurrentWidth);
+//				jumpEgg->setScale(eggCurrentScale);
 
 			}
 		}
