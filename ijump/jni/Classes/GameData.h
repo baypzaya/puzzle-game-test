@@ -48,19 +48,10 @@ class GameData {
 
 public:
 
-	static const int nest_step_height = 320;
+	static const int nest_step_height = 240;
 	static const int nest_move_speed_scope = 100;
 	static const int nest_base_height = 20;
-
-//	static const int nest_l1_width = 100;
-//	static const int nest_l2_width = 80;
-//	static const int nest_l3_width = 60;
-//	static const int nest_l4_widht = 40;
-//
-//	static const int nest_l1_speed = 70;
-//	static const int nest_l2_speed = 90;
-//	static const int nest_l3_speed = 120;
-//	static const int nest_l4_speed = 150;
+	static const int egg_jump_max_height = 350;
 
 	CC_SYNTHESIZE(GameState,m_currentGameState,CurrentGameState)
 	CC_SYNTHESIZE_READONLY(int,m_score,Score)

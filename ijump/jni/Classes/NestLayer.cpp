@@ -36,20 +36,23 @@ bool NestLayer::init() {
 
 CCSprite* NestLayer::catchEgg(CCSprite* jumpEgg) {
 	CCObject* nestO;
+	CCPoint worldPoint = jumpEgg->getParent()->convertToWorldSpace(jumpEgg->getPosition());
+	CCSize eggContentSize = jumpEgg->getContentSize();
+	CCPoint nodePoint = convertToNodeSpace(worldPoint);
+	nodePoint = ccp(nodePoint.x,nodePoint.y-eggContentSize.height/2);
+
 	CCARRAY_FOREACH(m_nestArray,nestO) {
 			CCSprite* nest = dynamic_cast<CCSprite*> (nestO);
 			CCRect nestBound = nest->boundingBox();
-			CCSize eggContentSize = jumpEgg->getContentSize();
-			CCPoint worldPoint = jumpEgg->getParent()->convertToWorldSpace(jumpEgg->getPosition());
-			CCPoint nodePoint = nest->getParent()->convertToNodeSpace(worldPoint);
 
-			float catchWidth = nestBound.size.width*0.8f;
-			float catchHeight = nestBound.size.height*0.8f;
+			float catchWidth = nestBound.size.width * 0.6f;
+			float catchHeight = 10;//nestBound.size.height * 0.6f;
 			float catchRectX = nestBound.getMinX() + (nestBound.size.width - catchWidth) / 2;
 			float catchRectY = nestBound.getMinY() + (nestBound.size.height - catchHeight) / 2;
 			CCRect catchRect = CCRectMake(catchRectX,catchRectY,catchWidth,catchHeight);
-
-			bool isContain = catchRect.containsPoint(ccp(nodePoint.x,nodePoint.y-eggContentSize.height/2));
+			CCPoint nodePoint = nest->getParent()->convertToNodeSpace(worldPoint);
+			nodePoint = ccp(nodePoint.x,nodePoint.y-eggContentSize.height/2);
+			bool isContain = catchRect.containsPoint(nodePoint);
 			if (isContain) {
 				return nest;
 			}
@@ -132,14 +135,18 @@ void NestLayer::createNest() {
 CCActionInterval* NestLayer::createNestAction(Nest nestData) {
 	CCSize size = CCDirector::sharedDirector()->getWinSize();
 	float speed = nestData.speed;
-	bool isLeft = nestData.direction == left;
 	CCPoint endPoint;
 
 	float dt2 = size.width / speed;
-	if (isLeft) {
+	switch (nestData.direction) {
+	case left:
 		endPoint = ccp(-size.width,0);
-	} else {
+		break;
+	case right:
 		endPoint = ccp(size.width,0);
+		break;
+	default:
+		endPoint = ccp(0,0);
 	}
 
 	CCActionInterval* move1 = CCMoveBy::create(dt2, endPoint);
@@ -168,3 +175,9 @@ void NestLayer::addToLayer(CCSprite* nestSprite) {
 		}
 	}
 }
+
+CCSprite* NestLayer::getBaseNest() {
+	CCSprite* baseNest = dynamic_cast<CCSprite*> (getChildByTag(0));
+	return baseNest;
+}
+
