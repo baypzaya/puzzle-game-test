@@ -22,6 +22,7 @@ public:
 	CCSprite* catchEgg(CCSprite* jumpEgg);
 	void updateNestPositon(CCPoint position);
 	CC_SYNTHESIZE_READONLY(bool,m_isMoving,Moving);
+	CCSprite* getBaseNest();
 private:
 	CCLayer* scollerLayer1;
 	CCLayer* scollerLayer2;

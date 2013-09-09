@@ -60,9 +60,8 @@ bool GameLayer::init() {
 	jumpEgg->setPosition(ccp(screenSize.width/2,20.0f));
 	addChild(jumpEgg, BACK_NEST_ZORDER);
 
-	followNest = m_nestLayer->catchEgg(jumpEgg);
-	//	createNest();
-
+	//	followNest = m_nestLayer->catchEgg(jumpEgg);
+	//	followNest = m_nestLayer->getBaseNest();
 	scheduleUpdate();
 
 	return true;
@@ -85,7 +84,10 @@ void GameLayer::update(float dt) {
 		CCLog("catchEgg end");
 		if (nest != NULL) {
 			float cy = nest->getParent()->convertToWorldSpace(nest->getPosition()).y;
-			float fy = followNest->getParent()->convertToWorldSpace(followNest->getPosition()).y;
+			float fy = 0;
+			if (followNest) {
+				fy = followNest->getParent()->convertToWorldSpace(followNest->getPosition()).y;
+			}
 			if (cy > fy) {
 				followNest = nest;
 				gameData->addScore(10);
@@ -95,10 +97,10 @@ void GameLayer::update(float dt) {
 
 				jumpEgg->stopAllActions();
 				jumpEgg->setRotation(0.0f);
-//				float eggCurrentWidth = jumpEgg->boundingBox().size.width;
-//				float nestCurrentWidth = followNest->boundingBox().size.width*0.8;
-//				float eggCurrentScale = jumpEgg->getScale()*(nestCurrentWidth/eggCurrentWidth);
-//				jumpEgg->setScale(eggCurrentScale);
+				//				float eggCurrentWidth = jumpEgg->boundingBox().size.width;
+				//				float nestCurrentWidth = followNest->boundingBox().size.width*0.8;
+				//				float eggCurrentScale = jumpEgg->getScale()*(nestCurrentWidth/eggCurrentWidth);
+				//				jumpEgg->setScale(eggCurrentScale);
 
 			}
 		}
@@ -115,7 +117,11 @@ void GameLayer::update(float dt) {
 			gameData->setCurrentGameState(STATE_OVER);
 		} else {
 			jumpEgg->stopAllActions();
-			CCPoint worldPoint = followNest->getParent()->convertToWorldSpaceAR(followNest->getPosition());
+			CCSize screenSize = CCDirector::sharedDirector()->getWinSize();
+			CCPoint worldPoint = ccp(screenSize.width/2,20.0f);
+			if (followNest) {
+				worldPoint = followNest->getParent()->convertToWorldSpaceAR(followNest->getPosition());
+			}
 			jumpEgg->setAnchorPoint(ccp(0.5f,0));
 			jumpEgg->setPosition(worldPoint);
 			jumpEgg->setRotation(0.0f);
@@ -147,7 +153,7 @@ void GameLayer::ccTouchesEnded(cocos2d::CCSet* touches, cocos2d::CCEvent* event)
 	jumpEgg->setAnchorPoint(ccp(0.5f,0.5f));
 	jumpEgg->setZOrder(PRE_NEST_ZORDER);
 	jumpEgg->stopAllActions();
-	CCJumpBy* jumpBy = CCJumpBy::create(1.5f, ccp(0,-40), 390, 1);
+	CCJumpBy* jumpBy = CCJumpBy::create(1.0f, ccp(0,-40), GameData::egg_jump_max_height, 1);
 	jumpEgg->runAction(jumpBy);
 
 	CCRotateBy* rotateBy = CCRotateBy::create(2.0f, -360);

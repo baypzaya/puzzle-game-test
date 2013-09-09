@@ -61,7 +61,7 @@ Nest GameData::createNest() {
 	int level = currentPageIndex / 5;
 	Nest nest;
 	nest.height = 16;
-	nest.direction = random < 5 ? left : right;
+	nest.direction = random < 6 ? left : right;
 	CCLog("createNest level: %d ", level);
 	switch (level) {
 	case 0:
@@ -87,12 +87,12 @@ Nest GameData::createNest() {
 		break;
 	}
 
-	if (nest.direction == none) {
-		nest.location = ccp(screenSize.width/2,m_lastNestHeight);
+	if (nest.direction == right) {
+		nest.location = ccp(0,m_lastNestHeight);
 	} else if (nest.direction == left) {
 		nest.location = ccp(screenSize.width,m_lastNestHeight);
 	} else {
-		nest.location = ccp(0,m_lastNestHeight);
+		nest.location = ccp(screenSize.width/2,m_lastNestHeight);
 	}
 
 	CCLog("createNest width: %d, speed : %d ", nest.width, nest.speed);
