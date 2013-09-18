@@ -153,7 +153,24 @@ void GameLayer::ccTouchesEnded(cocos2d::CCSet* touches, cocos2d::CCEvent* event)
 	jumpEgg->setAnchorPoint(ccp(0.5f,0.5f));
 	jumpEgg->setZOrder(PRE_NEST_ZORDER);
 	jumpEgg->stopAllActions();
-	CCJumpBy* jumpBy = CCJumpBy::create(1.0f, ccp(0,-40), GameData::egg_jump_max_height, 1);
+
+	CCJumpBy* jumpBy;
+	int nestType = slow;
+	if (followNest){
+		nestType = followNest->getTag();
+	}
+	switch (nestType) {
+	case strong:
+		jumpBy = CCJumpBy::create(1.0f, ccp(0,-40), GameData::egg_jump_max_height * 1.7, 1);
+		break;
+	case slow:
+		jumpBy = CCJumpBy::create(1.5f, ccp(0,-40), GameData::egg_jump_max_height, 1);
+		break;
+	case normal:
+		jumpBy = CCJumpBy::create(1.0f, ccp(0,-40), GameData::egg_jump_max_height, 1);
+		break;
+	}
+
 	jumpEgg->runAction(jumpBy);
 
 	CCRotateBy* rotateBy = CCRotateBy::create(2.0f, -360);

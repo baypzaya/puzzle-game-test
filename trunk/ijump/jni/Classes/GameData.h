@@ -29,7 +29,7 @@ enum GameState {
 };
 
 enum NestType {
-	lNestType, mNestType, sNestType
+	normal, slow, strong
 };
 
 enum NestRunDirection {
@@ -40,6 +40,7 @@ struct Nest {
 	int width;
 	int height;
 	int speed;
+	NestType type;
 	CCPoint location;
 	NestRunDirection direction;
 };
