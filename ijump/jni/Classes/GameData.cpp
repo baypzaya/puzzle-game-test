@@ -87,6 +87,8 @@ Nest GameData::createNest() {
 		break;
 	}
 
+	nest.type = random < 5 ? normal : random < 8 ? strong:slow;
+
 	if (nest.direction == right) {
 		nest.location = ccp(0,m_lastNestHeight);
 	} else if (nest.direction == left) {

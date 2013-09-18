@@ -127,6 +127,7 @@ void NestLayer::createNest() {
 		m_nestArray->addObject(nest);
 		nest->setScaleX(nestData.width / nest->getContentSize().width);
 		nest->runAction(createNestAction(nestData));
+		nest->setTag(nestData.type);
 		addToLayer(nest);
 	}
 
