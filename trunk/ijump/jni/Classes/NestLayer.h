@@ -10,6 +10,7 @@
 
 #include "cocos2d.h"
 #include "GameData.h"
+#include "NormalNest.h"
 
 USING_NS_CC;
 
@@ -28,7 +29,6 @@ private:
 	CCLayer* scollerLayer2;
 	CCArray* m_nestArray;
 	void createNest();
-	CCActionInterval* createNestAction(Nest nest);
 	void moveEnd();
 	void addToLayer(CCSprite* nestSprite);
 };

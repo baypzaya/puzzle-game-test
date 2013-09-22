@@ -51,6 +51,17 @@ void GameData::subEggCount() {
 }
 
 Nest GameData::createNest() {
+	if (currentPageIndex == 0) {
+		currentPageIndex++;
+		Nest nest;
+		nest.height = 16;
+		nest.width = nest_l1_width * 2;
+		nest.location = getInitPosition();
+		nest.speed = 0;
+		nest.type = normal;
+		return nest;
+	}
+
 	int random = (int) arc4random() % 10;
 
 	random = random < 0 ? -random : random;
@@ -74,8 +85,7 @@ Nest GameData::createNest() {
 		break;
 	case 2:
 		nest.width = random < 5 ? nest_l1_width : nest_l2_width;
-		nest.speed = random < 3 ? nest_l1_speed : random < 6 ? nest_l2_speed
-				: nest_l3_speed;
+		nest.speed = random < 3 ? nest_l1_speed : random < 6 ? nest_l2_speed : nest_l3_speed;
 		break;
 	case 3:
 		nest.width = random < 5 ? nest_l2_width : nest_l3_width;
@@ -87,7 +97,7 @@ Nest GameData::createNest() {
 		break;
 	}
 
-	nest.type = random < 5 ? normal : random < 8 ? strong:slow;
+	nest.type = random < 5 ? normal : random < 8 ? strong : slow;
 
 	if (nest.direction == right) {
 		nest.location = ccp(0,m_lastNestHeight);

@@ -11,6 +11,7 @@ Classes/MainGameScene.cpp \
 Classes/MainMenuScene.cpp \
 				   Classes/JumpActor.cpp \
 				   Classes/NestLayer.cpp \
+				   Classes/NormalNest.cpp \
 				   Classes/GameData.cpp \
 				   Classes/GameStateLayer.cpp \
                    Classes/AppDelegate.cpp \

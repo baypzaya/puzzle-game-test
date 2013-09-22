@@ -85,11 +85,9 @@ void NestLayer::moveEnd() {
 				nest->stopAllActions();
 				nest->getParent()->removeChild(nest, false);
 
-				Nest nestData = GameData::getInstance()->createNest();
-				nest->setPosition(nestData.location);
-				nest->setScaleX(nestData.width / nest->getContentSize().width);
+				NormalNest* normalNest = dynamic_cast<NormalNest*> (nest->getUserObject());
+				normalNest->runAction();
 				addToLayer(nest);
-				nest->runAction(createNestAction(nestData));
 			}
 		}
 
@@ -111,49 +109,17 @@ void NestLayer::createNest() {
 
 	GameData* gameData = GameData::getInstance();
 	CCSize size = CCDirector::sharedDirector()->getWinSize();
-	CCSprite* nest0 = CCSprite::create("nest.png");
-	nest0->setPosition(gameData->getInitPosition());
-	scollerLayer1->addChild(nest0);
-	m_nestArray->addObject(nest0);
-	nest0->setScaleX(2);
-	nest0->setTag(0);
-
-	int nestCount = (size.height - GameData::nest_base_height) / GameData::nest_step_height;
+	int nestCount = (size.height - GameData::nest_base_height) / GameData::nest_step_height + 1;
 
 	for (int i = 0; i < nestCount; i++) {
-		Nest nestData = gameData->createNest();
-		CCSprite* nest = CCSprite::create("nest.png");
-		nest->setPosition(nestData.location);
-		m_nestArray->addObject(nest);
-		nest->setScaleX(nestData.width / nest->getContentSize().width);
-		nest->runAction(createNestAction(nestData));
-		nest->setTag(nestData.type);
-		addToLayer(nest);
+		NormalNest* nest = NormalNest::create();
+		nest->runAction();
+		CCSprite* nestSprite = nest->getNestSprite();
+		nestSprite->setUserObject(nest);
+		m_nestArray->addObject(nestSprite);
+		addToLayer(nestSprite);
 	}
 
-}
-
-CCActionInterval* NestLayer::createNestAction(Nest nestData) {
-	CCSize size = CCDirector::sharedDirector()->getWinSize();
-	float speed = nestData.speed;
-	CCPoint endPoint;
-
-	float dt2 = size.width / speed;
-	switch (nestData.direction) {
-	case left:
-		endPoint = ccp(-size.width,0);
-		break;
-	case right:
-		endPoint = ccp(size.width,0);
-		break;
-	default:
-		endPoint = ccp(0,0);
-	}
-
-	CCActionInterval* move1 = CCMoveBy::create(dt2, endPoint);
-	CCActionInterval* move2 = move1->reverse();
-	CCActionInterval* moveRepeat = CCRepeatForever::create(CCSequence::create(move1, move2, NULL));
-	return moveRepeat;
 }
 
 void NestLayer::addToLayer(CCSprite* nestSprite) {
