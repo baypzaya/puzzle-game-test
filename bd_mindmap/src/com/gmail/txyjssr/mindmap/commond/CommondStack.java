@@ -1,6 +1,7 @@
-package com.gmail.txyjssr.mindmap;
+package com.gmail.txyjssr.mindmap.commond;
 
 import java.util.LinkedList;
+
 
 public class CommondStack {
 	private static final int MAX_STACK = 20;

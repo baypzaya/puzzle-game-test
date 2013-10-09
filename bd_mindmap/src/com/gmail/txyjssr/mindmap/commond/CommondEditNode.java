@@ -1,4 +1,11 @@
-package com.gmail.txyjssr.mindmap;
+package com.gmail.txyjssr.mindmap.commond;
+
+import com.gmail.txyjssr.mindmap.EditTextNode;
+import com.gmail.txyjssr.mindmap.MindMap;
+import com.gmail.txyjssr.mindmap.MindMapActivity;
+import com.gmail.txyjssr.mindmap.Node;
+import com.gmail.txyjssr.mindmap.R;
+import com.gmail.txyjssr.mindmap.R.id;
 
 import android.widget.TextView;
 
