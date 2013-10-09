@@ -50,6 +50,7 @@ import com.gmail.txyjssr.mindmap.commond.CommondMergeNode;
 import com.gmail.txyjssr.mindmap.commond.CommondMoveNode;
 import com.gmail.txyjssr.mindmap.commond.CommondStack;
 import com.gmail.txyjssr.mindmap.commond.ICommond;
+import com.gmail.txyjssr.mindmap.db.Node;
 
 public class MindMapActivity extends Activity implements OnClickListener, OnFocusChangeListener, OnMoveListener {
 	private static final int REQUST_CODE_MANAGE_MINDMAP = 1;

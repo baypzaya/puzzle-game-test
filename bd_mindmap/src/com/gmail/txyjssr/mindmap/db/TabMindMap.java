@@ -1,6 +1,5 @@
-package com.gmail.txyjssr.mindmap;
+package com.gmail.txyjssr.mindmap.db;
 
-import com.gmail.txyjssr.mindmap.db.BaseData;
 
 public class TabMindMap extends BaseData{
 	public String name;

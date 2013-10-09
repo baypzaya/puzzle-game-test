@@ -4,8 +4,6 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.gmail.txyjssr.mindmap.Node;
-import com.gmail.txyjssr.mindmap.TabMindMap;
 
 public class DBHelper extends SQLiteOpenHelper {
 
