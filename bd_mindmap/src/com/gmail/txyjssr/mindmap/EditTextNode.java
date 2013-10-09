@@ -4,9 +4,10 @@ import android.content.Context;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.AbsoluteLayout.LayoutParams;
+import android.widget.EditText;
 import android.widget.TextView;
 
-public class EditTextNode extends TextView implements INode {
+public class EditTextNode extends EditText implements INode {
 	private float x;
 	private float y;
 	private OnMoveListener mMoveListener;
@@ -23,8 +24,11 @@ public class EditTextNode extends TextView implements INode {
 		super(mmActivity);
 		setFocusable(true);
 		setFocusableInTouchMode(true);
+		setEnabled(false);
+		setSingleLine(true);
 		this.setOnFocusChangeListener(mmActivity);
 		this.setOnMoveListener(mmActivity);
+		
 	}
 
 	private float motionX;
@@ -74,7 +78,14 @@ public class EditTextNode extends TextView implements INode {
 				long downTime = event.getDownTime();
 				long eventTime = event.getEventTime();
 				if (eventTime - downTime < 500) {
-					requestFocus();
+					if(!isEnabled()){
+						if(!isFocused()){
+							requestFocus();
+						}else{
+							setEnabled(true);
+						}
+					}
+					return super.onTouchEvent(event);
 				}
 			}
 			break;
