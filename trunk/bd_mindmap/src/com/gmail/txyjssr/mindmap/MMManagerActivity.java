@@ -4,6 +4,8 @@ import java.util.Formatter;
 import java.util.List;
 
 import com.baidu.mobstat.StatService;
+import com.gmail.txyjssr.mindmap.db.MindMapDao;
+import com.gmail.txyjssr.mindmap.db.NodeDao;
 
 import android.app.ListActivity;
 import android.content.Context;
