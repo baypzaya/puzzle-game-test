@@ -1,4 +1,4 @@
-package com.gmail.txyjssr.mindmap;
+package com.gmail.txyjssr.mindmap.commond;
 
 public interface ICommond {
 	public void redo();

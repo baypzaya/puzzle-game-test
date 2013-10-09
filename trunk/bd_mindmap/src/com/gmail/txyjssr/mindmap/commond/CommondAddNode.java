@@ -1,8 +1,15 @@
-package com.gmail.txyjssr.mindmap;
+package com.gmail.txyjssr.mindmap.commond;
 
 import java.util.List;
 
 import android.view.View;
+
+import com.gmail.txyjssr.mindmap.EditTextNode;
+import com.gmail.txyjssr.mindmap.LinkView;
+import com.gmail.txyjssr.mindmap.MindMap;
+import com.gmail.txyjssr.mindmap.MindMapActivity;
+import com.gmail.txyjssr.mindmap.MindMapView;
+import com.gmail.txyjssr.mindmap.Node;
 
 public class CommondAddNode implements ICommond {
 	private MindMapActivity mmActivity;
