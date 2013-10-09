@@ -1,9 +1,8 @@
-package com.gmail.txyjssr.mindmap;
+package com.gmail.txyjssr.mindmap.db;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.gmail.txyjssr.mindmap.db.BaseData;
 
 public class Node extends BaseData{
 

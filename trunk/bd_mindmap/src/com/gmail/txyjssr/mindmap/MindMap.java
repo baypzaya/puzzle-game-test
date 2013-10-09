@@ -5,6 +5,7 @@ import java.util.Hashtable;
 import java.util.List;
 
 import com.gmail.txyjssr.mindmap.db.MindMapDao;
+import com.gmail.txyjssr.mindmap.db.Node;
 import com.gmail.txyjssr.mindmap.db.NodeDao;
 
 public class MindMap {

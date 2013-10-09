@@ -6,7 +6,6 @@ import java.util.List;
 import android.content.ContentValues;
 import android.database.Cursor;
 
-import com.gmail.txyjssr.mindmap.TabMindMap;
 
 public class MindMapDao extends BaseDao {
 	private static final String TABLE_MINDMAP = "TabMindMap";

@@ -1,5 +1,7 @@
 package com.gmail.txyjssr.mindmap;
 
+import com.gmail.txyjssr.mindmap.db.Node;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Camera;
