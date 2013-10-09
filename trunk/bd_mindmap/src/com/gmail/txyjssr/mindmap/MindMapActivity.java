@@ -31,6 +31,7 @@ import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsoluteLayout;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -46,7 +47,8 @@ import com.gmail.txyjssr.mindmap.EditTextNode.OnMoveListener;
 public class MindMapActivity extends Activity implements OnClickListener, OnFocusChangeListener, OnMoveListener {
 	private static final int REQUST_CODE_MANAGE_MINDMAP = 1;
 	private static final int MSG_CREATE_IMAGE = 1;
-	public static final String MM_CACHE_PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + "/M_mindmap";
+	public static final String MM_CACHE_PATH = Environment.getExternalStorageDirectory().getAbsolutePath()
+			+ "/M_mindmap";
 
 	private MindMapView mindMapPad;
 	private MindMapManager mindMapManager;
@@ -184,7 +186,7 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 	public void onClick(View v) {
 		if (v instanceof MindMapView) {
 			findViewById(R.id.et_focus).requestFocus();
-			StatService.onEvent(this, "click_empty", "show ads by click",1);
+			StatService.onEvent(this, "click_empty", "show ads by click", 1);
 		} else {
 			int id = v.getId();
 			switch (id) {
@@ -371,11 +373,10 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 				currentFocusedNode = etNode;
 				mindMapPad.scroll(currentFocusedNode);
 				mindMapPad.bringChildToFront(etNode);
-
 			} else {
-				// InputMethodManager imm = (InputMethodManager)
-				// getSystemService(Context.INPUT_METHOD_SERVICE);
-				// imm.hideSoftInputFromWindow(etNode.getWindowToken(), 0);
+				InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+				imm.hideSoftInputFromWindow(etNode.getWindowToken(), 0);
+				etNode.setEnabled(false);
 				currentFocusedNode = null;
 			}
 		} else {
@@ -772,7 +773,6 @@ public class MindMapActivity extends Activity implements OnClickListener, OnFocu
 		if (bitmap != null && !isCancelCreateImage) {
 
 			String fileName = tempMindMap.name + "_" + System.currentTimeMillis() + ".jpeg";
-			
 
 			try {
 				FileUtils.createFile(MM_CACHE_PATH, ".NOMEDIA");
