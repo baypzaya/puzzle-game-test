@@ -1,4 +1,4 @@
-package com.gmail.txyjssr.mindmap;
+package com.gmail.txyjssr.mindmap.db;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,7 +6,7 @@ import java.util.List;
 import android.database.Cursor;
 import android.util.Log;
 
-import com.gmail.txyjssr.mindmap.db.BaseDao;
+import com.gmail.txyjssr.mindmap.Node;
 
 public class NodeDao extends BaseDao {
 	private static final String TABLE_NAME = "Node";

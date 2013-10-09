@@ -3,6 +3,9 @@ package com.gmail.txyjssr.mindmap;
 import java.util.Hashtable;
 import java.util.List;
 
+import com.gmail.txyjssr.mindmap.db.MindMapDao;
+import com.gmail.txyjssr.mindmap.db.NodeDao;
+
 public class MindMapManager {
 	MindMapDao mindMapDao = new MindMapDao();
 	NodeDao nodeDao = new NodeDao();

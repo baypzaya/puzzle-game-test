@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
+import com.gmail.txyjssr.mindmap.db.MindMapDao;
+import com.gmail.txyjssr.mindmap.db.NodeDao;
+
 public class MindMap {
 	public static final float DISTANCE_dEFAULT = 120; // 单位dp
 	public long mindMapId;

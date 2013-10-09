@@ -56,7 +56,8 @@
             android:name="MindMapActivity"
             android:configChanges="keyboard|keyboardHidden|orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/custom_theme" >
+            android:theme="@style/custom_theme" 
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

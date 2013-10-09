@@ -1,4 +1,4 @@
-package com.gmail.txyjssr.mindmap;
+package com.gmail.txyjssr.mindmap.db;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,7 +6,7 @@ import java.util.List;
 import android.content.ContentValues;
 import android.database.Cursor;
 
-import com.gmail.txyjssr.mindmap.db.BaseDao;
+import com.gmail.txyjssr.mindmap.TabMindMap;
 
 public class MindMapDao extends BaseDao {
 	private static final String TABLE_MINDMAP = "TabMindMap";
